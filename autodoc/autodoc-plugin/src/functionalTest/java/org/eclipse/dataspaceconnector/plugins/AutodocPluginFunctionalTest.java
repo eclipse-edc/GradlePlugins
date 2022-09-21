@@ -14,7 +14,6 @@
 
 package org.eclipse.dataspaceconnector.plugins;
 
-import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.junit.jupiter.api.Test;
 
@@ -36,10 +35,10 @@ public class AutodocPluginFunctionalTest {
         writeString(new File(projectDir, "settings.gradle"), "");
         writeString(new File(projectDir, "build.gradle"),
                 "plugins {" +
-                        "  id(\"org.eclipse.dataspaceconnector.plugins.autodoc\")" +
+                        "  id(\"autodoc\")" +
                         "}");
         // Run the build
-        BuildResult result = GradleRunner.create()
+        var result = GradleRunner.create()
                 .forwardOutput()
                 .withPluginClasspath()
                 .withArguments("autodoc")
