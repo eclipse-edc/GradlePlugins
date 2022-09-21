@@ -67,6 +67,16 @@ allprojects {
                     sign(publishing.publications)
                 }
             }
+
+            dependencies {
+                // Use JUnit test framework for unit tests
+                testImplementation("org.junit.jupiter:junit-jupiter-api:${jupiterVersion}")
+                testImplementation("org.junit.jupiter:junit-jupiter-params:${jupiterVersion}")
+                testImplementation("org.junit.jupiter:junit-jupiter-params:${jupiterVersion}")
+                testImplementation("org.assertj:assertj-core:${assertj}")
+                testImplementation("org.mockito:mockito-core:${mockitoVersion}")
+                testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${jupiterVersion}")
+            }
         }
 
         java {
