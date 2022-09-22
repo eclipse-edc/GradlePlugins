@@ -10,18 +10,21 @@ plugins {
     id("com.gradle.plugin-publish") version "1.0.0" apply false
 }
 
-val groupId: String by project;
-val projectVersion: String by project;
-var deployUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+val groupId: String by project
+val defaultVersion: String by project
+val jupiterVersion: String by project
+val assertj: String by project
+val mockitoVersion: String by project
 
-// cannot do snapshots for gradle plugins
-//if (projectVersion.contains("SNAPSHOT")) {
-//    deployUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-//}
+
+var actualVersion: String = (project.findProperty("version") ?: defaultVersion) as String
+if (actualVersion == "unspecified") {
+    actualVersion = defaultVersion
+}
 
 subprojects {
     apply(plugin = "checkstyle")
-    version = projectVersion
+    version = actualVersion
     group = groupId
 
     // for all gradle plugins:
@@ -34,8 +37,13 @@ subprojects {
     pluginManager.withPlugin("java-library") {
         apply(plugin = "maven-publish")
         if (!project.hasProperty("skip.signing")) {
-
             apply(plugin = "signing")
+
+            //set the deploy-url only for java libraries
+            val deployUrl = if (actualVersion.contains("SNAPSHOT"))
+                "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            else
+                "https://oss.sonatype.org/content/repositories/snapshots/"
             publishing {
                 repositories {
                     maven {
@@ -63,8 +71,10 @@ subprojects {
             tasks.withType(JavaCompile::class.java) {
                 // making sure the code does not use any APIs from a more recent version.
                 // Ref: https://docs.gradle.org/current/userguide/building_java_projects.html#sec:java_cross_compilation
-                options.release.set(javaVersion.toInt())
+                options.release.set(javaVersion)
             }
+            withJavadocJar()
+            withSourcesJar()
         }
     }
 
