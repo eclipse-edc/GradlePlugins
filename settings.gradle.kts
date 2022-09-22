@@ -1,5 +1,5 @@
 rootProject.name = "edcPlugins"
 
-include("autodoc:autodoc-plugin")
-include("autodoc:autodoc-core")
+include("plugins:autodoc:autodoc-plugin")
+include("plugins:autodoc:autodoc-core")
 include("runtime-metamodel")
