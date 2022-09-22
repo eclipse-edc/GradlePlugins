@@ -31,18 +31,17 @@ if (actualVersion == "unspecified") {
 
 allprojects {
     apply(plugin = "checkstyle")
+    apply(plugin = "maven-publish")
     version = actualVersion
     group = groupId
 
     // for all gradle plugins:
     pluginManager.withPlugin("java-gradle-plugin") {
-        apply(plugin = "maven-publish")
         apply(plugin = "com.gradle.plugin-publish")
     }
 
     // for all java libs:
     pluginManager.withPlugin("java-library") {
-        apply(plugin = "maven-publish")
         if (!project.hasProperty("skip.signing")) {
             apply(plugin = "signing")
 
@@ -111,7 +110,6 @@ allprojects {
     repositories {
         mavenCentral()
     }
-
 
     // let's not generate any reports because that is done from within the Github Actions workflow
     tasks.withType<Checkstyle> {
