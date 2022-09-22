@@ -20,23 +20,24 @@ gradlePlugin {
 }
 
 val groupId: String by project
+
+// Running the functionalTest with Junit 5 seems not to work as of now. Once it does, the following lines can be uncommented
+
 // Add a source set and a task for a functional test suite
-val functionalTest: SourceSet by sourceSets.creating
-gradlePlugin.testSourceSets(functionalTest)
+//val functionalTest: SourceSet by sourceSets.creating
+//gradlePlugin.testSourceSets(functionalTest)
+//
+//configurations[functionalTest.implementationConfigurationName].extendsFrom(configurations.testImplementation.get())
+//
+//val functionalTestTask = tasks.register<Test>("functionalTest") {
+//    testClassesDirs = functionalTest.output.classesDirs
+//    classpath = configurations[functionalTest.runtimeClasspathConfigurationName] + functionalTest.output
+//}
 
-configurations[functionalTest.implementationConfigurationName].extendsFrom(configurations.testImplementation.get())
-
-val functionalTestTask = tasks.register<Test>("functionalTest") {
-    testClassesDirs = functionalTest.output.classesDirs
-    classpath = configurations[functionalTest.runtimeClasspathConfigurationName] + functionalTest.output
-}
-
-tasks.check {
-    // Run the functional tests as part of `check`
-
-    // Running the functionalTest with Junit 5 does not work as of now. Once it does, the following line can be uncommented
+//tasks.check {
+// Run the functional tests as part of `check`
 //    dependsOn(functionalTestTask)
-}
+//}
 
 pluginBundle {
     website = "https://projects.eclipse.org/proposals/eclipse-dataspace-connector"
