@@ -21,8 +21,8 @@ dependencies {
 
 publishing {
     publications {
-        create<MavenPublication>("autodoc-core") {
-            artifactId = "autodoc-core"
+        create<MavenPublication>("autodoc-processor") {
+            artifactId = "autodoc-processor"
             from(components["java"])
         }
     }

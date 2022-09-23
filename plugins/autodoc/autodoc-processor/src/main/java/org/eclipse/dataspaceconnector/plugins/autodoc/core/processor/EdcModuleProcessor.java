@@ -48,7 +48,7 @@ import static javax.tools.Diagnostic.Kind.NOTE;
  * <p>
  * Two processor parameters must be set: {@link #ID} which by convention uses Maven group id an artifact id coordinates;
  * and {@link #VERSION}. To Override the location where the manifest is generated, specify
- * {@link #EDC_LOCATION_OVERRIDE} as a processor parameter.
+ * {@link #EDC_OUTPUTDIR_OVERRIDE} as a processor parameter.
  */
 @SupportedAnnotationTypes({
         "org.eclipse.dataspaceconnector.runtime.metamodel.annotationEdcSetting",
@@ -68,7 +68,7 @@ public class EdcModuleProcessor extends AbstractProcessor {
     static final String ID = "edc.id";
 
     private static final String MANIFEST_NAME = "edc.json";
-    private static final String EDC_LOCATION_OVERRIDE = "edc.location";
+    private static final String EDC_OUTPUTDIR_OVERRIDE = "edc.outputdir";
 
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -90,6 +90,7 @@ public class EdcModuleProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
+        processingEnv.getMessager().printMessage(NOTE, "processing");
         if (!initializeModuleBuilder(environment)) {
             return false;  // error, do not continue processing
         }
@@ -158,7 +159,7 @@ public class EdcModuleProcessor extends AbstractProcessor {
                 processingEnv.getMessager().printMessage(ERROR, "Multiple SPI definitions found in module: " + types);
                 return null;
             } else if (spiElements.isEmpty()) {
-                processingEnv.getMessager().printMessage(NOTE, "Note an EDC module. Skipping module processing.");
+                processingEnv.getMessager().printMessage(NOTE, "Not an EDC module. Skipping module processing.");
                 return null;
             }
             return ModuleType.SPI;
@@ -177,7 +178,7 @@ public class EdcModuleProcessor extends AbstractProcessor {
     private void writeManifest() {
         try {
             var filer = processingEnv.getFiler();
-            var location = processingEnv.getOptions().get(EDC_LOCATION_OVERRIDE);
+            var location = processingEnv.getOptions().get(EDC_OUTPUTDIR_OVERRIDE);
             if (location != null) {
                 new File(location).mkdirs();
                 try (var writer = new BufferedWriter(new FileWriter(location + File.separator + MANIFEST_NAME))) {

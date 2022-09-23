@@ -17,12 +17,12 @@ plugins {
 
 dependencies {
     implementation(project(":runtime-metamodel"))
-    annotationProcessor(project(":plugins:autodoc:autodoc-core"))
+    annotationProcessor(project(":plugins:autodoc:autodoc-processor"))
 }
 
 tasks.withType<JavaCompile> {
     val compilerArgs = options.compilerArgs
     compilerArgs.add("-Aedc.version=${project.version}")
     compilerArgs.add("-Aedc.id=${project.group}:${project.name}")
-    compilerArgs.add("-Aedc.location=${project.projectDir.absolutePath}/build")
+    compilerArgs.add("-Aedc.outputdir=${project.projectDir.absolutePath}/build")
 }

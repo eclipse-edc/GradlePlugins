@@ -14,7 +14,7 @@ gradlePlugin {
     plugins {
         create("autodoc") {
             id = "autodoc"
-            implementationClass = "org.eclipse.dataspaceconnector.plugins.AutodocPlugin"
+            implementationClass = "org.eclipse.dataspaceconnector.plugins.autodoc.AutodocPlugin"
         }
     }
 }
