@@ -51,8 +51,8 @@ import static javax.tools.Diagnostic.Kind.NOTE;
  * {@link #EDC_OUTPUTDIR_OVERRIDE} as a processor parameter.
  */
 @SupportedAnnotationTypes({
-        "org.eclipse.dataspaceconnector.runtime.metamodel.annotationEdcSetting",
-        "org.eclipse.dataspaceconnector.runtime.metamodel.annotationEdcSettingContext",
+        "org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting",
+        "org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSettingContext",
         "org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Extension",
         "org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Spi",
         "org.eclipse.dataspaceconnector.runtime.metamodel.annotation.ExtensionPoint",
@@ -64,12 +64,10 @@ import static javax.tools.Diagnostic.Kind.NOTE;
 @SupportedSourceVersion(SourceVersion.RELEASE_11)
 @SupportedOptions({ EdcModuleProcessor.ID, EdcModuleProcessor.VERSION })
 public class EdcModuleProcessor extends AbstractProcessor {
-    static final String VERSION = "edc.version";
-    static final String ID = "edc.id";
-
+    public static final String VERSION = "edc.version";
+    public static final String ID = "edc.id";
+    public static final String EDC_OUTPUTDIR_OVERRIDE = "edc.outputdir";
     private static final String MANIFEST_NAME = "edc.json";
-    private static final String EDC_OUTPUTDIR_OVERRIDE = "edc.outputdir";
-
     private final ObjectMapper mapper = new ObjectMapper();
 
     private ModuleIntrospector moduleIntrospector;
@@ -90,7 +88,6 @@ public class EdcModuleProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment environment) {
-        processingEnv.getMessager().printMessage(NOTE, "processing");
         if (!initializeModuleBuilder(environment)) {
             return false;  // error, do not continue processing
         }

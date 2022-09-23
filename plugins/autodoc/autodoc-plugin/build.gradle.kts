@@ -7,6 +7,7 @@ val assertj: String by project
 
 dependencies {
     implementation(project(":runtime-metamodel"))
+    implementation(project(":plugins:autodoc:autodoc-processor"))
 }
 
 gradlePlugin {
