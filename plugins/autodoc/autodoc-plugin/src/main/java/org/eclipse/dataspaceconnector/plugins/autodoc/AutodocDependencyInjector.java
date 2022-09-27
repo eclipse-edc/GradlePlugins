@@ -21,6 +21,7 @@ import org.gradle.api.tasks.compile.JavaCompile;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import static java.lang.String.format;
 
@@ -33,15 +34,18 @@ class AutodocDependencyInjector implements DependencyResolutionListener {
     private static final String ID = "edc.id"; // must be identical to EdcModuleProcessor.ID
     private final Project project;
     private final String dependencyName;
+    private final Supplier<String> versionSupplier;
 
-    AutodocDependencyInjector(Project project, String dependencyName) {
+    AutodocDependencyInjector(Project project, String dependencyName, Supplier<String> versionProvider) {
         this.project = project;
         this.dependencyName = dependencyName;
+        versionSupplier = versionProvider;
     }
 
     @Override
     public void beforeResolve(@NotNull ResolvableDependencies dependencies) {
-        if (addDependency(project, dependencyName)) {
+        var artifact = dependencyName + versionSupplier.get();
+        if (addDependency(project, artifact)) {
             var task = project.getTasks().findByName("compileJava");
             if ((task instanceof JavaCompile)) {
                 var compileJava = (JavaCompile) task;

@@ -20,6 +20,8 @@ import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.ModuleVersionIdentifier;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Supplier;
+
 import static java.lang.String.format;
 
 /**
@@ -35,17 +37,32 @@ public class AutodocPlugin implements Plugin<Project> {
     @Override
     public void apply(@NotNull Project project) {
 
-        var extension = project.getExtensions().create("audodocextension", AutodocExtension.class);
+        project.getExtensions().create("audodocextension", AutodocExtension.class);
 
-        // runtime version of the actual annotation processor, or override in config
-        var versionToUse = extension.getProcessorVersion().orElse(getProcessorModuleVersion(project)).get();
 
         // adds the annotation processor dependency
-        project.getGradle().addListener(new AutodocDependencyInjector(project, format("%s:%s:%s", GROUP_NAME, PROCESSOR_ARTIFACT_NAME, versionToUse)));
+        project.getGradle().addListener(new AutodocDependencyInjector(project, format("%s:%s:", GROUP_NAME, PROCESSOR_ARTIFACT_NAME),
+                createVersionProvider(project)));
 
         // registers a "named" task, that does nothing, except depend on the compileTask, which then runs the annotation processor
         project.getTasks().register("autodoc", t -> t.dependsOn("compileJava"));
 
+    }
+
+    private Supplier<String> createVersionProvider(Project project) {
+        return () -> {
+            // runtime version of the actual annotation processor, or override in config
+            var versionToUse = getProcessorModuleVersion(project);
+
+            var extension = project.getExtensions().findByType(AutodocExtension.class);
+            if (extension != null && extension.getProcessorVersion().isPresent()) {
+                versionToUse = extension.getProcessorVersion().get();
+                project.getLogger().debug("{}: use configured version from AutodocExtension (override) [{}]", project.getName(), versionToUse);
+            } else {
+                project.getLogger().debug("{}: use default version [{}]", project.getName(), versionToUse);
+            }
+            return versionToUse;
+        };
     }
 
     private String getProcessorModuleVersion(Project project) {
@@ -57,5 +74,4 @@ public class AutodocPlugin implements Plugin<Project> {
                 .map(ModuleVersionIdentifier::getVersion)
                 .orElse(null);
     }
-
 }

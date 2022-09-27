@@ -43,6 +43,6 @@ pluginBundle {
     website = "https://projects.eclipse.org/proposals/eclipse-dataspace-connector"
     vcsUrl = "http://github.com/eclipse-dataspaceconnector/"
     group = groupId
-    version = version
+    version = version.toString().replace("-SNAPSHOT", "") // plugins cannot have SNAPSHOT version, strip off
     tags = listOf("build", "documentation", "generated", "autodoc")
 }
