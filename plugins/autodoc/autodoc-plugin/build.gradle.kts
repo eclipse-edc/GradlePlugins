@@ -13,7 +13,10 @@ gradlePlugin {
     // Define the plugin
     plugins {
         create("autodoc") {
-            id = "autodoc"
+            displayName = "autodoc"
+            description =
+                "Plugin to generate a documentation manifest for the EDC Metamodel, i.e. extensions, SPIs, etc."
+            id = "org.eclipse.dataspaceconnector.plugins.autodoc"
             implementationClass = "org.eclipse.dataspaceconnector.plugins.autodoc.AutodocPlugin"
         }
     }
