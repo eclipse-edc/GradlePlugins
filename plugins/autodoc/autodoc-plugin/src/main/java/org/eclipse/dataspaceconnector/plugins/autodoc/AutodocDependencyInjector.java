@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 import static java.lang.String.format;
 
 /**
- * adds an {@code annotationProcessor("...")} dependency to the project
+ * Adds an {@code annotationProcessor("...")} dependency to the project
  */
 class AutodocDependencyInjector implements DependencyResolutionListener {
     private static final String ANNOTATION_PROCESSOR = "annotationProcessor";
