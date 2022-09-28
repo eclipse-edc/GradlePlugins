@@ -17,11 +17,9 @@ jobs:
   Check-Release-Version:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
       - name: Publish Autodoc Plugin
         run: |
-          ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.GRADLE_PUBLISH_KEY }} -Pgradle.publish.secret=${{ secrets.GRADLE_PUBLISH_SECRET }} -Pskip.signing -Pversion=${{ env.RELEASE_VERSION }}
+          echo "Creating version ${{ env.RELEASE_VERSION }}
 
     outputs:
       release-version: ${{ env.RELEASE_VERSION }}
@@ -42,10 +40,10 @@ jobs:
           jenkins_url: "https://ci.eclipse.org/dataspaceconnector/"
           jenkins_user: ${{ secrets.EF_JENKINS_USER }}
           jenkins_token: ${{ secrets.EF_JENKINS_TOKEN }}
-          job_name: "GradlePlugins-Autobuild-Release"
+          job_name: "Plugins-Publish-Snapshot"
           job_params: |
             {
-              "VERSION": "${{ env.METAMODEL_VERSION }}"
+              "VERSION": "${{ env.RELEASE_VERSION }}"
             }
           job_timeout: "3600" # Default 30 sec. (optional)
 
@@ -65,7 +63,7 @@ jobs:
   
   
 
-  Github-Release:
+  Create-Github-Release:
     # cannot use the workflow-level env yet as it does not yet exist, must take output from previous job
     if: ${{ !endsWith( needs.Check-Release-Version.outputs.release-version, '-SNAPSHOT') }}
     needs:
