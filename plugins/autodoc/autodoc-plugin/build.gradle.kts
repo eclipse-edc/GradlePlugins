@@ -28,17 +28,3 @@ pluginBundle {
     version = version
     tags = listOf("build", "documentation", "generated", "autodoc")
 }
-
-publishing {
-    repositories {
-        maven {
-            name = "Snapshots"
-            description = "OSSR Snapshot repository"
-            url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
-            credentials {
-                username = System.getenv("OSSRH_USER")
-                password = System.getenv("OSSRH_PASSWORD")
-            }
-        }
-    }
-}
