@@ -16,13 +16,6 @@ val jupiterVersion: String by project
 val assertj: String by project
 val mockitoVersion: String by project
 
-// values needed for publishing
-val pluginsWebsiteUrl: String by project
-val pluginsDeveloperId: String by project
-val pluginsDeveloperName: String by project
-val pluginsDeveloperEmail: String by project
-val pluginsScmConnection: String by project
-val pluginsScmUrl: String by project
 
 var actualVersion: String = (project.findProperty("version") ?: defaultVersion) as String
 if (actualVersion == "unspecified") {
@@ -120,6 +113,13 @@ allprojects {
     }
 
     afterEvaluate {
+        // values needed for publishing
+        val pluginsWebsiteUrl: String by project
+        val pluginsDeveloperId: String by project
+        val pluginsDeveloperName: String by project
+        val pluginsDeveloperEmail: String by project
+        val pluginsScmConnection: String by project
+        val pluginsScmUrl: String by project
         publishing {
             publications.forEach { i ->
                 val mp = (i as MavenPublication)
@@ -146,7 +146,7 @@ allprojects {
                         }
                     }
                 }
-//                println("\n${mp.groupId}:${mp.artifactId}:${mp.version}")
+//                println("\nset POM for: ${mp.groupId}:${mp.artifactId}:${mp.version}")
             }
         }
     }
