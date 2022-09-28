@@ -18,7 +18,6 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.DependencyResolutionListener;
 import org.gradle.api.artifacts.ResolvableDependencies;
 import org.gradle.api.tasks.compile.JavaCompile;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -43,7 +42,7 @@ class AutodocDependencyInjector implements DependencyResolutionListener {
     }
 
     @Override
-    public void beforeResolve(@NotNull ResolvableDependencies dependencies) {
+    public void beforeResolve(ResolvableDependencies dependencies) {
         var artifact = dependencyName + versionSupplier.get();
         if (addDependency(project, artifact)) {
             var task = project.getTasks().findByName("compileJava");
@@ -59,7 +58,7 @@ class AutodocDependencyInjector implements DependencyResolutionListener {
     }
 
     @Override
-    public void afterResolve(@NotNull ResolvableDependencies dependencies) {
+    public void afterResolve(ResolvableDependencies dependencies) {
 
     }
 

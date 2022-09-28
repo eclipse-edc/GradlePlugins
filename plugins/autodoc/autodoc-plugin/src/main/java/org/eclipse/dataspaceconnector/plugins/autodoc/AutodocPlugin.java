@@ -18,7 +18,6 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.ModuleVersionIdentifier;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -33,9 +32,8 @@ public class AutodocPlugin implements Plugin<Project> {
     private static final String PLUGIN_ARTIFACT_NAME = "autodoc-plugin";
     private static final String GROUP_NAME = "org.eclipse.dataspaceconnector";
 
-
     @Override
-    public void apply(@NotNull Project project) {
+    public void apply(Project project) {
 
         project.getExtensions().create("audodocextension", AutodocExtension.class);
 
