@@ -17,16 +17,16 @@ jobs:
   Check-Release-Version:
     runs-on: ubuntu-latest
     steps:
-      - name: Publish Autodoc Plugin
+      - name: Check if SNAPSHOT version
         run: |
-          echo "Creating version ${{ env.RELEASE_VERSION }}
+          echo "Creating version ${{ env.RELEASE_VERSION }}"
 
     outputs:
       release-version: ${{ env.RELEASE_VERSION }}
 
   # Publish Gradle Plugins to OSSRH Staging using our EF Jenkins CI
   Publish-Snapshot:
-    if: ${{ !endsWith( needs.Check-Release-Version.outputs.release-version, '-SNAPSHOT') }}
+    if: ${{ endsWith( needs.Check-Release-Version.outputs.release-version, '-SNAPSHOT') }}
     needs:
       - Check-Release-Version
     runs-on: ubuntu-latest
