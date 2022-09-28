@@ -4,6 +4,7 @@ plugins {
 
 val jupiterVersion: String by project
 val assertj: String by project
+val groupId: String by project
 
 gradlePlugin {
     // Define the plugin
@@ -13,12 +14,12 @@ gradlePlugin {
             description =
                 "Plugin to generate a documentation manifest for the EDC Metamodel, i.e. extensions, SPIs, etc."
             id = "autodoc"
+            group = groupId
             implementationClass = "org.eclipse.dataspaceconnector.plugins.autodoc.AutodocPlugin"
         }
     }
 }
 
-val groupId: String by project
 
 
 pluginBundle {
