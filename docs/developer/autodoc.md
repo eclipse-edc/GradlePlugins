@@ -59,13 +59,15 @@ There are two options to apply a plugin. For multi-module builds this should be 
 
 The `autodoc` plugin exposes the following configuration values:
 
-1. the `processorVersion`: tells the plugin, which version of the annotation processor module to use. If this is
-   omitted, the plugin will use its own version. Please enter just the SemVer-compliant version information,
+1. the `processorVersion`: tells the plugin, which version of the annotation processor module to use. Set this value if
+   the version of the plugin and of the annotation processor diverge. If this is
+   omitted, the plugin will use its own version. Please enter _just_ the SemVer-compliant version string,
    no `groupId` or `artifactName` are needed.
    ```kotlin
    configure<org.eclipse.dataspaceconnector.plugins.autodoc.AutodocExtension> {
        processorVersion.set("<VERSION>")
    }
    ```
+   **Typically, you do not need to configure this and can safely omit it.**
 
 _The plugin will then generate an `edc.json` file for every module/gradle project._
