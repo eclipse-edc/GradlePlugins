@@ -14,6 +14,9 @@
 
 package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor;
 
+import org.eclipse.dataspaceconnector.runtime.metamodel.domain.EdcModule;
+import org.eclipse.dataspaceconnector.runtime.metamodel.domain.Service;
+import org.eclipse.dataspaceconnector.runtime.metamodel.domain.ServiceReference;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,10 +57,10 @@ class EdcModuleProcessorTest {
         fileManager.setLocation(StandardLocation.CLASS_OUTPUT, List.of(tempDir.toFile()));
         fileManager.setLocation(StandardLocation.SOURCE_OUTPUT, List.of(tempDir.toFile()));
 
-        var file = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/SampleExtensionWithoutAnnotation.java");
+        var file1 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/SampleExtensionWithoutAnnotation.java");
         var file2 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/OptionalService.java");
         var file3 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/RequiredService.java");
-        var compilationUnits = fileManager.getJavaFileObjects(file, file2, file3);
+        var compilationUnits = fileManager.getJavaFileObjects(file1, file2, file3);
 
         var options = List.of("-Aedc.id=" + EDC_ID, "-Aedc.version=" + EDC_VERSION);
         task = compiler.getTask(null, fileManager, diagnostics, options, null, compilationUnits);
@@ -89,7 +92,34 @@ class EdcModuleProcessorTest {
         task.call();
 
         var modules = readManifest(filterManifest(tempDir));
-        assertThat(modules).hasSize(1);
+        assertThat(modules).hasSize(1).extracting(EdcModule::getName).containsOnly(SampleExtensionWithoutAnnotation.class.getSimpleName());
+    }
+
+    @Test
+    void verifyManifestContainsCorrectElements() {
+        task.call();
+
+        var manifests = readManifest(filterManifest(tempDir));
+        var manifest = manifests.get(0);
+        assertThat(manifest.getName()).isEqualTo(SampleExtensionWithoutAnnotation.class.getSimpleName());
+        assertThat(manifest.getCategories()).isNotNull().isEmpty();
+        assertThat(manifest.getOverview()).isNull();
+
+        var providedServices = manifest.getProvides();
+        assertThat(providedServices).hasSize(2)
+                .extracting(Service::getService)
+                .containsExactlyInAnyOrder(SomeService.class.getName(), SomeOtherService.class.getName());
+
+        var references = manifest.getReferences();
+        assertThat(references.size()).isEqualTo(2);
+        assertThat(references).contains(new ServiceReference(OptionalService.class.getName(), false));
+        assertThat(references).contains(new ServiceReference(RequiredService.class.getName(), true));
+
+        var configuration = manifest.getConfiguration().get(0);
+        assertThat(configuration).isNotNull();
+        assertThat(configuration.getKey()).isEqualTo(SampleExtensionWithoutAnnotation.TEST_SETTING);
+        assertThat(configuration.isRequired()).isTrue();
+        assertThat(configuration.getDescription()).isNotEmpty();
     }
 
 

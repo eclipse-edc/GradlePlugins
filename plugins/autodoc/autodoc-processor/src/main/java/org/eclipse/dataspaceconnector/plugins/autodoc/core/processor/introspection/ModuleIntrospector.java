@@ -14,6 +14,7 @@
 
 package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.introspection;
 
+import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.compiler.AnnotationFunctions;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSettingContext;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Extension;
@@ -31,12 +32,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 
 import static java.util.stream.Collectors.toList;
@@ -102,8 +105,17 @@ public class ModuleIntrospector {
      * Resolves referenced services by introspecting the {@link Provides} annotation.
      */
     public List<Service> resolveProvidedServices(RoundEnvironment environment) {
-        return environment.getElementsAnnotatedWith(Provides.class).stream()
-                .flatMap(element -> attributeTypeValues("value", mirrorFor(Provides.class, element), elementUtils).stream())
+        var providesServices = environment.getElementsAnnotatedWith(Provides.class).stream()
+                .flatMap(element -> attributeTypeValues("value", mirrorFor(Provides.class, element), elementUtils).stream());
+
+        var providerMethodServices = environment.getElementsAnnotatedWith(Provider.class)
+                .stream()
+                .map(AnnotationFunctions::mirrorForReturn)
+                .filter(Objects::nonNull)
+                .map(TypeMirror::toString);
+
+        return Stream.concat(providesServices, providerMethodServices)
+                .distinct()
                 .map(Service::new)
                 .collect(toList());
     }

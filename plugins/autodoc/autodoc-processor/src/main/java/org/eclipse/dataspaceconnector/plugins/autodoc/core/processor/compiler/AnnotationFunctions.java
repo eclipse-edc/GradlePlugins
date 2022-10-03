@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
+import javax.lang.model.type.ExecutableType;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.SimpleAnnotationValueVisitor9;
 
@@ -54,6 +56,18 @@ public class AnnotationFunctions {
             if (type.getName().equals(annotationMirror.getAnnotationType().toString())) {
                 return annotationMirror;
             }
+        }
+        return null;
+    }
+
+    /**
+     * Returns the type mirror for a method's return type. Assumes that {@code element} refers to an executable type, most likely a {@code Type$MethodType}
+     */
+    public static TypeMirror mirrorForReturn(Element element) {
+        var type = element.asType();
+        if (type instanceof ExecutableType) { //method
+            var methodSymbol = (ExecutableType) type;
+            return methodSymbol.getReturnType();
         }
         return null;
     }

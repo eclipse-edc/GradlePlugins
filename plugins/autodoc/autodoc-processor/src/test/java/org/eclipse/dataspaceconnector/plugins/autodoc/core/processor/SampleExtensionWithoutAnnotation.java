@@ -16,9 +16,12 @@ package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor;
 
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Inject;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Provider;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Provides;
 
+@Provides(SomeOtherService.class)
 public class SampleExtensionWithoutAnnotation {
-    @EdcSetting(value = Constants.TEST_SETTING_NAME)
+    @EdcSetting(value = Constants.TEST_SETTING_NAME, required = true)
     public static final String TEST_SETTING = Constants.TEST_SETTING_KEY;
 
     @Inject
@@ -26,4 +29,10 @@ public class SampleExtensionWithoutAnnotation {
 
     @Inject(required = false)
     protected OptionalService optionalService;
+
+    @Provider
+    public SomeService provideSomeService() {
+        return null;
+    }
+
 }

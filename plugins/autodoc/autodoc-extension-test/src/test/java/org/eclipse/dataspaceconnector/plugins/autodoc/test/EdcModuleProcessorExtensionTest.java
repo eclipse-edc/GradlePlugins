@@ -52,41 +52,11 @@ class EdcModuleProcessorExtensionTest {
 
         try (var stream = manifestFileUrl.openStream()) {
             var manifests = new ObjectMapper().readValue(stream, TYPE_REFERENCE);
-            assertThat(manifests.size()).isEqualTo(2);
+            assertThat(manifests.size()).isEqualTo(1);
 
             var manifest = manifests.get(0);
             assertThat(manifest.getName()).isEqualTo(SampleExtension.NAME);
             assertThat(manifest.getCategories()).contains(SampleExtension.CATEGORY);
-            assertThat(manifest.getOverview()).isNotEmpty();
-
-            var provides = manifest.getProvides();
-            assertThat(provides.size()).isEqualTo(1);
-            assertThat(provides.get(0).getService()).isEqualTo(ProvidedService1.class.getName());
-
-            var references = manifest.getReferences();
-            assertThat(references.size()).isEqualTo(2);
-            assertThat(references).contains(new ServiceReference(OptionalService.class.getName(), false));
-            assertThat(references).contains(new ServiceReference(RequiredService.class.getName(), true));
-
-            var configuration = manifest.getConfiguration().get(0);
-            assertThat(configuration).isNotNull();
-            assertThat(configuration.getKey()).isEqualTo(SampleExtension.CONFIG1);
-            assertThat(configuration.isRequired()).isTrue();
-            assertThat(configuration.getDescription()).isNotEmpty();
-        }
-    }
-
-    @Test
-    void verifyUnannotatedExtension() throws IOException {
-
-
-        try (var stream = manifestFileUrl.openStream()) {
-            var manifests = new ObjectMapper().readValue(stream, TYPE_REFERENCE);
-            assertThat(manifests.size()).isEqualTo(1);
-
-            var manifest = manifests.get(0);
-            assertThat(manifest.getName()).isNull();
-            assertThat(manifest.getCategories()).isEmpty();
             assertThat(manifest.getOverview()).isNotEmpty();
 
             var provides = manifest.getProvides();
