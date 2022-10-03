@@ -12,7 +12,7 @@
  *
  */
 
-package org.eclipse.dataspaceconnector.plugins.autodoc.test;
+package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor;
 
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Inject;

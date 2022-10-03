@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * Enumerates {@link EdcModule} types. SPI modules define extension points and extension modules contribute capabilities to a runtime.
  */
 public enum ModuleType {
+    INVALID("invalid"),
     SPI("spi"),
     EXTENSION("extension");
 

@@ -12,9 +12,7 @@
  *
  */
 
-package org.eclipse.dataspaceconnector.plugins.autodoc.test;
+package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor;
 
-public interface Constants {
-    String TEST_SETTING_NAME = "Test setting name";
-    String TEST_SETTING_KEY = "edc.test.setting";
+public interface OptionalService {
 }

@@ -17,7 +17,6 @@ package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.introspection.ModuleIntrospector;
 import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.introspection.OverviewIntrospector;
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Extension;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Spi;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.EdcModule;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.ModuleType;
@@ -131,7 +130,7 @@ public class EdcModuleProcessor extends AbstractProcessor {
         }
 
         moduleType = determineAndValidateModuleType(environment);
-        if (moduleType == null) {
+        if (moduleType == ModuleType.INVALID) {
             // error or not a module, return
             return false;
         }
@@ -147,17 +146,17 @@ public class EdcModuleProcessor extends AbstractProcessor {
 
     @Nullable
     private ModuleType determineAndValidateModuleType(RoundEnvironment environment) {
-        var extensionElements = environment.getElementsAnnotatedWith(Extension.class);
+        var extensionElements = moduleIntrospector.getExtensionElements(environment);
         if (extensionElements.isEmpty()) {
             // check if it is an SPI
             var spiElements = environment.getElementsAnnotatedWith(Spi.class);
             if (spiElements.size() > 1) {
                 var types = spiElements.stream().map(e -> e.asType().toString()).collect(Collectors.joining(", "));
                 processingEnv.getMessager().printMessage(ERROR, "Multiple SPI definitions found in module: " + types);
-                return null;
+                return ModuleType.INVALID;
             } else if (spiElements.isEmpty()) {
                 processingEnv.getMessager().printMessage(NOTE, "Not an EDC module. Skipping module processing.");
-                return null;
+                return ModuleType.INVALID;
             }
             return ModuleType.SPI;
 
