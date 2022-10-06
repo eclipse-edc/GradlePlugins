@@ -12,7 +12,7 @@
  *
  */
 
-package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testclasses;
+package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testextensions;
 
 public interface OptionalService {
 }

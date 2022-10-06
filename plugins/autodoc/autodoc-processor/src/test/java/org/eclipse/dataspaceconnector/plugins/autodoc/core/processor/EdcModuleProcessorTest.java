@@ -14,10 +14,10 @@
 
 package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor;
 
-import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testclasses.OptionalService;
-import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testclasses.RequiredService;
-import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testclasses.SampleExtensionWithoutAnnotation;
-import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testclasses.SecondExtension;
+import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testextensions.OptionalService;
+import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testextensions.RequiredService;
+import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testextensions.SampleExtensionWithoutAnnotation;
+import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testextensions.SecondExtension;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.EdcServiceExtension;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.Service;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.ServiceReference;
@@ -61,10 +61,10 @@ class EdcModuleProcessorTest {
         fileManager.setLocation(StandardLocation.CLASS_OUTPUT, List.of(tempDir.toFile()));
         fileManager.setLocation(StandardLocation.SOURCE_OUTPUT, List.of(tempDir.toFile()));
 
-        var file1 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/testclasses/SampleExtensionWithoutAnnotation.java");
-        var file2 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/testclasses/SecondExtension.java");
-        var file3 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/testclasses/OptionalService.java");
-        var file4 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/testclasses/RequiredService.java");
+        var file1 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/testextensions/SampleExtensionWithoutAnnotation.java");
+        var file2 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/testextensions/SecondExtension.java");
+        var file3 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/testextensions/OptionalService.java");
+        var file4 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/testextensions/RequiredService.java");
         var compilationUnits = fileManager.getJavaFileObjects(file1, file2, file3, file4);
 
         var options = List.of("-Aedc.id=" + EDC_ID, "-Aedc.version=" + EDC_VERSION);

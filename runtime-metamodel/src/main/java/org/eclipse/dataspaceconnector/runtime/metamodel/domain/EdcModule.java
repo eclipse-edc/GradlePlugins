@@ -29,7 +29,7 @@ import static java.util.Objects.requireNonNull;
  */
 @JsonDeserialize(builder = EdcModule.Builder.class)
 public class EdcModule {
-
+    private final List<String> categories = new ArrayList<>();
     private final Set<EdcServiceExtension> extensions;
     private final List<Service> extensionPoints = new ArrayList<>();
     private String modulePath;
@@ -61,6 +61,13 @@ public class EdcModule {
 
     public String getName() {
         return name;
+    }
+
+    /**
+     * Returns categories assigned to the module, or an empty collection.
+     */
+    public List<String> getCategories() {
+        return categories;
     }
 
     /**
@@ -108,16 +115,20 @@ public class EdcModule {
             return this;
         }
 
-
-        public EdcModule build() {
-            requireNonNull(module.modulePath, "id");
-            requireNonNull(module.version, "version");
-            return module;
+        public Builder categories(List<String> categories) {
+            module.categories.addAll(categories);
+            return this;
         }
 
         public Builder name(String moduleName) {
             module.name = moduleName;
             return this;
+        }
+
+        public EdcModule build() {
+            requireNonNull(module.modulePath, "id");
+            requireNonNull(module.version, "version");
+            return module;
         }
     }
 }

@@ -14,7 +14,6 @@
 
 package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.introspection;
 
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Extension;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.ExtensionPoint;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Spi;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.Service;
@@ -24,9 +23,9 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.util.Elements;
 
 import static java.util.stream.Collectors.toList;
+import static org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.compiler.AnnotationFunctions.attributeStringValues;
 import static org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.compiler.AnnotationFunctions.attributeValue;
 import static org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.compiler.AnnotationFunctions.mirrorFor;
-import static org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.introspection.IntrospectionUtils.getExtensionElements;
 
 /**
  * Contains methods for introspecting the current module using the Java Compiler API.
@@ -38,16 +37,10 @@ public class ModuleIntrospector {
         this.elementUtils = elementUtils;
     }
 
-    /**
-     * Returns the module name set by either the {@link Spi} or {@link Extension} annotation.
-     */
-    public List<String> getExtensionNames(RoundEnvironment environment) {
-        return getExtensionElements(environment).stream().map(extensionElement -> {
-            var annotationMirror = mirrorFor(Extension.class, extensionElement);
-            return annotationMirror != null ?
-                    attributeValue(String.class, "value", annotationMirror, elementUtils) :
-                    extensionElement.getSimpleName().toString();
-        }).collect(toList());
+
+    public List<String> getCategories(RoundEnvironment environment) {
+        var extensionElement = environment.getElementsAnnotatedWith(Spi.class).iterator().next();
+        return attributeStringValues("categories", mirrorFor(Spi.class, extensionElement), elementUtils);
     }
 
     /**

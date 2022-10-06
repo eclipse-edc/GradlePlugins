@@ -128,6 +128,7 @@ public class EdcModuleProcessor extends AbstractProcessor {
             }
         } else {
             moduleBuilder.name(moduleIntrospector.getModuleName(environment));
+            moduleBuilder.categories(moduleIntrospector.getCategories(environment));
         }
 
         moduleBuilder.extensionPoints(moduleIntrospector.resolveExtensionPoints(environment));

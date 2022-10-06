@@ -38,7 +38,6 @@ public class EdcServiceExtension {
     private EdcServiceExtension() {
     }
 
-
     /**
      * Returns the module readable name.
      */

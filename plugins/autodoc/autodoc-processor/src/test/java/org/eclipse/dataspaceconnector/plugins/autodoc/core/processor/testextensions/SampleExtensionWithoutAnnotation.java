@@ -12,7 +12,7 @@
  *
  */
 
-package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testclasses;
+package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testextensions;
 
 import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.Constants;
 import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.SomeOtherService;

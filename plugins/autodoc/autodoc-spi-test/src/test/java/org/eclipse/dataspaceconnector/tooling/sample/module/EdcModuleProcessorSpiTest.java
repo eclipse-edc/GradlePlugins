@@ -45,10 +45,9 @@ class EdcModuleProcessorSpiTest {
             var modules = new ObjectMapper().readValue(stream, TYPE_REFERENCE);
             assertThat(modules.size()).isEqualTo(1);
 
-            var extension = modules.get(0).getExtensions().iterator().next();
+            var extension = modules.get(0);
             assertThat(extension.getName()).isEqualTo(TestConstants.NAME);
             assertThat(extension.getCategories()).contains("category");
-            assertThat(extension.getOverview()).isNotEmpty();
 
             var extensionPoints = modules.get(0).getExtensionPoints();
             assertThat(extensionPoints.size()).isEqualTo(1);
