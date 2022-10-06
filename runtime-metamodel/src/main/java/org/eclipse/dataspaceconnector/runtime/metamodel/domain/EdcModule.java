@@ -14,6 +14,7 @@
 
 package org.eclipse.dataspaceconnector.runtime.metamodel.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 
@@ -68,6 +70,16 @@ public class EdcModule {
      */
     public List<String> getCategories() {
         return categories;
+    }
+
+    /**
+     * Returns categories assigned to the module itself, plus the categories of all extensions found in the module.
+     */
+    @JsonIgnore
+    public List<String> getAllCategories() {
+        var extensionCategories = extensions.stream().flatMap(e -> e.getCategories().stream()).collect(Collectors.toList());
+        extensionCategories.addAll(categories);
+        return extensionCategories;
     }
 
     /**

@@ -47,17 +47,14 @@ import static org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.comp
 import static org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.compiler.ElementFunctions.typeFor;
 import static org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.introspection.IntrospectionUtils.getExtensionElements;
 
+/**
+ * Contains methods for introspecting any given extension (represented by an {@link Element}) using the Java Compiler API.
+ */
 public class ExtensionIntrospector {
     private final Elements elementUtils;
 
     public ExtensionIntrospector(Elements elementUtils) {
         this.elementUtils = elementUtils;
-    }
-
-    @NotNull
-    private static <A extends Annotation> Stream<? extends Element> getEnclosedFieldsAnnotatedWith(Element extensionElement, Class<A> annotationClass) {
-        return extensionElement.getEnclosedElements()
-                .stream().filter(e -> e.getAnnotation(annotationClass) != null);
     }
 
     /**
@@ -73,7 +70,7 @@ public class ExtensionIntrospector {
      * Resolves referenced services by introspecting usages of {@link Inject}.
      */
     public List<ServiceReference> resolveReferencedServices(Element extensionElement) {
-        return getEnclosedFieldsAnnotatedWith(extensionElement, Inject.class)
+        return getEnclosedElementsAnnotatedWith(extensionElement, Inject.class)
                 .map(element -> {
                     var required = attributeValue(Boolean.class, "required", mirrorFor(Inject.class, element), elementUtils);
                     return new ServiceReference(typeFor(element), required);
@@ -84,13 +81,15 @@ public class ExtensionIntrospector {
     /**
      * Resolves referenced services by introspecting the {@link Provides} annotation.
      */
-    public List<Service> resolveProvidedServices(RoundEnvironment environment, Element element) {
+    public List<Service> resolveProvidedServices(Element element) {
 
+        // class annotation @Provides
         var providesServices = ofNullable(mirrorFor(Provides.class, element))
                 .map(mirror -> attributeTypeValues("value", mirror, elementUtils).stream())
                 .orElse(Stream.empty());
 
-        var providerMethodServices = getEnclosedFieldsAnnotatedWith(element, Provider.class)
+        // @Provider methods
+        var providerMethodServices = getEnclosedElementsAnnotatedWith(element, Provider.class)
                 .map(AnnotationFunctions::mirrorForReturn)
                 .filter(Objects::nonNull)
                 .map(TypeMirror::toString);
@@ -105,7 +104,7 @@ public class ExtensionIntrospector {
      * Resolves configuration points declared with {@link EdcSetting}.
      */
     public List<ConfigurationSetting> resolveConfigurationSettings(Element element) {
-        return getEnclosedFieldsAnnotatedWith(element, EdcSetting.class)
+        return getEnclosedElementsAnnotatedWith(element, EdcSetting.class)
                 .filter(VariableElement.class::isInstance)
                 .map(VariableElement.class::cast)
                 .map(this::createConfigurationSetting)
@@ -117,6 +116,15 @@ public class ExtensionIntrospector {
         return annotationMirror != null ?
                 attributeValue(String.class, "value", annotationMirror, elementUtils) :
                 extensionElement.getSimpleName().toString();
+    }
+
+
+    /**
+     * Returns a stream consisting of the {@code extensionElement}'s enclosed {@link Element}s, that are annotated with the given annotation class.
+     */
+    private <A extends Annotation> Stream<? extends Element> getEnclosedElementsAnnotatedWith(Element extensionElement, Class<A> annotationClass) {
+        return extensionElement.getEnclosedElements()
+                .stream().filter(e -> e.getAnnotation(annotationClass) != null);
     }
 
     /**

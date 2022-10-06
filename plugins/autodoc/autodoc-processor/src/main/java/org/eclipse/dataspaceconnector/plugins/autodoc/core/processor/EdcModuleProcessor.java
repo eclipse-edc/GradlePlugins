@@ -108,24 +108,16 @@ public class EdcModuleProcessor extends AbstractProcessor {
         if (moduleType == ModuleType.EXTENSION) {
             var extensionElements = getExtensionElements(environment);
 
-            for (var element : extensionElements) {
-
-                extensionBuilder = EdcServiceExtension.Builder.newInstance().type(moduleType);
-
-                extensionBuilder.name(extensionIntrospector.getExtensionName(element));
-
-                extensionBuilder.provides(extensionIntrospector.resolveProvidedServices(environment, element));
-
-                extensionBuilder.references(extensionIntrospector.resolveReferencedServices(element));
-
-                extensionBuilder.configuration(extensionIntrospector.resolveConfigurationSettings(element));
-
-                extensionBuilder.overview(overviewIntrospector.generateModuleOverview(moduleType, environment));
-
-                extensionBuilder.categories(extensionIntrospector.getExtensionCategories(environment));
-
+            extensionElements.forEach(element -> {
+                extensionBuilder = EdcServiceExtension.Builder.newInstance().type(moduleType)
+                        .name(extensionIntrospector.getExtensionName(element))
+                        .provides(extensionIntrospector.resolveProvidedServices(element))
+                        .references(extensionIntrospector.resolveReferencedServices(element))
+                        .configuration(extensionIntrospector.resolveConfigurationSettings(element))
+                        .overview(overviewIntrospector.generateModuleOverview(moduleType, environment))
+                        .categories(extensionIntrospector.getExtensionCategories(environment));
                 moduleBuilder.extension(extensionBuilder.build());
-            }
+            });
         } else {
             moduleBuilder.name(moduleIntrospector.getModuleName(environment));
             moduleBuilder.categories(moduleIntrospector.getCategories(environment));

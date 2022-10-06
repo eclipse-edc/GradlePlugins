@@ -47,7 +47,8 @@ class EdcModuleProcessorSpiTest {
 
             var extension = modules.get(0);
             assertThat(extension.getName()).isEqualTo(TestConstants.NAME);
-            assertThat(extension.getCategories()).contains("category");
+            assertThat(extension.getCategories()).containsOnly("category");
+            assertThat(extension.getAllCategories()).containsOnly("category");
 
             var extensionPoints = modules.get(0).getExtensionPoints();
             assertThat(extensionPoints.size()).isEqualTo(1);
