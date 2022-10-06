@@ -12,12 +12,11 @@
  *
  */
 
-/**
- * This is a sample SPI package.
- */
-@Spi(value = NAME, categories = { "category" })
-package org.eclipse.dataspaceconnector.tooling.sample.module;
+package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testextensions;
 
-import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Spi;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Inject;
 
-import static org.eclipse.dataspaceconnector.tooling.sample.module.TestConstants.NAME;
+public class NotAnExtension {
+    @Inject(required = false)
+    private OptionalService optionalService;
+}

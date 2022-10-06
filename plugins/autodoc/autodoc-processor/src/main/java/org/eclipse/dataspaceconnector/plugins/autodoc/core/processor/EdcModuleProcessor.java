@@ -43,7 +43,6 @@ import javax.tools.StandardLocation;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.NOTE;
-import static org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.introspection.IntrospectionUtils.getExtensionElements;
 
 /**
  * Generates an EDC module manifest by introspecting a set of bounded artifacts.
@@ -85,7 +84,7 @@ public class EdcModuleProcessor extends AbstractProcessor {
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        moduleIntrospector = new ModuleIntrospector(processingEnv.getElementUtils());
+        moduleIntrospector = new ModuleIntrospector(processingEnv.getElementUtils(), processingEnv.getTypeUtils());
         //todo: replace this Noop converter with an actual JavadocConverter
         overviewIntrospector = new OverviewIntrospector(javadoc -> javadoc, processingEnv.getElementUtils());
 
@@ -106,7 +105,7 @@ public class EdcModuleProcessor extends AbstractProcessor {
         }
 
         if (moduleType == ModuleType.EXTENSION) {
-            var extensionElements = getExtensionElements(environment);
+            var extensionElements = moduleIntrospector.getExtensionElements(environment);
 
             extensionElements.forEach(element -> {
                 extensionBuilder = EdcServiceExtension.Builder.newInstance().type(moduleType)
@@ -115,7 +114,7 @@ public class EdcModuleProcessor extends AbstractProcessor {
                         .references(extensionIntrospector.resolveReferencedServices(element))
                         .configuration(extensionIntrospector.resolveConfigurationSettings(element))
                         .overview(overviewIntrospector.generateModuleOverview(moduleType, environment))
-                        .categories(extensionIntrospector.getExtensionCategories(environment));
+                        .categories(extensionIntrospector.getExtensionCategories(element));
                 moduleBuilder.extension(extensionBuilder.build());
             });
         } else {
@@ -159,7 +158,7 @@ public class EdcModuleProcessor extends AbstractProcessor {
 
     @Nullable
     private ModuleType determineAndValidateModuleType(RoundEnvironment environment) {
-        var extensionElements = getExtensionElements(environment);
+        var extensionElements = moduleIntrospector.getExtensionElements(environment);
         if (extensionElements.isEmpty()) {
             // check if it is an SPI
             var spiElements = environment.getElementsAnnotatedWith(Spi.class);

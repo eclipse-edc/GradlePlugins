@@ -14,6 +14,7 @@
 
 package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor;
 
+import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testextensions.NotAnExtension;
 import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testextensions.OptionalService;
 import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testextensions.RequiredService;
 import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testextensions.SampleExtensionWithoutAnnotation;
@@ -47,7 +48,8 @@ class EdcModuleProcessorExtensionTest extends EdcModuleProcessorTest {
                 .hasSize(2)
                 .extracting(EdcServiceExtension::getName)
                 .containsOnly(SampleExtensionWithoutAnnotation.class.getSimpleName(),
-                        SecondExtension.class.getSimpleName());
+                        SecondExtension.class.getSimpleName())
+                .doesNotContain(NotAnExtension.class.getName()); //explicitly exclude this
     }
 
     @Test

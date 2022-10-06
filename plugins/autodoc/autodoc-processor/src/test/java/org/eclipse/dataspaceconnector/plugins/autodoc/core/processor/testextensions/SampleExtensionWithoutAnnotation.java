@@ -19,9 +19,10 @@ import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Inject;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Provider;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Provides;
+import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
 
 @Provides(SomeOtherService.class)
-public class SampleExtensionWithoutAnnotation {
+public class SampleExtensionWithoutAnnotation implements ServiceExtension {
     @EdcSetting(value = Constants.TEST_SETTING_NAME, required = true)
     public static final String TEST_SETTING = Constants.TEST_SETTING_KEY;
 

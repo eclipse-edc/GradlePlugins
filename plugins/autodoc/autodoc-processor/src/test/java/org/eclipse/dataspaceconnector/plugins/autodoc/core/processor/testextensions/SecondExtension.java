@@ -15,8 +15,9 @@
 package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testextensions;
 
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Inject;
+import org.eclipse.dataspaceconnector.spi.system.ServiceExtension;
 
-public class SecondExtension {
+public class SecondExtension implements ServiceExtension {
 
     @Inject
     private SomeService requiredService;

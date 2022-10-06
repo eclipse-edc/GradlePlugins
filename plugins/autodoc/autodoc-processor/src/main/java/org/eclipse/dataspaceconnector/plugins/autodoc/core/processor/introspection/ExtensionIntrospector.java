@@ -32,7 +32,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
-import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
@@ -45,7 +44,6 @@ import static org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.comp
 import static org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.compiler.AnnotationFunctions.attributeValue;
 import static org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.compiler.AnnotationFunctions.mirrorFor;
 import static org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.compiler.ElementFunctions.typeFor;
-import static org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.introspection.IntrospectionUtils.getExtensionElements;
 
 /**
  * Contains methods for introspecting any given extension (represented by an {@link Element}) using the Java Compiler API.
@@ -60,8 +58,7 @@ public class ExtensionIntrospector {
     /**
      * Returns module categories set using either the {@link Spi} or {@link Extension} annotation.
      */
-    public List<String> getExtensionCategories(RoundEnvironment environment) {
-        var extensionElement = getExtensionElements(environment).iterator().next();
+    public List<String> getExtensionCategories(Element extensionElement) {
         var annotationMirror = mirrorFor(Extension.class, extensionElement);
         return annotationMirror != null ? attributeStringValues("categories", annotationMirror, elementUtils) : Collections.emptyList();
     }
@@ -122,7 +119,7 @@ public class ExtensionIntrospector {
     /**
      * Returns a stream consisting of the {@code extensionElement}'s enclosed {@link Element}s, that are annotated with the given annotation class.
      */
-    private <A extends Annotation> Stream<? extends Element> getEnclosedElementsAnnotatedWith(Element extensionElement, Class<A> annotationClass) {
+    private Stream<? extends Element> getEnclosedElementsAnnotatedWith(Element extensionElement, Class<? extends Annotation> annotationClass) {
         return extensionElement.getEnclosedElements()
                 .stream().filter(e -> e.getAnnotation(annotationClass) != null);
     }

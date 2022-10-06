@@ -12,7 +12,7 @@
  *
  */
 
-package org.eclipse.dataspaceconnector.plugins.autodoc.test;
+package org.eclipse.dataspaceconnector.spi.system;
 
-public interface ProvidedService1 {
+public interface ServiceExtension {
 }
