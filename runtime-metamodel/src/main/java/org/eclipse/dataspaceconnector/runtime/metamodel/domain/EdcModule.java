@@ -14,13 +14,13 @@
 
 package org.eclipse.dataspaceconnector.runtime.metamodel.domain;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
 
@@ -29,22 +29,27 @@ import static java.util.Objects.requireNonNull;
  */
 @JsonDeserialize(builder = EdcModule.Builder.class)
 public class EdcModule {
-    private final List<String> categories = new ArrayList<>();
+
+    private final Set<EdcServiceExtension> extensions;
     private final List<Service> extensionPoints = new ArrayList<>();
-    private final List<Service> provides = new ArrayList<>();
-    private final List<ServiceReference> references = new ArrayList<>();
-    private final List<ConfigurationSetting> configuration = new ArrayList<>();
-    private String id;
+    private String modulePath;
     private String version;
     private String name;
-    private ModuleType type = ModuleType.EXTENSION;
-    private String overview;
+
+
+    private EdcModule() {
+        extensions = new HashSet<>();
+    }
+
+    public Set<EdcServiceExtension> getExtensions() {
+        return extensions;
+    }
 
     /**
      * Returns the module id, which corresponds to Maven-style <code>group:artifact</code> coordinates.
      */
-    public String getId() {
-        return id;
+    public String getModulePath() {
+        return modulePath;
     }
 
     /**
@@ -54,32 +59,8 @@ public class EdcModule {
         return version;
     }
 
-    /**
-     * Returns the module readable name.
-     */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Returns the module type.
-     */
-    public ModuleType getType() {
-        return type;
-    }
-
-    /**
-     * Returns categories assigned to the module, or an empty collection.
-     */
-    public List<String> getCategories() {
-        return categories;
-    }
-
-    /**
-     * Returns services provided by this extension module, or an empty collection.
-     */
-    public List<Service> getProvides() {
-        return provides;
     }
 
     /**
@@ -89,43 +70,6 @@ public class EdcModule {
         return extensionPoints;
     }
 
-    /**
-     * Returns services that are provided by other modules and referenced in the current module, or an empty collection.
-     */
-    public List<ServiceReference> getReferences() {
-        return references;
-    }
-
-    /**
-     * Returns the configuration settings for this module.
-     */
-    public List<ConfigurationSetting> getConfiguration() {
-        return configuration;
-    }
-
-    /**
-     * Returns a Markdown-formatted description of this module.
-     */
-    public String getOverview() {
-        return overview;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, version);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        var edcModule = (EdcModule) o;
-        return id.equals(edcModule.id) && version.equals(edcModule.version);
-    }
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class Builder {
@@ -135,13 +79,22 @@ public class EdcModule {
             module = new EdcModule();
         }
 
-        @JsonCreator
-        public static Builder newInstance() {
+        public static EdcModule.Builder newInstance() {
             return new Builder();
         }
 
-        public Builder id(String id) {
-            module.id = id;
+        public Builder extension(EdcServiceExtension extension) {
+            module.extensions.add(extension);
+            return this;
+        }
+
+        public Builder extensions(Set<EdcServiceExtension> extensions) {
+            module.extensions.addAll(extensions);
+            return this;
+        }
+
+        public Builder modulePath(String modulePath) {
+            module.modulePath = modulePath;
             return this;
         }
 
@@ -150,52 +103,21 @@ public class EdcModule {
             return this;
         }
 
-        public Builder name(String name) {
-            module.name = name;
-            return this;
-        }
-
-        public Builder type(ModuleType type) {
-            module.type = type;
-            return this;
-        }
-
-        public Builder categories(List<String> categories) {
-            module.categories.addAll(categories);
-            return this;
-        }
-
-        public Builder provides(List<Service> provides) {
-            module.provides.addAll(provides);
-            return this;
-        }
-
         public Builder extensionPoints(List<Service> provides) {
             module.extensionPoints.addAll(provides);
             return this;
         }
 
-        public Builder references(List<ServiceReference> requires) {
-            module.references.addAll(requires);
-            return this;
-        }
-
-        public Builder configuration(List<ConfigurationSetting> configuration) {
-            module.configuration.addAll(configuration);
-            return this;
-        }
-
-        public Builder overview(String overview) {
-            module.overview = overview;
-            return this;
-        }
 
         public EdcModule build() {
-            requireNonNull(module.id, "id");
+            requireNonNull(module.modulePath, "id");
             requireNonNull(module.version, "version");
-            requireNonNull(module.name, "name");
             return module;
         }
 
+        public Builder name(String moduleName) {
+            module.name = moduleName;
+            return this;
+        }
     }
 }

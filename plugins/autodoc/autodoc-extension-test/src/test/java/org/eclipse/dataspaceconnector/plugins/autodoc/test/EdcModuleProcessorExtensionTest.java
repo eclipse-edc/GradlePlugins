@@ -54,7 +54,7 @@ class EdcModuleProcessorExtensionTest {
             var manifests = new ObjectMapper().readValue(stream, TYPE_REFERENCE);
             assertThat(manifests.size()).isEqualTo(1);
 
-            var manifest = manifests.get(0);
+            var manifest = manifests.get(0).getExtensions().iterator().next();
             assertThat(manifest.getName()).isEqualTo(SampleExtension.NAME);
             assertThat(manifest.getCategories()).contains(SampleExtension.CATEGORY);
             assertThat(manifest.getOverview()).isNotEmpty();

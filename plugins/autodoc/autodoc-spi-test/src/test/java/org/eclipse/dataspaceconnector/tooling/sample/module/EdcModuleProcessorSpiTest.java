@@ -42,15 +42,15 @@ class EdcModuleProcessorSpiTest {
         assertThat(url).isNotNull();
 
         try (var stream = url.openStream()) {
-            var manifests = new ObjectMapper().readValue(stream, TYPE_REFERENCE);
-            assertThat(manifests.size()).isEqualTo(1);
+            var modules = new ObjectMapper().readValue(stream, TYPE_REFERENCE);
+            assertThat(modules.size()).isEqualTo(1);
 
-            var manifest = manifests.get(0);
-            assertThat(manifest.getName()).isEqualTo(TestConstants.NAME);
-            assertThat(manifest.getCategories()).contains("category");
-            assertThat(manifest.getOverview()).isNotEmpty();
+            var extension = modules.get(0).getExtensions().iterator().next();
+            assertThat(extension.getName()).isEqualTo(TestConstants.NAME);
+            assertThat(extension.getCategories()).contains("category");
+            assertThat(extension.getOverview()).isNotEmpty();
 
-            var extensionPoints = manifest.getExtensionPoints();
+            var extensionPoints = modules.get(0).getExtensionPoints();
             assertThat(extensionPoints.size()).isEqualTo(1);
             assertThat(extensionPoints.get(0).getService()).isEqualTo(ExtensionService.class.getName());
 

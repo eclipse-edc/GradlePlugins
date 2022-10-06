@@ -18,6 +18,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.ConfigurationSetting;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.EdcModule;
+import org.eclipse.dataspaceconnector.runtime.metamodel.domain.EdcServiceExtension;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.Service;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.ServiceReference;
 import org.junit.jupiter.api.Test;
@@ -32,25 +33,29 @@ class EdcModuleTest {
     void verifySerializeDeserialize() throws JsonProcessingException {
         var mapper = new ObjectMapper();
         var module = EdcModule.Builder.newInstance()
-                .id("foo:bar")
+                .modulePath("foo:bar")
                 .version("1.0.0")
-                .name("test")
-                .overview("overview")
-                .categories(List.of("category"))
+                .extension(EdcServiceExtension.Builder.newInstance()
+                        .name("test")
+                        .overview("overview")
+                        .categories(List.of("category"))
+                        .provides(List.of(new Service("com.bar.BazService")))
+                        .references(List.of(new ServiceReference("com.bar.QuuxService", false)))
+                        .configuration(List.of(ConfigurationSetting.Builder.newInstance().key("key1").build()))
+                        .build())
                 .extensionPoints(List.of(new Service("com.bar.BarService")))
-                .provides(List.of(new Service("com.bar.BazService")))
-                .references(List.of(new ServiceReference("com.bar.QuuxService", false)))
-                .configuration(List.of(ConfigurationSetting.Builder.newInstance().key("key1").build()))
                 .build();
 
         var serialized = mapper.writeValueAsString(module);
         var deserialized = mapper.readValue(serialized, EdcModule.class);
 
         assertThat(deserialized).isNotNull();
-        assertThat(deserialized.getCategories().size()).isEqualTo(1);
         assertThat(deserialized.getExtensionPoints().size()).isEqualTo(1);
-        assertThat(deserialized.getProvides().size()).isEqualTo(1);
-        assertThat(deserialized.getReferences().size()).isEqualTo(1);
-        assertThat(deserialized.getConfiguration().size()).isEqualTo(1);
+
+        var extension = deserialized.getExtensions().iterator().next();
+        assertThat(extension.getCategories().size()).isEqualTo(1);
+        assertThat(extension.getProvides().size()).isEqualTo(1);
+        assertThat(extension.getReferences().size()).isEqualTo(1);
+        assertThat(extension.getConfiguration().size()).isEqualTo(1);
     }
 }

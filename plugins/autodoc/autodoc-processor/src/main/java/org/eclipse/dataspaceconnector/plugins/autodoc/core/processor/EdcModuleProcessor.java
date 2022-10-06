@@ -15,10 +15,12 @@
 package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.introspection.ExtensionIntrospector;
 import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.introspection.ModuleIntrospector;
 import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.introspection.OverviewIntrospector;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Spi;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.EdcModule;
+import org.eclipse.dataspaceconnector.runtime.metamodel.domain.EdcServiceExtension;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.ModuleType;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,6 +43,7 @@ import javax.tools.StandardLocation;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.NOTE;
+import static org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.introspection.IntrospectionUtils.getExtensionElements;
 
 /**
  * Generates an EDC module manifest by introspecting a set of bounded artifacts.
@@ -74,6 +77,8 @@ public class EdcModuleProcessor extends AbstractProcessor {
     private OverviewIntrospector overviewIntrospector;
 
     private EdcModule.Builder moduleBuilder;
+    private EdcServiceExtension.Builder extensionBuilder;
+    private ExtensionIntrospector extensionIntrospector;
 
     private ModuleType moduleType;
 
@@ -83,6 +88,8 @@ public class EdcModuleProcessor extends AbstractProcessor {
         moduleIntrospector = new ModuleIntrospector(processingEnv.getElementUtils());
         //todo: replace this Noop converter with an actual JavadocConverter
         overviewIntrospector = new OverviewIntrospector(javadoc -> javadoc, processingEnv.getElementUtils());
+
+        extensionIntrospector = new ExtensionIntrospector(processingEnv.getElementUtils());
     }
 
     @Override
@@ -98,15 +105,32 @@ public class EdcModuleProcessor extends AbstractProcessor {
             return false; // processing rounds are complete, return
         }
 
-        moduleBuilder.provides(moduleIntrospector.resolveProvidedServices(environment));
+        if (moduleType == ModuleType.EXTENSION) {
+            var extensionElements = getExtensionElements(environment);
+
+            for (var element : extensionElements) {
+
+                extensionBuilder = EdcServiceExtension.Builder.newInstance().type(moduleType);
+
+                extensionBuilder.name(extensionIntrospector.getExtensionName(element));
+
+                extensionBuilder.provides(extensionIntrospector.resolveProvidedServices(environment, element));
+
+                extensionBuilder.references(extensionIntrospector.resolveReferencedServices(element));
+
+                extensionBuilder.configuration(extensionIntrospector.resolveConfigurationSettings(element));
+
+                extensionBuilder.overview(overviewIntrospector.generateModuleOverview(moduleType, environment));
+
+                extensionBuilder.categories(extensionIntrospector.getExtensionCategories(environment));
+
+                moduleBuilder.extension(extensionBuilder.build());
+            }
+        } else {
+            moduleBuilder.name(moduleIntrospector.getModuleName(environment));
+        }
 
         moduleBuilder.extensionPoints(moduleIntrospector.resolveExtensionPoints(environment));
-
-        moduleBuilder.references(moduleIntrospector.resolveReferencedServices(environment));
-
-        moduleBuilder.configuration(moduleIntrospector.resolveConfigurationSettings(environment));
-
-        moduleBuilder.overview(overviewIntrospector.generateModuleOverview(moduleType, environment));
 
         return false;
     }
@@ -135,18 +159,14 @@ public class EdcModuleProcessor extends AbstractProcessor {
             return false;
         }
 
-        var name = moduleIntrospector.getModuleName(moduleType, environment);
-
-        var categories = moduleIntrospector.getModuleCategories(moduleType, environment);
-
-        moduleBuilder = EdcModule.Builder.newInstance().id(id).version(version).type(moduleType).name(name).categories(categories);
+        moduleBuilder = EdcModule.Builder.newInstance().modulePath(id).version(version);
 
         return true;
     }
 
     @Nullable
     private ModuleType determineAndValidateModuleType(RoundEnvironment environment) {
-        var extensionElements = moduleIntrospector.getExtensionElements(environment);
+        var extensionElements = getExtensionElements(environment);
         if (extensionElements.isEmpty()) {
             // check if it is an SPI
             var spiElements = environment.getElementsAnnotatedWith(Spi.class);
@@ -160,15 +180,8 @@ public class EdcModuleProcessor extends AbstractProcessor {
             }
             return ModuleType.SPI;
 
-        } else {
-            // an extension
-            if (extensionElements.size() > 1) {
-                var types = extensionElements.stream().map(e -> e.asType().toString()).collect(Collectors.joining(", "));
-                processingEnv.getMessager().printMessage(ERROR, "Multiple extension types found in module: " + types);
-                return null;
-            }
-            return ModuleType.EXTENSION;
         }
+        return ModuleType.EXTENSION;
     }
 
     private void writeManifest() {

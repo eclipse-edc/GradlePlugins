@@ -14,7 +14,11 @@
 
 package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor;
 
-import org.eclipse.dataspaceconnector.runtime.metamodel.domain.EdcModule;
+import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testclasses.OptionalService;
+import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testclasses.RequiredService;
+import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testclasses.SampleExtensionWithoutAnnotation;
+import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testclasses.SecondExtension;
+import org.eclipse.dataspaceconnector.runtime.metamodel.domain.EdcServiceExtension;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.Service;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.ServiceReference;
 import org.junit.jupiter.api.AfterEach;
@@ -57,10 +61,11 @@ class EdcModuleProcessorTest {
         fileManager.setLocation(StandardLocation.CLASS_OUTPUT, List.of(tempDir.toFile()));
         fileManager.setLocation(StandardLocation.SOURCE_OUTPUT, List.of(tempDir.toFile()));
 
-        var file1 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/SampleExtensionWithoutAnnotation.java");
-        var file2 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/OptionalService.java");
-        var file3 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/RequiredService.java");
-        var compilationUnits = fileManager.getJavaFileObjects(file1, file2, file3);
+        var file1 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/testclasses/SampleExtensionWithoutAnnotation.java");
+        var file2 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/testclasses/SecondExtension.java");
+        var file3 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/testclasses/OptionalService.java");
+        var file4 = new File("src/test/java/org/eclipse/dataspaceconnector/plugins/autodoc/core/processor/testclasses/RequiredService.java");
+        var compilationUnits = fileManager.getJavaFileObjects(file1, file2, file3, file4);
 
         var options = List.of("-Aedc.id=" + EDC_ID, "-Aedc.version=" + EDC_VERSION);
         task = compiler.getTask(null, fileManager, diagnostics, options, null, compilationUnits);
@@ -92,34 +97,59 @@ class EdcModuleProcessorTest {
         task.call();
 
         var modules = readManifest(filterManifest(tempDir));
-        assertThat(modules).hasSize(1).extracting(EdcModule::getName).containsOnly(SampleExtensionWithoutAnnotation.class.getSimpleName());
+        assertThat(modules).hasSize(1);
+        assertThat(modules.get(0).getExtensions())
+                .hasSize(2)
+                .extracting(EdcServiceExtension::getName)
+                .containsOnly(SampleExtensionWithoutAnnotation.class.getSimpleName(),
+                        SecondExtension.class.getSimpleName());
     }
 
     @Test
     void verifyManifestContainsCorrectElements() {
         task.call();
 
-        var manifests = readManifest(filterManifest(tempDir));
-        var manifest = manifests.get(0);
-        assertThat(manifest.getName()).isEqualTo(SampleExtensionWithoutAnnotation.class.getSimpleName());
-        assertThat(manifest.getCategories()).isNotNull().isEmpty();
-        assertThat(manifest.getOverview()).isNull();
+        var modules = readManifest(filterManifest(tempDir));
+        assertThat(modules).hasSize(1);
+        var extensions = modules.get(0).getExtensions();
 
-        var providedServices = manifest.getProvides();
+        assertThat(extensions)
+                .allSatisfy(e -> assertThat(e.getCategories()).isNotNull().isEmpty())
+                .allSatisfy(e -> assertThat(e.getOverview()).isNull())
+                .extracting(EdcServiceExtension::getName)
+                .containsOnly(SampleExtensionWithoutAnnotation.class.getSimpleName(), SecondExtension.class.getSimpleName());
+
+        var ext1 = extensions.stream().filter(e -> e.getName().equals(SampleExtensionWithoutAnnotation.class.getSimpleName()))
+                .findFirst()
+                .orElseThrow();
+
+        var providedServices = ext1.getProvides();
         assertThat(providedServices).hasSize(2)
                 .extracting(Service::getService)
                 .containsExactlyInAnyOrder(SomeService.class.getName(), SomeOtherService.class.getName());
 
-        var references = manifest.getReferences();
+        var references = ext1.getReferences();
         assertThat(references.size()).isEqualTo(2);
         assertThat(references).contains(new ServiceReference(OptionalService.class.getName(), false));
         assertThat(references).contains(new ServiceReference(RequiredService.class.getName(), true));
 
-        var configuration = manifest.getConfiguration().get(0);
+        var configuration = ext1.getConfiguration().get(0);
         assertThat(configuration).isNotNull();
         assertThat(configuration.getKey()).isEqualTo(SampleExtensionWithoutAnnotation.TEST_SETTING);
         assertThat(configuration.isRequired()).isTrue();
         assertThat(configuration.getDescription()).isNotEmpty();
+
+        var ext2 = extensions.stream().filter(e -> e.getName().equals(SecondExtension.class.getSimpleName()))
+                .findFirst()
+                .orElseThrow();
+
+        assertThat(ext2.getProvides()).isEmpty();
+
+        assertThat(ext2.getReferences())
+                .hasSize(1)
+                .containsOnly(new ServiceReference(SomeService.class.getName(), true));
+
+        assertThat(ext2.getConfiguration()).isEmpty();
     }
 
 
