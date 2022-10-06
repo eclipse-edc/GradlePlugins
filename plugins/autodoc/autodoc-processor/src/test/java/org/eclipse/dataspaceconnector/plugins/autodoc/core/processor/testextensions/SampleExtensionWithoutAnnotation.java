@@ -15,8 +15,6 @@
 package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testextensions;
 
 import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.Constants;
-import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.SomeOtherService;
-import org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.SomeService;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.EdcSetting;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Inject;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Provider;

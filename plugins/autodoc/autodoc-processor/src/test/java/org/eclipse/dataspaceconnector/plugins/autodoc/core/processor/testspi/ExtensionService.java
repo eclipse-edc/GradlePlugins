@@ -12,10 +12,10 @@
  *
  */
 
-package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor;
+package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testspi;
 
-public interface Constants {
-    String TEST_SETTING_NAME = "Test setting name";
-    String TEST_SETTING_KEY = "edc.test.setting";
-    String TEST_SPI_MODULE = "Test SPI Module";
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.ExtensionPoint;
+
+@ExtensionPoint
+public interface ExtensionService {
 }

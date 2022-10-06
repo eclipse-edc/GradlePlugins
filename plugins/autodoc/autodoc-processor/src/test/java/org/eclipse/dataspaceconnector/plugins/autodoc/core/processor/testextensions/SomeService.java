@@ -12,10 +12,7 @@
  *
  */
 
-package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor;
+package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testextensions;
 
-public interface Constants {
-    String TEST_SETTING_NAME = "Test setting name";
-    String TEST_SETTING_KEY = "edc.test.setting";
-    String TEST_SPI_MODULE = "Test SPI Module";
+public interface SomeService {
 }

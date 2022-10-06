@@ -12,7 +12,12 @@
  *
  */
 
-package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor;
+/**
+ * This is a sample SPI package.
+ */
+@Spi(value = TEST_SPI_MODULE, categories = { "category" })
+package org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.testspi;
 
-public interface SomeService {
-}
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Spi;
+
+import static org.eclipse.dataspaceconnector.plugins.autodoc.core.processor.Constants.TEST_SPI_MODULE;
