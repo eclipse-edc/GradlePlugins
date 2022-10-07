@@ -34,6 +34,7 @@ public class EdcServiceExtension {
     private String name;
     private ModuleType type = ModuleType.EXTENSION;
     private String overview;
+    private String className;
 
     private EdcServiceExtension() {
     }
@@ -87,6 +88,10 @@ public class EdcServiceExtension {
         return overview;
     }
 
+    public String getClassName() {
+        return className;
+    }
+
     @JsonPOJOBuilder(withPrefix = "")
     public static class Builder {
         private final EdcServiceExtension serviceExtension;
@@ -137,10 +142,15 @@ public class EdcServiceExtension {
             return this;
         }
 
-        public EdcServiceExtension build() {
-            requireNonNull(serviceExtension.name, "name");
-            return serviceExtension;
+        public Builder className(String className) {
+            serviceExtension.className = className;
+            return this;
         }
 
+        public EdcServiceExtension build() {
+            requireNonNull(serviceExtension.name, "name");
+            requireNonNull(serviceExtension.className, "className");
+            return serviceExtension;
+        }
     }
 }

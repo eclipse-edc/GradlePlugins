@@ -39,6 +39,7 @@ class EdcModuleTest {
                         .name("test")
                         .overview("overview")
                         .categories(List.of("category"))
+                        .className("test-classname")
                         .provides(List.of(new Service("com.bar.BazService")))
                         .references(List.of(new ServiceReference("com.bar.QuuxService", false)))
                         .configuration(List.of(ConfigurationSetting.Builder.newInstance().key("key1").build()))

@@ -69,7 +69,7 @@ public class EdcModule {
      * Returns categories assigned to the module, or an empty collection.
      */
     public List<String> getCategories() {
-        return categories;
+        return getAllCategories();
     }
 
     /**

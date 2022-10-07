@@ -110,6 +110,7 @@ public class EdcModuleProcessor extends AbstractProcessor {
             extensionElements.forEach(element -> {
                 extensionBuilder = EdcServiceExtension.Builder.newInstance().type(moduleType)
                         .name(extensionIntrospector.getExtensionName(element))
+                        .className(extensionIntrospector.getExtensionClassname(element))
                         .provides(extensionIntrospector.resolveProvidedServices(element))
                         .references(extensionIntrospector.resolveReferencedServices(element))
                         .configuration(extensionIntrospector.resolveConfigurationSettings(element))

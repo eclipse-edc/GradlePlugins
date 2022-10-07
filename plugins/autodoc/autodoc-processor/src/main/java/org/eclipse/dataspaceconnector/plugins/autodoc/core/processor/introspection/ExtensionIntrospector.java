@@ -115,6 +115,10 @@ public class ExtensionIntrospector {
                 extensionElement.getSimpleName().toString();
     }
 
+    public String getExtensionClassname(Element element) {
+        return element.asType().toString();
+    }
+
 
     /**
      * Returns a stream consisting of the {@code extensionElement}'s enclosed {@link Element}s, that are annotated with the given annotation class.
