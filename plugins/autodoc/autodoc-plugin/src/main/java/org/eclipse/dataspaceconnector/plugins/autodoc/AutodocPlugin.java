@@ -19,6 +19,7 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.ModuleVersionIdentifier;
 
+import java.io.File;
 import java.util.function.Supplier;
 
 import static java.lang.String.format;
@@ -40,11 +41,22 @@ public class AutodocPlugin implements Plugin<Project> {
 
         // adds the annotation processor dependency
         project.getGradle().addListener(new AutodocDependencyInjector(project, format("%s:%s:", GROUP_NAME, PROCESSOR_ARTIFACT_NAME),
-                createVersionProvider(project)));
+                createVersionProvider(project), getOutputDirectoryProvider(project)));
 
         // registers a "named" task, that does nothing, except depend on the compileTask, which then runs the annotation processor
         project.getTasks().register("autodoc", t -> t.dependsOn("compileJava"));
 
+    }
+
+    private Supplier<File> getOutputDirectoryProvider(Project project) {
+        return () -> {
+            var extension = project.getExtensions().findByType(AutodocExtension.class);
+            if (extension != null) {
+                var fileProvider = extension.getOutputDirectory();
+                return fileProvider.isPresent() ? fileProvider.get() : null;
+            }
+            return null;
+        };
     }
 
     private Supplier<String> createVersionProvider(Project project) {

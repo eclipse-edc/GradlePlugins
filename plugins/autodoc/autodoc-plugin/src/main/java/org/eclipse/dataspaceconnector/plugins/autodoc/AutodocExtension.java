@@ -16,11 +16,17 @@ package org.eclipse.dataspaceconnector.plugins.autodoc;
 
 import org.gradle.api.provider.Property;
 
+import java.io.File;
+
 public abstract class AutodocExtension {
+    /**
+     * Overrides the default output directory relative to the current project dir
+     */
+    public abstract Property<File> getOutputDirectory();
+
     /**
      * Override the version of the annotation processor module to use. The default is to take the same version as the plugin.
      */
     public abstract Property<String> getProcessorVersion();
-
 
 }

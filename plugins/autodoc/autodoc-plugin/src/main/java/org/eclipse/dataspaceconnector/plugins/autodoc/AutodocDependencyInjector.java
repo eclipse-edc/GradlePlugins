@@ -19,6 +19,7 @@ import org.gradle.api.artifacts.DependencyResolutionListener;
 import org.gradle.api.artifacts.ResolvableDependencies;
 import org.gradle.api.tasks.compile.JavaCompile;
 
+import java.io.File;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -31,14 +32,17 @@ class AutodocDependencyInjector implements DependencyResolutionListener {
     private static final String ANNOTATION_PROCESSOR = "annotationProcessor";
     private static final String VERSION = "edc.version"; // must be identical to EdcModuleProcessor.VERSION
     private static final String ID = "edc.id"; // must be identical to EdcModuleProcessor.ID
+    private static final String OUTPUTDIR = "edc.outputDir"; // must be identical to EdcModuleProcessor.EDC_OUTPUTDIR_OVERRIDE
     private final Project project;
     private final String dependencyName;
     private final Supplier<String> versionSupplier;
+    private final Supplier<File> outputDirectoryProvider;
 
-    AutodocDependencyInjector(Project project, String dependencyName, Supplier<String> versionProvider) {
+    AutodocDependencyInjector(Project project, String dependencyName, Supplier<String> versionProvider, Supplier<File> outputDirectoryProvider) {
         this.project = project;
         this.dependencyName = dependencyName;
         versionSupplier = versionProvider;
+        this.outputDirectoryProvider = outputDirectoryProvider;
     }
 
     @Override
@@ -50,8 +54,9 @@ class AutodocDependencyInjector implements DependencyResolutionListener {
                 var compileJava = (JavaCompile) task;
                 var versionArg = format("-A%s=%s", VERSION, project.getVersion());
                 var idArg = format("-A%s=%s:%s", ID, project.getGroup(), project.getName());
+                var outputArg = format("-A%s=%s", OUTPUTDIR, outputDirectoryProvider.get());
 
-                compileJava.getOptions().getCompilerArgs().addAll(List.of(idArg, versionArg));
+                compileJava.getOptions().getCompilerArgs().addAll(List.of(idArg, versionArg, outputArg));
             }
         }
         project.getGradle().removeListener(this);
