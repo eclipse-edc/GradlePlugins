@@ -117,7 +117,7 @@ public class ModuleIntrospector {
     private boolean isExtension(Element element) {
 
         var t = (TypeElement) element;
-        while (!t.toString().equals(Object.class.getName())) {
+        while (t != null && !t.toString().equals(Object.class.getName())) {
             if (t.getInterfaces().stream().anyMatch(p -> p.toString().contains(SERVICE_EXTENSION_NAME))) {
                 return true;
             }
