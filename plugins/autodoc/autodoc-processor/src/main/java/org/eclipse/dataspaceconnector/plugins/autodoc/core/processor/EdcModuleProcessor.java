@@ -67,7 +67,7 @@ import static javax.tools.Diagnostic.Kind.NOTE;
 public class EdcModuleProcessor extends AbstractProcessor {
     public static final String VERSION = "edc.version";
     public static final String ID = "edc.id";
-    public static final String EDC_OUTPUTDIR_OVERRIDE = "edc.outputdir";
+    public static final String EDC_OUTPUTDIR_OVERRIDE = "edc.outputDir";
     private static final String MANIFEST_NAME = "edc.json";
     private final ObjectMapper mapper = new ObjectMapper();
 
