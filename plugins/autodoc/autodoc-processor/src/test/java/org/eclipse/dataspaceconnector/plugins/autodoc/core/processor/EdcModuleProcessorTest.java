@@ -133,7 +133,7 @@ abstract class EdcModuleProcessorTest {
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
             return Stream.of(
-                    Arguments.of("-Aedc.version=1.2.3", "-Aedc.id=someid", "-Aedc.outputDir=some/dir"),
+                    Arguments.of("-Aedc.version=1.2.3", "-Aedc.id=someid", "-Aedc.outputDir=build/some/dir"),
                     Arguments.of("-Aedc.version=1.2.3", "-Aedc.id=someid", null),
                     Arguments.of("-Aedc.version=1.2.3", "-Aedc.id=someid", "-Aedc.outputDir=")
             );
