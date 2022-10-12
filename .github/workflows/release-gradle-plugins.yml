@@ -1,4 +1,4 @@
-name: Create Autodoc Plugin Release
+name: Create Gradle Plugins Release/Snapshot
 on:
   workflow_dispatch:
     inputs:
