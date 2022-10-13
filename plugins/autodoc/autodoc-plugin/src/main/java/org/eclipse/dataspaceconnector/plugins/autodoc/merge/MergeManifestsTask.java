@@ -35,13 +35,11 @@ public class MergeManifestsTask extends DefaultTask {
 
     @TaskAction
     public void mergeManifests() {
-        var extension = getProject().getExtensions().findByType(MergeManifestExtension.class);
         var autodocExt = getProject().getExtensions().findByType(AutodocExtension.class);
 
-        Objects.requireNonNull(extension, "MergeManifestExtension cannot be null");
         Objects.requireNonNull(autodocExt, "AutodocExtension cannot be null");
 
-        var destination = extension.getDestinationFile().getOrNull();
+        var destination = autodocExt.getDestinationFile().getOrNull();
         var sourceFile = Path.of(autodocExt.getOutputDirectory().get().getAbsolutePath(), "edc.json").toFile();
 
         if (destination == null) {

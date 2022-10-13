@@ -14,7 +14,6 @@
 
 package org.eclipse.dataspaceconnector.plugins.autodoc;
 
-import org.eclipse.dataspaceconnector.plugins.autodoc.merge.MergeManifestExtension;
 import org.eclipse.dataspaceconnector.plugins.autodoc.merge.MergeManifestsTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -39,8 +38,6 @@ public class AutodocPlugin implements Plugin<Project> {
     public void apply(Project project) {
 
         project.getExtensions().create("audodocextension", AutodocExtension.class);
-        project.getExtensions().create("manifestMerge", MergeManifestExtension.class);
-
 
         // adds the annotation processor dependency
         project.getGradle().addListener(new AutodocDependencyInjector(project, format("%s:%s:", GROUP_NAME, PROCESSOR_ARTIFACT_NAME),
