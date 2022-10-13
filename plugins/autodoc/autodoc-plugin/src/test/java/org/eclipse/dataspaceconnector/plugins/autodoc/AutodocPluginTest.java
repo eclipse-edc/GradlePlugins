@@ -31,5 +31,6 @@ public class AutodocPluginTest {
         // Verify the result
         var tasks = project.getTasks();
         assertThat(tasks.findByName("autodoc")).isNotNull();
+        assertThat(tasks.findByName("mergeManifest")).isNotNull();
     }
 }

@@ -28,16 +28,31 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static java.lang.String.format;
 
+/**
+ * Appends the contents of one file to another.
+ * The contents of either file must be interpretable as {@link List}
+ */
 class JsonFileAppender {
     private static final ReentrantLock LOCK = new ReentrantLock();
     private final Logger logger;
     private final ObjectMapper mapper;
+    private final TypeReference<List<?>> listTypeReference;
 
     JsonFileAppender(Logger logger) {
         this.logger = logger;
         mapper = new ObjectMapper();
+        listTypeReference = new TypeReference<>() {
+        };
     }
 
+    /**
+     * Appends the contents of the source file to the destination file.
+     * It reads the contents of both files as {@link List}, and appends the contents of the source file to the destination file.
+     * This method is threadsafe.
+     *
+     * @param destination The file to which the list get appended to
+     * @param source      The file whose contents are appended
+     */
     public void append(File destination, File source) {
         logger.lifecycle(format("Appending contents of [%s] to [%s]", source, destination));
 
@@ -69,10 +84,8 @@ class JsonFileAppender {
     }
 
     private List<?> readJsonFile(File source) throws IOException {
-        var tr = new TypeReference<List<?>>() {
-        };
         try {
-            return mapper.readValue(source, tr);
+            return mapper.readValue(source, listTypeReference);
         } catch (IOException ex) {
             return Collections.emptyList();
         }

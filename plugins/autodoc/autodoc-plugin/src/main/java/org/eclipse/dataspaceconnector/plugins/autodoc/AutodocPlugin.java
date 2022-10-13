@@ -37,7 +37,7 @@ public class AutodocPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
 
-        project.getExtensions().create("audodocextension", AutodocExtension.class);
+        project.getExtensions().create("autodocextension", AutodocExtension.class);
 
         // adds the annotation processor dependency
         project.getGradle().addListener(new AutodocDependencyInjector(project, format("%s:%s:", GROUP_NAME, PROCESSOR_ARTIFACT_NAME),

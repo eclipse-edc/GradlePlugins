@@ -15,7 +15,6 @@
 package org.eclipse.dataspaceconnector.plugins.autodoc;
 
 import org.gradle.api.provider.Property;
-import org.gradle.api.tasks.OutputFile;
 
 import java.io.File;
 
@@ -31,9 +30,4 @@ public abstract class AutodocExtension {
     public abstract Property<String> getProcessorVersion();
 
 
-    /**
-     * Specifies the destination file when merging manifests
-     */
-    @OutputFile
-    public abstract Property<File> getDestinationFile();
 }
