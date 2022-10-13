@@ -3,6 +3,17 @@ plugins {
     id("org.gradle.crypto.checksum") version "1.4.0"
 }
 
+val jetBrainsAnnotationsVersion: String by project
+val jacksonVersion: String by project
+
+dependencies {
+    implementation("org.jetbrains:annotations:${jetBrainsAnnotationsVersion}")
+    implementation("com.fasterxml.jackson.core:jackson-core:${jacksonVersion}")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}")
+    implementation("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
+}
+
 val jupiterVersion: String by project
 val assertj: String by project
 val groupId: String by project
