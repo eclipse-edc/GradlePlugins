@@ -71,3 +71,35 @@ The `autodoc` plugin exposes the following configuration values:
    **Typically, you do not need to configure this and can safely omit it.**
 
 _The plugin will then generate an `edc.json` file for every module/gradle project._
+
+## Merging the manifests
+
+There is a Gradle task readily available to merge all the manifests into one large `manifest.json` file. This comes in
+handy when the JSON manifest is to be converted into other formats, such as Markdown, HTML, etc.
+
+To do that, execute the following command on a shell:
+
+```bash
+./gradlew mergeManifest
+```
+
+By default, the merged manifests are saved to `<rootProject>/build/manifest.json`. This destination file can be
+configured using a task property:
+
+```kotlin
+    // delete the merged manifest before the first merge task runs
+tasks.withType<MergeManifestsTask> {
+    destinationFile = YOUR_MANIFEST_FILE
+}
+```
+
+Be aware that due to the multithreaded nature of the merger task, every subproject's `edc.json` gets appended to the
+destination file, so it is a good idea to delete that file before running the `mergeManifest` task.
+Gradle can take care of that for you though:
+
+```kotlin
+// delete the merged manifest before the first merge task runs
+rootProject.tasks.withType<MergeManifestsTask> {
+    doFirst { YOUR_MANIFEST_FILE.delete() }
+}
+```
