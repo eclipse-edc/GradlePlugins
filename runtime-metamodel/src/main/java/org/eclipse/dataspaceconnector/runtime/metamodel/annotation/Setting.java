@@ -22,14 +22,11 @@ import java.lang.annotation.Target;
 
 /**
  * Denotes a runtime configuration setting.
- *
- * @deprecated Please use {@link Setting}
  */
 @Target({ ElementType.TYPE, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Deprecated
-public @interface EdcSetting {
+public @interface Setting {
 
     /**
      * The setting description.

@@ -21,6 +21,8 @@ import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Extension;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Inject;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Provider;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Provides;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Setting;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.SettingContext;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Spi;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.ConfigurationSetting;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.Service;
@@ -98,10 +100,11 @@ public class ExtensionIntrospector {
     }
 
     /**
-     * Resolves configuration points declared with {@link EdcSetting}.
+     * Resolves configuration points declared with {@link Setting}.
      */
     public List<ConfigurationSetting> resolveConfigurationSettings(Element element) {
-        return getEnclosedElementsAnnotatedWith(element, EdcSetting.class)
+        return Stream.concat(getEnclosedElementsAnnotatedWith(element, EdcSetting.class),
+                        getEnclosedElementsAnnotatedWith(element, Setting.class))
                 .filter(VariableElement.class::isInstance)
                 .map(VariableElement.class::cast)
                 .map(this::createConfigurationSetting)
@@ -129,7 +132,7 @@ public class ExtensionIntrospector {
     }
 
     /**
-     * Maps a {@link ConfigurationSetting} from an {@link EdcSetting} annotation.
+     * Maps a {@link ConfigurationSetting} from an {@link Setting} annotation.
      */
     private ConfigurationSetting createConfigurationSetting(VariableElement settingElement) {
         var prefix = resolveConfigurationPrefix(settingElement);
@@ -137,7 +140,10 @@ public class ExtensionIntrospector {
 
         var settingBuilder = ConfigurationSetting.Builder.newInstance().key(keyValue);
 
-        var settingMirror = mirrorFor(EdcSetting.class, settingElement);
+        var settingMirror = mirrorFor(Setting.class, settingElement);
+        if (settingMirror == null) { //todo: compatibility
+            settingMirror = mirrorFor(EdcSetting.class, settingElement);
+        }
 
         var description = attributeValue(String.class, "value", settingMirror, elementUtils);
         settingBuilder.description(description);
@@ -166,7 +172,10 @@ public class ExtensionIntrospector {
         if (enclosingElement == null) {
             return "";
         }
-        var contextMirror = mirrorFor(EdcSettingContext.class, enclosingElement);
+        var contextMirror = mirrorFor(SettingContext.class, enclosingElement);
+        if (contextMirror == null) {
+            contextMirror = mirrorFor(EdcSettingContext.class, enclosingElement);
+        }
         return contextMirror != null ? attributeValue(String.class, "value", contextMirror, elementUtils) : "";
     }
 }

@@ -21,6 +21,7 @@ import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Inject;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Provider;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Provides;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Requires;
+import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Setting;
 import org.eclipse.dataspaceconnector.runtime.metamodel.annotation.Spi;
 import org.eclipse.dataspaceconnector.runtime.metamodel.domain.Service;
 
@@ -91,13 +92,14 @@ public class ModuleIntrospector {
      */
     public Set<Element> getExtensionElements(RoundEnvironment environment) {
         var extensionClasses = environment.getElementsAnnotatedWith(Extension.class);
-        var settingsSymbols = environment.getElementsAnnotatedWith(EdcSetting.class);
+        var settingsSymbolsDeprecated = environment.getElementsAnnotatedWith(EdcSetting.class);
+        var settingsSymbols = environment.getElementsAnnotatedWith(Setting.class);
         var injectSymbols = environment.getElementsAnnotatedWith(Inject.class);
         var providerSymbols = environment.getElementsAnnotatedWith(Provider.class);
         var providesClasses = environment.getElementsAnnotatedWith(Provides.class);
         var requiresClasses = environment.getElementsAnnotatedWith(Requires.class);
 
-        var symbols = settingsSymbols.stream();
+        var symbols = Stream.concat(settingsSymbols.stream(), settingsSymbolsDeprecated.stream());
         symbols = Stream.concat(symbols, injectSymbols.stream());
         symbols = Stream.concat(symbols, providerSymbols.stream());
 

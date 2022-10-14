@@ -22,10 +22,13 @@ import java.lang.annotation.Target;
 
 /**
  * Defines a context for setting keys.
+ *
+ * @deprecated please use {@link SettingContext}
  */
 @Target({ ElementType.TYPE, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+@Deprecated
 public @interface EdcSettingContext {
     String value();
 }

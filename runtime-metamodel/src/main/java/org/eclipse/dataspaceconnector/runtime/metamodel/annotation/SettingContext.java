@@ -21,30 +21,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Denotes a runtime configuration setting.
- *
- * @deprecated Please use {@link Setting}
+ * Defines a context for setting keys.
  */
 @Target({ ElementType.TYPE, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Deprecated
-public @interface EdcSetting {
-
-    /**
-     * The setting description.
-     */
-    String value() default "";
-
-    String type() default "string";
-
-    long min() default Long.MIN_VALUE;
-
-    long max() default Long.MAX_VALUE;
-
-    /**
-     * Returns true if the setting is required.
-     */
-    boolean required() default false;
-
+public @interface SettingContext {
+    String value();
 }
