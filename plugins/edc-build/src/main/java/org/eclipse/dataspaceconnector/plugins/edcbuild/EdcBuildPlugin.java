@@ -14,23 +14,55 @@
 
 package org.eclipse.dataspaceconnector.plugins.edcbuild;
 
-import org.eclipse.dataspaceconnector.plugins.autodoc.AutodocPlugin;
-import org.eclipse.dataspaceconnector.plugins.modulenames.ModuleNamesPlugin;
-import org.eclipse.dataspaceconnector.plugins.testsummary.TestSummaryPlugin;
+import org.eclipse.dataspaceconnector.plugins.edcbuild.extensions.BuildExtension;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.plugins.JavaPlugin;
-import org.gradle.api.plugins.quality.CheckstylePlugin;
-import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
 
+import static java.util.List.of;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.checkstyle;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.defaultDependencies;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.dependencyAnalysis;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.jacoco;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.jar;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.java;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.mavenPom;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.mavenPublishing;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.repositories;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.signing;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.tests;
+
+/**
+ * Adds (opinionated) conventions (=configuration) for various plugins. Specifically:
+ * <ul>
+ *     <li>{@link org.gradle.api.plugins.quality.CheckstylePlugin}: <ul>
+ *         <li>{@code toolVersion=10}</li>
+ *         <li>{@code maxErrors=0}</li>
+ *     </ul></li>
+ * </ul>
+ */
 public class EdcBuildPlugin implements Plugin<Project> {
     @Override
     public void apply(Project target) {
-        target.getPluginManager().apply(ModuleNamesPlugin.class);
-        target.getPluginManager().apply(AutodocPlugin.class);
-        target.getPluginManager().apply(CheckstylePlugin.class);
-        target.getPluginManager().apply(MavenPublishPlugin.class);
-        target.getPluginManager().apply(JavaPlugin.class);
-        target.getPluginManager().apply(TestSummaryPlugin.class);
+
+        // apply all plugins
+        target.getPlugins().apply(EdcBuildBasePlugin.class);
+
+        // register the extension(s)
+        target.getExtensions().create("edcBuild", BuildExtension.class, target.getObjects());
+
+        // apply the conventions
+        of(
+                java(),
+                repositories(),
+                checkstyle(),
+                mavenPublishing(),
+                signing(),
+                defaultDependencies(),
+                mavenPom(),
+                jacoco(),
+                dependencyAnalysis(),
+                tests(),
+                jar()
+        ).forEach(c -> c.apply(target));
     }
 }
