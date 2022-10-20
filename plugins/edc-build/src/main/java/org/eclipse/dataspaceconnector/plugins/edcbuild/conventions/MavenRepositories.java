@@ -19,11 +19,11 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler;
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
 import org.gradle.api.artifacts.repositories.PasswordCredentials;
 
-class MavenRepoFunctions {
+public class MavenRepositories {
 
     public static final String REPO_NAME_SONATYPE = "OSSRH";
-    private static final String SNAPSHOT_REPO_URL = "https://oss.sonatype.org/content/repositories/snapshots/";
-    private static final String RELEASE_REPO_URL = "https://oss.sonatype.org/service/local/staging/deploy/maven2/";
+    public static final String SNAPSHOT_REPO_URL = "https://oss.sonatype.org/content/repositories/snapshots/";
+    public static final String RELEASE_REPO_URL = "https://oss.sonatype.org/service/local/staging/deploy/maven2/";
 
     private static Action<MavenArtifactRepository> mavenRepo(String snapshotRepoUrl) {
         return repo -> {
