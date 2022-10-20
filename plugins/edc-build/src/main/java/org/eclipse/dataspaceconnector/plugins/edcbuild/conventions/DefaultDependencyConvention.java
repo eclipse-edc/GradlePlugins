@@ -28,7 +28,7 @@ class DefaultDependencyConvention implements EdcConvention {
             var ext = requireExtension(target, BuildExtension.class).getVersions();
             var group = "org.eclipse.dataspaceconnector";
             target.setGroup(group);
-            target.setVersion(ext.getProjectVersion().getOrElse("0.0.0-SNAPSHOT"));
+            target.setVersion(ext.getProjectVersion().getOrElse("0.0.1-SNAPSHOT"));
 
             // classpath dependencies
             var d = target.getDependencies();

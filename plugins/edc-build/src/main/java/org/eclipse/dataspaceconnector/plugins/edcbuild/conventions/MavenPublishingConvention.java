@@ -16,12 +16,17 @@ package org.eclipse.dataspaceconnector.plugins.edcbuild.conventions;
 
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
-import org.gradle.api.artifacts.repositories.PasswordCredentials;
 import org.gradle.api.publish.PublishingExtension;
 
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.MavenRepoFunctions.releaseRepo;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.MavenRepoFunctions.snapshotRepo;
 
 class MavenPublishingConvention implements EdcConvention {
+
+
+    private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
+
     @Override
     public void apply(Project target) {
         if (target.hasProperty("skip.signing")) {
@@ -29,16 +34,15 @@ class MavenPublishingConvention implements EdcConvention {
         }
         var pubExt = requireExtension(target, PublishingExtension.class);
 
-        if (pubExt.getRepositories().stream().noneMatch(repo -> repo.getName().equals("OSSRH") && repo instanceof MavenArtifactRepository)) {
-            pubExt.repositories(handler -> handler.maven(repo -> {
-                repo.setUrl("https://oss.sonatype.org/content/repositories/snapshots/");
-                repo.setName("OSSRH");
-                repo.credentials(PasswordCredentials.class, creds -> {
-                    creds.setPassword(System.getenv("OSSRH_PASSWORD"));
-                    creds.setUsername(System.getenv("OSSRH_USER"));
-                });
-            }));
+        if (pubExt.getRepositories().stream().noneMatch(repo -> repo.getName().equals(MavenRepoFunctions.REPO_NAME_SONATYPE) && repo instanceof MavenArtifactRepository)) {
+
+            if (target.getVersion().toString().endsWith(SNAPSHOT_SUFFIX)) {
+                pubExt.repositories(snapshotRepo());
+            } else {
+                pubExt.repositories(releaseRepo());
+            }
         }
     }
+
 
 }

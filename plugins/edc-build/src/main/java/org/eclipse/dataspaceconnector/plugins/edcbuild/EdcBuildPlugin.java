@@ -54,10 +54,10 @@ public class EdcBuildPlugin implements Plugin<Project> {
         of(
                 java(),
                 repositories(),
+                defaultDependencies(),
                 checkstyle(),
                 mavenPublishing(),
                 signing(),
-                defaultDependencies(),
                 mavenPom(),
                 jacoco(),
                 dependencyAnalysis(),
