@@ -19,6 +19,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
 import static java.util.List.of;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.buildscript;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.checkstyle;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.defaultDependencies;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.dependencyAnalysis;
@@ -27,6 +28,7 @@ import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conven
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.java;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.mavenPom;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.mavenPublishing;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.nexusPublishing;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.repositories;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.signing;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.tests;
@@ -52,6 +54,7 @@ public class EdcBuildPlugin implements Plugin<Project> {
 
         // apply the conventions
         of(
+                buildscript(),
                 java(),
                 repositories(),
                 defaultDependencies(),
@@ -62,7 +65,9 @@ public class EdcBuildPlugin implements Plugin<Project> {
                 jacoco(),
                 dependencyAnalysis(),
                 tests(),
-                jar()
+                jar(),
+                nexusPublishing()
         ).forEach(c -> c.apply(target));
+
     }
 }

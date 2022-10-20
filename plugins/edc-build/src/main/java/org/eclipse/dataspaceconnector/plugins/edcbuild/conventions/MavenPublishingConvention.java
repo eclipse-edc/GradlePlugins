@@ -19,8 +19,8 @@ import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
 import org.gradle.api.publish.PublishingExtension;
 
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
-import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.MavenRepositories.releaseRepo;
-import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.MavenRepositories.snapshotRepo;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Repositories.releaseRepo;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Repositories.snapshotRepo;
 
 class MavenPublishingConvention implements EdcConvention {
 
@@ -34,7 +34,7 @@ class MavenPublishingConvention implements EdcConvention {
         }
         var pubExt = requireExtension(target, PublishingExtension.class);
 
-        if (pubExt.getRepositories().stream().noneMatch(repo -> repo.getName().equals(MavenRepositories.REPO_NAME_SONATYPE) && repo instanceof MavenArtifactRepository)) {
+        if (pubExt.getRepositories().stream().noneMatch(repo -> repo.getName().equals(Repositories.REPO_NAME_SONATYPE) && repo instanceof MavenArtifactRepository)) {
 
             if (target.getVersion().toString().endsWith(SNAPSHOT_SUFFIX)) {
                 pubExt.repositories(snapshotRepo());

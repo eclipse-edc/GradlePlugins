@@ -14,6 +14,7 @@
 
 package org.eclipse.dataspaceconnector.plugins.edcbuild;
 
+import io.github.gradlenexus.publishplugin.NexusPublishPlugin;
 import org.eclipse.dataspaceconnector.plugins.autodoc.AutodocPlugin;
 import org.eclipse.dataspaceconnector.plugins.modulenames.ModuleNamesPlugin;
 import org.eclipse.dataspaceconnector.plugins.testsummary.TestSummaryPlugin;
@@ -36,6 +37,9 @@ public class EdcBuildBasePlugin implements Plugin<Project> {
         target.getPluginManager().apply(MavenPublishPlugin.class);
         target.getPluginManager().apply(JavaPlugin.class);
         target.getPluginManager().apply(TestSummaryPlugin.class);
+        if (target == target.getRootProject()) {
+            target.getPluginManager().apply(NexusPublishPlugin.class);
+        }
     }
 
     @Override

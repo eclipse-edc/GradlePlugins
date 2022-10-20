@@ -14,6 +14,9 @@
 
 package org.eclipse.dataspaceconnector.plugins.edcbuild.conventions;
 
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Repositories.SNAPSHOT_REPO_URL;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Repositories.mavenRepo;
+
 /**
  * Contains statically accessible {@link EdcConvention} objects that can be applied to a project.
  */
@@ -61,5 +64,21 @@ public class Conventions {
 
     public static EdcConvention jar() {
         return new JarConvention();
+    }
+
+    public static EdcConvention nexusPublishing() {
+        return new NexusPublishingConvention();
+    }
+
+    public static EdcConvention buildscript() {
+        return target -> {
+            if (target == target.getRootProject()) {
+                //configure buildscript repos
+                target.getBuildscript().getRepositories().mavenLocal();
+                target.getBuildscript().getRepositories().mavenCentral();
+                target.getBuildscript().getRepositories().gradlePluginPortal();
+                target.getBuildscript().getRepositories().maven(mavenRepo(SNAPSHOT_REPO_URL));
+            }
+        };
     }
 }
