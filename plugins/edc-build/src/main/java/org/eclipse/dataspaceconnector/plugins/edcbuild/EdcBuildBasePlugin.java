@@ -20,9 +20,11 @@ import org.eclipse.dataspaceconnector.plugins.modulenames.ModuleNamesPlugin;
 import org.eclipse.dataspaceconnector.plugins.testsummary.TestSummaryPlugin;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.plugins.JavaLibraryPlugin;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.quality.CheckstylePlugin;
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
+import org.gradle.testing.jacoco.plugins.JacocoPlugin;
 
 /**
  * Defines the capabilities of the EDC build as specified in the Gradle Documentation
@@ -31,12 +33,17 @@ import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
  */
 public class EdcBuildBasePlugin implements Plugin<Project> {
     private static void defineCapabilities(Project target) {
+
+        target.getPluginManager().apply(JavaLibraryPlugin.class);
+        target.getPluginManager().apply(JacocoPlugin.class);
         target.getPluginManager().apply(ModuleNamesPlugin.class);
         target.getPluginManager().apply(AutodocPlugin.class);
         target.getPluginManager().apply(CheckstylePlugin.class);
         target.getPluginManager().apply(MavenPublishPlugin.class);
         target.getPluginManager().apply(JavaPlugin.class);
         target.getPluginManager().apply(TestSummaryPlugin.class);
+
+        // The nexus publish plugin MUST be applied to the root project only, it'll throw an exception otherwise
         if (target == target.getRootProject()) {
             target.getPluginManager().apply(NexusPublishPlugin.class);
         }

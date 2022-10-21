@@ -23,7 +23,6 @@ class JacocoConvention implements EdcConvention {
     public void apply(Project target) {
         if ("true".equals(System.getenv("JACOCO"))) {
             target.getPluginManager().apply(JacocoPlugin.class);
-
         }
 
         var jacocoReport = target.getTasks().findByName("jacocoTestReport");
