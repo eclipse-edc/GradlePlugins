@@ -67,7 +67,7 @@ public class Conventions {
         return new NexusPublishingConvention();
     }
 
-    public static EdcConvention buildscript() {
-        return new BuildScriptConvention();
+    public static EdcConvention rootBuildScript() {
+        return new RootBuildScriptConvention();
     }
 }
