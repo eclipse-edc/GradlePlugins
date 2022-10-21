@@ -21,6 +21,9 @@ import org.gradle.api.tasks.compile.JavaCompile;
 
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
 
+/**
+ * Enforces the Java version, generates Javadoc jar and Sources jar for publications
+ */
 class JavaConvention implements EdcConvention {
 
     @Override

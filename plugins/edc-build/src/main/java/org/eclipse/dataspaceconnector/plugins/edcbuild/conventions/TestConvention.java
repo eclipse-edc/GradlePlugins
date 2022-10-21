@@ -20,6 +20,9 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat;
 
 import static java.util.Optional.ofNullable;
 
+/**
+ * Configures the use of JUnit, the tagging mechanism and also configures the test logging
+ */
 class TestConvention implements EdcConvention {
     private static void determineJunitPlatform(Test testTask) {
         // Target all type of test e.g. -DrunAllTests="true"

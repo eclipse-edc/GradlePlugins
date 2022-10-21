@@ -22,9 +22,13 @@ import static java.util.List.of;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.openApiMerger;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.swaggerGenerator;
 
+/**
+ * Wrapper convention for the swagger generator and the openapi merger.
+ *
+ * @see SwaggerGeneratorConvention
+ * @see OpenApiMergerConvention
+ */
 class SwaggerConvention implements EdcConvention {
-
-
     public static Path defaultOutputDirectory(Project project) {
         return Path.of(project.getRootProject().getProjectDir().getAbsolutePath(), "resources/openapi/yaml");
     }

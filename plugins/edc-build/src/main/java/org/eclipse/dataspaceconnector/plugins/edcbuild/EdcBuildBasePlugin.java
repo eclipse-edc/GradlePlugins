@@ -14,6 +14,7 @@
 
 package org.eclipse.dataspaceconnector.plugins.edcbuild;
 
+import com.autonomousapps.DependencyAnalysisPlugin;
 import com.rameshkp.openapi.merger.gradle.plugin.OpenApiMergerGradlePlugin;
 import io.github.gradlenexus.publishplugin.NexusPublishPlugin;
 import org.eclipse.dataspaceconnector.plugins.autodoc.AutodocPlugin;
@@ -25,6 +26,7 @@ import org.gradle.api.plugins.JavaLibraryPlugin;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.quality.CheckstylePlugin;
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
+import org.gradle.crypto.checksum.ChecksumPlugin;
 import org.gradle.testing.jacoco.plugins.JacocoPlugin;
 
 /**
@@ -35,19 +37,22 @@ import org.gradle.testing.jacoco.plugins.JacocoPlugin;
 public class EdcBuildBasePlugin implements Plugin<Project> {
     private static void defineCapabilities(Project target) {
 
-        target.getPluginManager().apply(JavaLibraryPlugin.class);
-        target.getPluginManager().apply(JacocoPlugin.class);
-        target.getPluginManager().apply(ModuleNamesPlugin.class);
-        target.getPluginManager().apply(AutodocPlugin.class);
-        target.getPluginManager().apply(CheckstylePlugin.class);
-        target.getPluginManager().apply(MavenPublishPlugin.class);
-        target.getPluginManager().apply(JavaPlugin.class);
-        target.getPluginManager().apply(TestSummaryPlugin.class);
+        target.getPlugins().apply(ChecksumPlugin.class);
+        target.getPlugins().apply(DependencyAnalysisPlugin.class);
+
+        target.getPlugins().apply(JavaLibraryPlugin.class);
+        target.getPlugins().apply(JacocoPlugin.class);
+        target.getPlugins().apply(ModuleNamesPlugin.class);
+        target.getPlugins().apply(AutodocPlugin.class);
+        target.getPlugins().apply(CheckstylePlugin.class);
+        target.getPlugins().apply(MavenPublishPlugin.class);
+        target.getPlugins().apply(JavaPlugin.class);
+        target.getPlugins().apply(TestSummaryPlugin.class);
 
         // The nexus publish plugin MUST be applied to the root project only, it'll throw an exception otherwise
         if (target == target.getRootProject()) {
-            target.getPluginManager().apply(NexusPublishPlugin.class);
-            target.getPluginManager().apply(OpenApiMergerGradlePlugin.class);
+            target.getPlugins().apply(NexusPublishPlugin.class);
+            target.getPlugins().apply(OpenApiMergerGradlePlugin.class);
         }
     }
 

@@ -19,16 +19,9 @@ import org.gradle.api.Project;
 
 import java.util.function.Supplier;
 
-import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
 
 class ConventionFunctions {
-    /**
-     * Returns the value of the specified environment variable or throws a {@link GradleException}
-     */
-    public static String requireEnvVar(String environmentVariable) {
-        return ofNullable(System.getenv(environmentVariable)).orElseThrow(gradleException(format("Environment variable [%s] not defined!", environmentVariable)));
-    }
 
     /**
      * Supplies a generic {@link GradleException} with the given message.

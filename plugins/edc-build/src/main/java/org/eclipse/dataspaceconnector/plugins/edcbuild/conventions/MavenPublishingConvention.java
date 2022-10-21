@@ -22,6 +22,9 @@ import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conven
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Repositories.releaseRepo;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Repositories.snapshotRepo;
 
+/**
+ * Configures the Maven repos for publishing depending on the project's version
+ */
 class MavenPublishingConvention implements EdcConvention {
 
 

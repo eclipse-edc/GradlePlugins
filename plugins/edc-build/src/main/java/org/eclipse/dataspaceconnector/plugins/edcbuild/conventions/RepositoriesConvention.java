@@ -18,6 +18,9 @@ import org.gradle.api.Project;
 
 import java.net.URI;
 
+/**
+ * Sets default maven repositories for a project
+ */
 class RepositoriesConvention implements EdcConvention {
 
     @Override

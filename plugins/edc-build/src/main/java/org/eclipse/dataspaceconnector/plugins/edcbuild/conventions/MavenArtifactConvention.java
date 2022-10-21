@@ -27,6 +27,13 @@ import java.nio.file.Path;
 
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
 
+/**
+ * Configures the Maven POM for each project:
+ * <ul>
+ *     <li>sets project name, description, license, SCM info etc.</li>
+ *     <li>adds an artifact for the documentation manifest ("edc.json")</li>
+ * </ul>
+ */
 class MavenArtifactConvention implements EdcConvention {
     @Override
     public void apply(Project target) {
@@ -51,7 +58,6 @@ class MavenArtifactConvention implements EdcConvention {
     }
 
     private void addManifestArtifact(Project target, MavenPublication mavenPub) {
-        // todo: read these from the {@link AutodocExtension}
         var autodocExt = requireExtension(target, AutodocExtension.class);
         var pathToManifest = autodocExt.getOutputDirectory().getOrElse(target.getBuildDir()).getAbsolutePath();
         var manifestFileName = "edc.json";
@@ -82,8 +88,8 @@ class MavenArtifactConvention implements EdcConvention {
             }));
 
             pom.scm(scm -> {
-                scm.getUrl().set(pomExt.getScmUrl().getOrElse("https://github.com/eclipse-dataspaceconnector/DataSpaceConnector.git"));
-                scm.getConnection().set(pomExt.getScmConnection().getOrElse("scm:git:git@github.com:eclipse-dataspaceconnector/DataSpaceConnector.git"));
+                scm.getUrl().set(pomExt.getScmUrl());
+                scm.getConnection().set(pomExt.getScmConnection());
             });
         });
     }

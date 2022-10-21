@@ -21,6 +21,9 @@ import org.gradle.plugins.signing.SigningPlugin;
 
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
 
+/**
+ * Configures the "signing" plugin, sets the publications and declares the use of GPG
+ */
 class SigningConvention implements EdcConvention {
     @Override
     public void apply(Project target) {

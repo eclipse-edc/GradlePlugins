@@ -26,6 +26,9 @@ import java.util.Map;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.SwaggerConvention.defaultOutputDirectory;
 
+/**
+ * Congfigures the Swagger Generator to create openapi yaml file per project
+ */
 class SwaggerGeneratorConvention implements EdcConvention {
     @Override
     public void apply(Project target) {

@@ -22,6 +22,13 @@ import org.gradle.api.tasks.diagnostics.DependencyReportTask;
 import static java.util.Optional.ofNullable;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
 
+/**
+ * Provides default configuration for the "dependency-analysis" plugin:
+ * <ul>
+ *     <li>defines general exclusions</li>
+ *     <li>defines exclusions for the "unused dependencies" check</li>
+ * </ul>
+ */
 class DependencyAnalysisConvention implements EdcConvention {
     @Override
     public void apply(Project target) {

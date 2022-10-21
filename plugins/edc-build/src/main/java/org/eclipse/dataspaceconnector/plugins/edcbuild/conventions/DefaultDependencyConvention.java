@@ -21,6 +21,10 @@ import org.gradle.api.plugins.JavaPlugin;
 import static java.lang.String.format;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
 
+/**
+ * Applies default dependencies to all "java-library" projects, i.e. Jackson, the runtime-metamodel, JUnit, Mockito and AssertJ in
+ * their respective configurations.
+ */
 class DefaultDependencyConvention implements EdcConvention {
     @Override
     public void apply(Project target) {

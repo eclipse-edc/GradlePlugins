@@ -20,6 +20,14 @@ import org.gradle.api.plugins.quality.CheckstyleExtension;
 
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
 
+/**
+ * Applies default configuration for the checkstyle plugin:
+ * <ul>
+ *     <li>applies tool version 10.0</li>
+ *     <li>sets maxError to 0</li>
+ *     <li>requires xml reports</li>
+ * </ul>
+ */
 class CheckstyleConvention implements EdcConvention {
     @Override
     public void apply(Project target) {

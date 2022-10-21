@@ -14,13 +14,14 @@
 
 package org.eclipse.dataspaceconnector.plugins.edcbuild.conventions;
 
-import com.autonomousapps.DependencyAnalysisPlugin;
 import org.gradle.api.Project;
-import org.gradle.crypto.checksum.ChecksumPlugin;
 
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Repositories.SNAPSHOT_REPO_URL;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Repositories.mavenRepo;
 
+/**
+ * Configures the root buildscript, i.e. adds repos
+ */
 class RootBuildScriptConvention implements EdcConvention {
     @Override
     public void apply(Project target) {
@@ -30,10 +31,6 @@ class RootBuildScriptConvention implements EdcConvention {
             target.getBuildscript().getRepositories().mavenCentral();
             target.getBuildscript().getRepositories().gradlePluginPortal();
             target.getBuildscript().getRepositories().maven(mavenRepo(SNAPSHOT_REPO_URL));
-
-            // add root build script plugins
-            target.getPlugins().apply(ChecksumPlugin.class);
-            target.getPlugins().apply(DependencyAnalysisPlugin.class);
         }
     }
 }

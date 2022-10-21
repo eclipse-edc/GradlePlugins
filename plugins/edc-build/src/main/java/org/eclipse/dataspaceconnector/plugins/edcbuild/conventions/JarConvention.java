@@ -19,6 +19,9 @@ import org.gradle.jvm.tasks.Jar;
 
 import java.nio.file.Path;
 
+/**
+ * Adds the LICENSE and NOTICE.md file to every JAR
+ */
 class JarConvention implements EdcConvention {
     @Override
     public void apply(Project target) {

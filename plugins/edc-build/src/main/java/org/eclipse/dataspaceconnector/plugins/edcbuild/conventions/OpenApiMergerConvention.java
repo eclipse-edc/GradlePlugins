@@ -21,6 +21,9 @@ import org.gradle.api.Project;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.SwaggerConvention.defaultOutputDirectory;
 
+/**
+ * Configures inputs and outputs for the OpenAPI merger plugin
+ */
 class OpenApiMergerConvention implements EdcConvention {
     @Override
     public void apply(Project target) {

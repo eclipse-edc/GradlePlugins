@@ -19,7 +19,9 @@ import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.jvm.toolchain.JavaLanguageVersion;
 
-
+/**
+ * Root configuration resource for the EDC Build plugin
+ */
 public abstract class BuildExtension {
     private final VersionsExtension versions;
     private final MavenPomExtension pom;
