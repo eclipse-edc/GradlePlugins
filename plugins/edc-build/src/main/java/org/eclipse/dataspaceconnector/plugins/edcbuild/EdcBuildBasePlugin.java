@@ -14,6 +14,7 @@
 
 package org.eclipse.dataspaceconnector.plugins.edcbuild;
 
+import com.rameshkp.openapi.merger.gradle.plugin.OpenApiMergerGradlePlugin;
 import io.github.gradlenexus.publishplugin.NexusPublishPlugin;
 import org.eclipse.dataspaceconnector.plugins.autodoc.AutodocPlugin;
 import org.eclipse.dataspaceconnector.plugins.modulenames.ModuleNamesPlugin;
@@ -46,6 +47,7 @@ public class EdcBuildBasePlugin implements Plugin<Project> {
         // The nexus publish plugin MUST be applied to the root project only, it'll throw an exception otherwise
         if (target == target.getRootProject()) {
             target.getPluginManager().apply(NexusPublishPlugin.class);
+            target.getPluginManager().apply(OpenApiMergerGradlePlugin.class);
         }
     }
 

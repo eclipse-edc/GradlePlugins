@@ -16,11 +16,19 @@ package org.eclipse.dataspaceconnector.plugins.edcbuild.conventions;
 
 import org.gradle.api.Project;
 
+import java.nio.file.Path;
+
 import static java.util.List.of;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.openApiMerger;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.swaggerGenerator;
 
 class SwaggerConvention implements EdcConvention {
+
+
+    public static Path defaultOutputDirectory(Project project) {
+        return Path.of(project.getRootProject().getProjectDir().getAbsolutePath(), "resources/openapi/yaml");
+    }
+
     @Override
     public void apply(Project target) {
         of(

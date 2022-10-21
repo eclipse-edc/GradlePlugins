@@ -21,10 +21,10 @@ import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.hidetake.gradle.swagger.generator.SwaggerGeneratorPlugin;
 
-import java.nio.file.Path;
 import java.util.Map;
 
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.SwaggerConvention.defaultOutputDirectory;
 
 class SwaggerGeneratorConvention implements EdcConvention {
     @Override
@@ -43,7 +43,7 @@ class SwaggerGeneratorConvention implements EdcConvention {
 
             var javaExt = requireExtension(target, JavaPluginExtension.class);
             var swaggerExt = requireExtension(target, BuildExtension.class).getSwagger();
-            var outputPath = Path.of(target.getRootProject().getProjectDir().getAbsolutePath(), "resources/openapi/yaml");
+            var outputPath = defaultOutputDirectory(target);
 
             var outputFileName = swaggerExt.getOutputFilename().getOrElse(target.getName());
             var outputDir = swaggerExt.getOutputDirectory().getOrElse(outputPath.toFile());
