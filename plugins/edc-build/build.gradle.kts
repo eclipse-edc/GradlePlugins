@@ -20,6 +20,8 @@ dependencies {
     implementation("com.autonomousapps:dependency-analysis-gradle-plugin:1.13.1")
     implementation("io.github.gradle-nexus:publish-plugin:1.1.0")
     implementation("gradle.plugin.org.gradle.crypto:checksum:1.4.0")
+    implementation("gradle.plugin.org.hidetake:gradle-swagger-generator-plugin:2.19.2")
+    implementation("io.swagger.core.v3:swagger-gradle-plugin:2.2.2")
 }
 
 gradlePlugin {

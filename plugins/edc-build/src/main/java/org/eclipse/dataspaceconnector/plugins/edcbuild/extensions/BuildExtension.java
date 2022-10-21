@@ -23,10 +23,12 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion;
 public abstract class BuildExtension {
     private final VersionsExtension versions;
     private final MavenPomExtension pom;
+    private final SwaggerExtension swagger;
 
     public BuildExtension(ObjectFactory objectFactory) {
         versions = objectFactory.newInstance(VersionsExtension.class);
         pom = objectFactory.newInstance(MavenPomExtension.class);
+        swagger = objectFactory.newInstance(SwaggerExtension.class);
     }
 
 
@@ -38,6 +40,10 @@ public abstract class BuildExtension {
         action.execute(pom);
     }
 
+    public void swagger(Action<? super SwaggerExtension> action) {
+        action.execute(swagger);
+    }
+
     public VersionsExtension getVersions() {
         return versions;
     }
@@ -47,4 +53,8 @@ public abstract class BuildExtension {
     }
 
     public abstract Property<JavaLanguageVersion> getJavaLanguageVersion();
+
+    public SwaggerExtension getSwagger() {
+        return swagger;
+    }
 }

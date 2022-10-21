@@ -20,7 +20,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat;
 
 import static java.util.Optional.ofNullable;
 
-public class TestConvention implements EdcConvention {
+class TestConvention implements EdcConvention {
     private static void determineJunitPlatform(Test testTask) {
         // Target all type of test e.g. -DrunAllTests="true"
         var runAllTests = Boolean.parseBoolean(System.getProperty("runAllTests", "false"));

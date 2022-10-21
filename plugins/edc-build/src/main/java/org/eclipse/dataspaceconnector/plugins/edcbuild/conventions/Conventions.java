@@ -70,4 +70,16 @@ public class Conventions {
     public static EdcConvention rootBuildScript() {
         return new RootBuildScriptConvention();
     }
+
+    public static EdcConvention swagger() {
+        return new SwaggerConvention();
+    }
+
+    public static EdcConvention swaggerGenerator() {
+        return new SwaggerGeneratorConvention();
+    }
+
+    public static EdcConvention openApiMerger() {
+        return new OpenApiMergerConvention();
+    }
 }

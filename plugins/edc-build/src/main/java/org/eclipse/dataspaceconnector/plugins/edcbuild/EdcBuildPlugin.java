@@ -31,6 +31,7 @@ import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conven
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.repositories;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.rootBuildScript;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.signing;
+import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.swagger;
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.tests;
 
 /**
@@ -66,7 +67,8 @@ public class EdcBuildPlugin implements Plugin<Project> {
                 dependencyAnalysis(),
                 tests(),
                 jar(),
-                nexusPublishing()
+                nexusPublishing(),
+                swagger()
         ).forEach(c -> c.apply(target));
 
     }
