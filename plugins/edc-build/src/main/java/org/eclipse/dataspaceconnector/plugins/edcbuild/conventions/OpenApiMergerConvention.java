@@ -25,6 +25,9 @@ import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Swagge
  * Configures inputs and outputs for the OpenAPI merger plugin
  */
 class OpenApiMergerConvention implements EdcConvention {
+
+    private static final String OPEN_API_VERSION = "3.0.1";
+
     @Override
     public void apply(Project target) {
         if (target == target.getRootProject()) {
@@ -44,7 +47,7 @@ class OpenApiMergerConvention implements EdcConvention {
             });
 
             mergerExt.openApi(openApi -> {
-                openApi.getOpenApiVersion().set("3.0.1");
+                openApi.getOpenApiVersion().set(OPEN_API_VERSION);
                 openApi.info(info -> {
                     info.getTitle().set(swaggerExt.getTitle());
                     info.getDescription().set(swaggerExt.getDescription());

@@ -26,11 +26,14 @@ import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conven
  * their respective configurations.
  */
 class DefaultDependencyConvention implements EdcConvention {
+
+    private static final String EDC_GROUP_ID = "org.eclipse.dataspaceconnector";
+
     @Override
     public void apply(Project target) {
         target.getPluginManager().withPlugin("java-library", plugin -> {
             var ext = requireExtension(target, BuildExtension.class).getVersions();
-            var group = "org.eclipse.dataspaceconnector";
+            var group = EDC_GROUP_ID;
             target.setGroup(group);
             target.setVersion(ext.getProjectVersion().getOrElse("0.0.1-SNAPSHOT"));
 

@@ -29,11 +29,14 @@ import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conven
  * </ul>
  */
 class CheckstyleConvention implements EdcConvention {
+
+    private static final String DEFAULT_TOOL_VERSION = "10.0";
+
     @Override
     public void apply(Project target) {
         var cse = requireExtension(target, CheckstyleExtension.class);
 
-        cse.setToolVersion("10.0");
+        cse.setToolVersion(DEFAULT_TOOL_VERSION);
         cse.setMaxErrors(0);
         target.getTasks().withType(Checkstyle.class, cs -> cs.reports(r -> {
             r.getHtml().getRequired().set(false);
