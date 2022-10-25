@@ -18,6 +18,7 @@ import org.eclipse.dataspaceconnector.plugins.edcbuild.extensions.BuildExtension
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.compile.JavaCompile;
+import org.gradle.jvm.toolchain.JavaLanguageVersion;
 
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
 
@@ -26,27 +27,26 @@ import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conven
  */
 class JavaConvention implements EdcConvention {
 
+    private static final int DEFAULT_JAVA_VERSION = 11;
+
     @Override
     public void apply(Project target) {
         var javaPluginExt = requireExtension(target, JavaPluginExtension.class);
         var buildExt = requireExtension(target, BuildExtension.class);
-        var javaVersion = buildExt.getJavaLanguageVersion();
+        var javaVersion = buildExt.getJavaLanguageVersion()
+                .getOrElse(JavaLanguageVersion.of(DEFAULT_JAVA_VERSION));
 
-        if (javaVersion.isPresent()) {
+        // set java version
+        javaPluginExt.toolchain(tc -> tc.getLanguageVersion().set(javaVersion));
 
-            // set java version
-            javaPluginExt.toolchain(tc -> tc.getLanguageVersion().set(javaVersion));
-
-            // making sure the code does not use any APIs from a more recent version.
-            // Ref: https://docs.gradle.org/current/userguide/building_java_projects.html#sec:java_cross_compilation
-            target.getTasks().withType(JavaCompile.class, compileTask -> compileTask.getOptions().getRelease().set(javaVersion.get().asInt()));
-
-            target.getTasks().configureEach(t -> {
-                var javaCompile = (JavaCompile) t;
-                javaCompile.getOptions().setFork(true);
-                javaCompile.getOptions().setIncremental(true);
-            });
-        }
+        // making sure the code does not use any APIs from a more recent version.
+        // Ref: https://docs.gradle.org/current/userguide/building_java_projects.html#sec:java_cross_compilation
+        target.getTasks().withType(JavaCompile.class, compileTask -> {
+            var options = compileTask.getOptions();
+            options.getRelease().set(javaVersion.asInt());
+            options.setFork(true);
+            options.setIncremental(true);
+        });
 
 
         // needed for publishing to maven central
