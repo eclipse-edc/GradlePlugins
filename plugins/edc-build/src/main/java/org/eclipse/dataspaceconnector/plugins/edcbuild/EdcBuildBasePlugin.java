@@ -37,12 +37,8 @@ import org.gradle.testing.jacoco.plugins.JacocoPlugin;
 public class EdcBuildBasePlugin implements Plugin<Project> {
     private static void defineCapabilities(Project target) {
 
-        target.getPlugins().apply(ChecksumPlugin.class);
-        target.getPlugins().apply(DependencyAnalysisPlugin.class);
-
         target.getPlugins().apply(JavaLibraryPlugin.class);
         target.getPlugins().apply(JacocoPlugin.class);
-        target.getPlugins().apply(ModuleNamesPlugin.class);
         target.getPlugins().apply(AutodocPlugin.class);
         target.getPlugins().apply(CheckstylePlugin.class);
         target.getPlugins().apply(MavenPublishPlugin.class);
@@ -51,8 +47,11 @@ public class EdcBuildBasePlugin implements Plugin<Project> {
 
         // The nexus publish plugin MUST be applied to the root project only, it'll throw an exception otherwise
         if (target == target.getRootProject()) {
+            target.getPlugins().apply(ChecksumPlugin.class);
             target.getPlugins().apply(NexusPublishPlugin.class);
             target.getPlugins().apply(OpenApiMergerGradlePlugin.class);
+            target.getPlugins().apply(ModuleNamesPlugin.class);
+            target.getPlugins().apply(DependencyAnalysisPlugin.class);
         }
     }
 

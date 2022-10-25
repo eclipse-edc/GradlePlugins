@@ -40,6 +40,12 @@ class JavaConvention implements EdcConvention {
             // making sure the code does not use any APIs from a more recent version.
             // Ref: https://docs.gradle.org/current/userguide/building_java_projects.html#sec:java_cross_compilation
             target.getTasks().withType(JavaCompile.class, compileTask -> compileTask.getOptions().getRelease().set(javaVersion.get().asInt()));
+
+            target.getTasks().configureEach(t -> {
+                var javaCompile = (JavaCompile) t;
+                javaCompile.getOptions().setFork(true);
+                javaCompile.getOptions().setIncremental(true);
+            });
         }
 
 

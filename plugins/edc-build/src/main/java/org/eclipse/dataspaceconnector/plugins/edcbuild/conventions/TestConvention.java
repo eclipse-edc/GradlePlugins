@@ -48,6 +48,7 @@ class TestConvention implements EdcConvention {
         target.getTasks().withType(Test.class, testTask -> {
             determineJunitPlatform(testTask);
             configureLogging(target.hasProperty("verboseTest"), testTask);
+            testTask.setForkEvery(100L);
         });
     }
 

@@ -35,13 +35,7 @@ import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conven
 import static org.eclipse.dataspaceconnector.plugins.edcbuild.conventions.Conventions.tests;
 
 /**
- * Adds (opinionated) conventions (=configuration) for various plugins. Specifically:
- * <ul>
- *     <li>{@link org.gradle.api.plugins.quality.CheckstylePlugin}: <ul>
- *         <li>{@code toolVersion=10}</li>
- *         <li>{@code maxErrors=0}</li>
- *     </ul></li>
- * </ul>
+ * Adds (opinionated) conventions (=configuration) for various plugins.
  */
 public class EdcBuildPlugin implements Plugin<Project> {
     @Override
