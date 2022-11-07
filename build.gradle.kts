@@ -151,6 +151,12 @@ allprojects {
         }
     }
 
+    tasks.withType<Jar> {
+        metaInf {
+            from("${rootProject.projectDir.path}/NOTICE.md")
+            from("${rootProject.projectDir.path}/LICENSE")
+        }
+    }
 }
 
 repositories {
