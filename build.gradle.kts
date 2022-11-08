@@ -4,6 +4,7 @@ plugins {
     `maven-publish`
     signing
     `java-library`
+    `version-catalog`
     // for publishing to nexus/ossrh/mavencentral
     id("org.gradle.crypto.checksum") version "1.4.0"
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
@@ -157,11 +158,6 @@ allprojects {
             from("${rootProject.projectDir.path}/LICENSE")
         }
     }
-}
-
-repositories {
-    // Use Maven Central for resolving dependencies
-    mavenCentral()
 }
 
 nexusPublishing {
