@@ -44,7 +44,8 @@ awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility" 
 bouncyCastle-bcprov = { module = "org.bouncycastle:bcprov-jdk15on", version.ref = "bouncyCastle" }
 bouncyCastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk15on", version.ref = "bouncyCastle" }
 cloudEvents = { module = "io.cloudevents:cloudevents-http-basic", version.ref = "cloudEvents" }
-failsafe = { module = "dev.failsafe:failsafe", version.ref = "failsafe" }
+failsafe-core = { module = "dev.failsafe:failsafe", version.ref = "failsafe" }
+failsafe-okhttp = { module = "dev.failsafe:failsafe-okhttp", version.ref = "failsafe" }
 gatling = { module = "io.gatling.highcharts:gatling-charts-highcharts", version.ref = "gatling" }
 h2 = { module = "com.h2database:h2", version.ref = "h2" }
 mockserver-netty = { module = "org.mock-server:mockserver-netty", version.ref = "httpMockServer" }
