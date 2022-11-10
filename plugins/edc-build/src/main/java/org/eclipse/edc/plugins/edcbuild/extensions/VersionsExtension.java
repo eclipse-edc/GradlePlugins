@@ -17,6 +17,8 @@ package org.eclipse.edc.plugins.edcbuild.extensions;
 import org.gradle.api.provider.Property;
 
 public abstract class VersionsExtension {
+    private String catalogName = "libs";
+
     public abstract Property<String> getProjectVersion();
 
     public abstract Property<String> getJetbrainsAnnotation();
@@ -30,5 +32,13 @@ public abstract class VersionsExtension {
     public abstract Property<String> getMockito();
 
     public abstract Property<String> getAssertJ();
+
+    public String getCatalogName() {
+        return catalogName;
+    }
+
+    public void setCatalogName(String catalogName) {
+        this.catalogName = catalogName;
+    }
 
 }
