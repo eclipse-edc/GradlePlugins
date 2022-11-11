@@ -77,7 +77,7 @@ class DefaultDependencyConvention implements EdcConvention {
         String versionFor(String versionRef, String defaultValue) {
             var factory = target.getExtensions().findByName(catalogName);
             if (factory == null) {
-                target.getLogger().warn("No VersionCatalog with name {} found. Please either override the version for {} in your build script, or instantiate the version catalog in your client project.", versionRef, catalogName);
+                target.getLogger().debug("No VersionCatalog with name {} found. Please either override the version for {} in your build script, or instantiate the version catalog in your client project.", catalogName, versionRef);
                 return defaultValue;
             }
             try {

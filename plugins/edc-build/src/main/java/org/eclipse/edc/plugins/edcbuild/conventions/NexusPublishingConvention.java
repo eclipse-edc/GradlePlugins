@@ -17,15 +17,15 @@ package org.eclipse.edc.plugins.edcbuild.conventions;
 import io.github.gradlenexus.publishplugin.NexusPublishExtension;
 import org.gradle.api.Project;
 
-import static org.eclipse.edc.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Repositories.sonatypeRepo;
 
 class NexusPublishingConvention implements EdcConvention {
     @Override
     public void apply(Project target) {
         if (target == target.getRootProject()) {
-            var pubExt = requireExtension(target, NexusPublishExtension.class);
-            pubExt.repositories(sonatypeRepo());
+            target.getExtensions().configure(NexusPublishExtension.class, nexusPublishExtension -> {
+                nexusPublishExtension.repositories(sonatypeRepo());
+            });
         }
     }
 }

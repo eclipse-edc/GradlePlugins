@@ -47,6 +47,8 @@ public class EdcBuildPlugin implements Plugin<Project> {
         // apply all plugins
         target.getPlugins().apply(EdcBuildBasePlugin.class);
 
+        //this one must run in the configuration phase
+        nexusPublishing().apply(target);
 
         // configuration values are only guaranteed to be set after the project has been evaluated
         // https://docs.gradle.org/current/userguide/build_lifecycle.html
@@ -68,7 +70,7 @@ public class EdcBuildPlugin implements Plugin<Project> {
                     dependencyAnalysis(),
                     tests(),
                     jar(),
-                    nexusPublishing(),
+
                     swagger()
             ).forEach(c -> c.apply(project));
         });
