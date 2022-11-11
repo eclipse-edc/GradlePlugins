@@ -77,4 +77,7 @@ public abstract class SwaggerGeneratorExtension {
     public void setMergedFileExtension(String mergedFileExtension) {
         this.mergedFileExtension = mergedFileExtension;
     }
+
+    public abstract Property<String> getApiGroup();
+
 }

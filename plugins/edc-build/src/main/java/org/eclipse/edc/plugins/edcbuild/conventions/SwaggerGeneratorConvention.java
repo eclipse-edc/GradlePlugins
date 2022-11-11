@@ -21,6 +21,7 @@ import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.hidetake.gradle.swagger.generator.SwaggerGeneratorPlugin;
 
+import java.nio.file.Path;
 import java.util.Map;
 
 import static org.eclipse.edc.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
@@ -30,6 +31,9 @@ import static org.eclipse.edc.plugins.edcbuild.conventions.SwaggerConvention.def
  * Congfigures the Swagger Generator to create openapi yaml file per project
  */
 class SwaggerGeneratorConvention implements EdcConvention {
+
+    private static final String DEFAULT_API_GROUP = "";
+
     @Override
     public void apply(Project target) {
         // apply root script plugin
@@ -46,10 +50,15 @@ class SwaggerGeneratorConvention implements EdcConvention {
 
             var javaExt = requireExtension(target, JavaPluginExtension.class);
             var swaggerExt = requireExtension(target, BuildExtension.class).getSwagger();
-            var outputPath = defaultOutputDirectory(target);
+            var fallbackOutputDir = defaultOutputDirectory(target);
 
             var outputFileName = swaggerExt.getOutputFilename().getOrElse(target.getName());
-            var outputDir = swaggerExt.getOutputDirectory().getOrElse(outputPath.toFile());
+
+            var apiGroup = swaggerExt.getApiGroup().getOrElse(DEFAULT_API_GROUP);
+            var outputDir = Path.of(swaggerExt.getOutputDirectory().getOrElse(fallbackOutputDir.toFile()).toURI())
+                    .resolve(apiGroup)
+                    .toFile();
+
             var resourcePkgs = swaggerExt.getResourcePackages(); // already provides the default
 
             target.getTasks().withType(ResolveTask.class, task -> {
