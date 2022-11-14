@@ -8,7 +8,7 @@ plugins {
     // for publishing to nexus/ossrh/mavencentral
     id("org.gradle.crypto.checksum") version "1.4.0"
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
-    id("com.gradle.plugin-publish") version "1.0.0" apply false
+    id("com.gradle.plugin-publish") version "1.1.0" apply false
 }
 
 val groupId: String by project
