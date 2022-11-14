@@ -21,7 +21,7 @@ import java.util.function.Supplier;
 
 import static java.util.Optional.ofNullable;
 
-class ConventionFunctions {
+public class ConventionFunctions {
 
     /**
      * Supplies a generic {@link GradleException} with the given message.
@@ -33,11 +33,11 @@ class ConventionFunctions {
     /**
      * Supplies a {@link GradleException} that has a specific message indicating that a particular extension is missing.
      */
-    public static Supplier<GradleException> extensionException(Class<?> extensionClass) {
+    static Supplier<GradleException> extensionException(Class<?> extensionClass) {
         return gradleException(extensionClass.getSimpleName() + " expected but was null");
     }
 
-    static <A> A requireExtension(Project target, Class<A> extensionClass) {
+    public static <A> A requireExtension(Project target, Class<A> extensionClass) {
         return ofNullable(target.getExtensions().findByType(extensionClass))
                 .orElseThrow(extensionException(extensionClass));
     }

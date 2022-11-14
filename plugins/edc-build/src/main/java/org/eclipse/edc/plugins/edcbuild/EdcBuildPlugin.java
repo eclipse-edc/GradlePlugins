@@ -70,10 +70,10 @@ public class EdcBuildPlugin implements Plugin<Project> {
                     dependencyAnalysis(),
                     tests(),
                     jar(),
-
                     swagger()
             ).forEach(c -> c.apply(project));
         });
+
 
     }
 }

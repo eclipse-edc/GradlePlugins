@@ -16,6 +16,7 @@ dependencies {
     implementation(project(":plugins:autodoc:autodoc-plugin"))
     implementation(project(":plugins:test-summary"))
     implementation(project(":plugins:module-names"))
+    implementation(project(":plugins:openapi-merger"))
 
     implementation("com.autonomousapps:dependency-analysis-gradle-plugin:1.13.1")
     implementation("io.github.gradle-nexus:publish-plugin:1.1.0")

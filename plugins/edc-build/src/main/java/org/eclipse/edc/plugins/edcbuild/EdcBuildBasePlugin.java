@@ -15,10 +15,10 @@
 package org.eclipse.edc.plugins.edcbuild;
 
 import com.autonomousapps.DependencyAnalysisPlugin;
-import com.rameshkp.openapi.merger.gradle.plugin.OpenApiMergerGradlePlugin;
 import io.github.gradlenexus.publishplugin.NexusPublishPlugin;
 import org.eclipse.edc.plugins.autodoc.AutodocPlugin;
 import org.eclipse.edc.plugins.modulenames.ModuleNamesPlugin;
+import org.eclipse.edc.plugins.openapimerger.OpenApiMergerPlugin;
 import org.eclipse.edc.plugins.testsummary.TestSummaryPlugin;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -49,7 +49,7 @@ public class EdcBuildBasePlugin implements Plugin<Project> {
         if (target == target.getRootProject()) {
             target.getPlugins().apply(ChecksumPlugin.class);
             target.getPlugins().apply(NexusPublishPlugin.class);
-            target.getPlugins().apply(OpenApiMergerGradlePlugin.class);
+            target.getPlugins().apply(OpenApiMergerPlugin.class);
             target.getPlugins().apply(ModuleNamesPlugin.class);
             target.getPlugins().apply(DependencyAnalysisPlugin.class);
         }
