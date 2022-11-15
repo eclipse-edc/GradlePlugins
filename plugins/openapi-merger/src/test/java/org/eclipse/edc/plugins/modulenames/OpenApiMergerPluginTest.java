@@ -15,6 +15,7 @@
 package org.eclipse.edc.plugins.modulenames;
 
 import org.eclipse.edc.plugins.openapimerger.OpenApiMergerPlugin;
+import org.eclipse.edc.plugins.openapimerger.tasks.MergeApiSpecByPathTask;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,16 +29,23 @@ class OpenApiMergerPluginTest {
 
     @BeforeEach
     void setUp() {
-        // Create a test project and apply the plugin
         project = ProjectBuilder.builder().build();
-
         project.getPlugins().apply(OpenApiMergerPlugin.class);
     }
 
     @Test
     void verify_hasMergerTask() {
-        assertThat(project.getTasks().findByName("mergeApiSpec")).isNotNull();
+        assertThat(project.getTasks().findByName(MergeApiSpecByPathTask.NAME)).isNotNull();
     }
 
+
+    @Test
+    void verify_pluginIsOnlyAppliedToRootProject() {
+        var subproj = ProjectBuilder.builder().withParent(project).build();
+
+        subproj.getPlugins().apply(OpenApiMergerPlugin.class);
+
+        assertThat(subproj.getTasks().findByName(MergeApiSpecByPathTask.NAME)).isNull();
+    }
 
 }

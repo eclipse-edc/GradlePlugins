@@ -31,7 +31,6 @@ public class OpenApiMergerPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
 
-        // can only be used in the root project
         if (project == project.getRootProject()) {
             project.getPlugins().apply(OpenApiMergerGradlePlugin.class);
             project.getTasks().register(MergeApiSpecByPathTask.NAME, MergeApiSpecByPathTask.class);
