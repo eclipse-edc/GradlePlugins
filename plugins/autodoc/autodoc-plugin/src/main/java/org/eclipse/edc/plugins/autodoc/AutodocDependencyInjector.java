@@ -77,7 +77,7 @@ class AutodocDependencyInjector implements DependencyResolutionListener {
     private boolean addDependency(Project project, String dependencyName) {
         var apConfig = project.getConfigurations().findByName(ANNOTATION_PROCESSOR);
         if (apConfig != null) {
-            project.getLogger().debug("autodoc: Add dependency annotationProcessor(\"{}\") to project {}", dependencyName, project.getName());
+            project.getLogger().debug("autodoc: Add dependency {}(\"{}\") to project {}", ANNOTATION_PROCESSOR, dependencyName, project.getName());
             return apConfig.getDependencies().add(project.getDependencies().create(dependencyName));
         }
         return false;

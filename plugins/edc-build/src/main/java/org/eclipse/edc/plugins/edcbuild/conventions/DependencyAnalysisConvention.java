@@ -57,14 +57,16 @@ class DependencyAnalysisConvention implements EdcConvention {
                             "com.fasterxml.jackson.core:jackson-annotations",
                             "com.fasterxml.jackson.core:jackson-databind");
                 });
+                a.onUnusedAnnotationProcessors(i -> i.exclude(
+                        "org.eclipse.edc:autodoc-processor"
+                ));
                 a.onUnusedDependencies(i -> i.exclude(
                         // dependencies declared at the root level for all modules
                         "org.assertj:assertj-core",
                         "org.junit.jupiter:junit-jupiter-api",
                         "org.junit.jupiter:junit-jupiter-params",
                         "org.mockito:mockito-core",
-                        "org.eclipse.edc:runtime-metamodel",
-                        "org.eclipse.edc:autodoc-processor"
+                        "org.eclipse.edc:runtime-metamodel"
                 ));
                 a.onIncorrectConfiguration(i -> i.exclude(
                         // some common dependencies are intentionally exported by core:common:connector-core for simplicity
