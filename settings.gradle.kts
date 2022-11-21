@@ -1,4 +1,4 @@
-rootProject.name = "edcPlugins"
+rootProject.name = "GradlePlugins"
 include("plugins:module-names")
 include("plugins:test-summary")
 include("plugins:openapi-merger")

@@ -38,6 +38,7 @@ public @interface Setting {
 
     /**
      * The setting default value. Empty string if no default value is provided
+     *
      * @return the setting's default value
      */
     String defaultValue() default "";
