@@ -8,7 +8,7 @@ assertj = "3.22.0"
 atomikos = "5.0.8"
 awaitility = "4.2.0"
 aws = "2.17.288"
-bouncycastle-jdk18on = "1.72"
+bouncyCastle-jdk18on = "1.72"
 bouncyCastle = "1.70" # this bouncycastle version is deprecated in favor of the jdk18on
 cloudEvents = "2.3.0"
 failsafe = "3.2.4"
@@ -42,8 +42,8 @@ slf4j = "2.0.0-alpha7"
 # Core EDC dependencies
 assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility" }
-bouncyCastle-bcprov-jdk18on = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle-jdk18on" }
-bouncyCastle-bcpkix-jdk18on = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bouncycastle-jdk18on" }
+bouncyCastle-bcprovJdk18on = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncyCastle-jdk18on" }
+bouncyCastle-bcpkixJdk18on = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bouncyCastle-jdk18on" }
 # these two bouncycastle versions are deprecated in favor of the jdk18on
 bouncyCastle-bcprov = { module = "org.bouncycastle:bcprov-jdk15on", version.ref = "bouncyCastle" }
 bouncyCastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk15on", version.ref = "bouncyCastle" }
