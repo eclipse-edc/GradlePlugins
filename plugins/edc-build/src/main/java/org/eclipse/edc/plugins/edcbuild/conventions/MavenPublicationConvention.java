@@ -29,9 +29,7 @@ public class MavenPublicationConvention implements EdcConvention {
     public void apply(Project target) {
         var applicationPlugin = target.getPlugins().findPlugin("application");
         if (applicationPlugin == null) {
-            requireExtension(target, PublishingExtension.class);
-
-            var pe = target.getExtensions().getByType(PublishingExtension.class);
+            var pe = requireExtension(target, PublishingExtension.class);
             pe.publications(publications -> publications.create(target.getName(), MavenPublication.class,
                     mavenPublication -> mavenPublication.from(target.getComponents().getByName("java"))));
         }
