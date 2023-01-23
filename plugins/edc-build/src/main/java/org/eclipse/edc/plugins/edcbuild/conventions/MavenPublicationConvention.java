@@ -31,12 +31,17 @@ public class MavenPublicationConvention implements EdcConvention {
     
     /**
      * Checks whether publishing is explicitly set to false for the target project and, if it is
-     * not, adds a Maven publication to the project, if none exists.
+     * not, adds a Maven publication to the project, if none exists. This only applies for
+     * sub-projects.
      *
      * @param target The project to which the convention applies
      */
     @Override
     public void apply(Project target) {
+        if (target.getRootProject() == target) {
+            return;
+        }
+        
         var buildExt = requireExtension(target, BuildExtension.class);
         var shouldPublish = buildExt.getPublish().getOrElse(DEFAULT_SHOULD_PUBLISH);
         
