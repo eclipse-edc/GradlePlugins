@@ -32,13 +32,14 @@ public class MavenPublicationConvention implements EdcConvention {
     /**
      * Checks whether publishing is explicitly set to false for the target project and, if it is
      * not, adds a Maven publication to the project, if none exists. This only applies for
-     * sub-projects.
+     * sub-projects that contain a build.gradle.kts file.
      *
      * @param target The project to which the convention applies
      */
     @Override
     public void apply(Project target) {
-        if (target.getRootProject() == target) {
+        // do not publish the root project or modules without a build.gradle.kts
+        if (target.getRootProject() == target || !target.file("build.gradle.kts").exists()) {
             return;
         }
         
