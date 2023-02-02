@@ -100,6 +100,7 @@ azure-storageblob = { group = "com.azure", name = "azure-storage-blob", version 
 aws-sts = { module = "software.amazon.awssdk:sts", version.ref = "aws" }
 aws-iam = { module = "software.amazon.awssdk:iam", version.ref = "aws" }
 aws-s3 = { module = "software.amazon.awssdk:s3", version.ref = "aws" }
+aws-secretsmanager = { module = "software.amazon.awssdk:secretsmanager", version.ref = "aws" }
 
 # Google dependencies
 googlecloud-iam-admin = { module = "com.google.cloud:google-iam-admin", version.ref = "googleCloudIamAdmin" }
