@@ -18,7 +18,7 @@ dependencies {
     implementation(project(":plugins:module-names"))
     implementation(project(":plugins:openapi-merger"))
 
-    implementation("com.autonomousapps:dependency-analysis-gradle-plugin:1.17.0")
+    implementation("com.autonomousapps:dependency-analysis-gradle-plugin:1.19.0")
     implementation("io.github.gradle-nexus:publish-plugin:1.1.0")
     implementation("gradle.plugin.org.gradle.crypto:checksum:1.4.0")
     implementation("gradle.plugin.org.hidetake:gradle-swagger-generator-plugin:2.19.2")
