@@ -11,7 +11,7 @@ dependencies {
     // contains the actual merger task
     implementation("com.rameshkp:openapi-merger-gradle-plugin:1.0.5")
     // needed for the OpenApiDataInvalidException:
-    implementation("com.rameshkp:openapi-merger-app:1.0.4")
+    implementation("com.rameshkp:openapi-merger-app:1.0.5")
 }
 
 gradlePlugin {
