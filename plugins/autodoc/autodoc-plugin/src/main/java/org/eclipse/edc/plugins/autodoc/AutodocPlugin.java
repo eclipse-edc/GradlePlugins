@@ -17,8 +17,6 @@ package org.eclipse.edc.plugins.autodoc;
 import org.eclipse.edc.plugins.autodoc.merge.MergeManifestsTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.artifacts.Configuration;
-import org.gradle.api.artifacts.ModuleVersionIdentifier;
 
 import java.io.File;
 import java.util.function.Supplier;
@@ -40,7 +38,7 @@ public class AutodocPlugin implements Plugin<Project> {
         project.getExtensions().create("autodocextension", AutodocExtension.class);
 
         // adds the annotation processor dependency
-        project.getGradle().addListener(new AutodocDependencyInjector(project, format("%s:%s:", GROUP_NAME, PROCESSOR_ARTIFACT_NAME),
+        project.getGradle().addListener(new AutodocDependencyInjector(project, format("%s:%s", GROUP_NAME, PROCESSOR_ARTIFACT_NAME),
                 createVersionProvider(project),
                 getOutputDirectoryProvider(project)));
 
@@ -64,26 +62,14 @@ public class AutodocPlugin implements Plugin<Project> {
     private Supplier<String> createVersionProvider(Project project) {
         return () -> {
             // runtime version of the actual annotation processor, or override in config
-            var versionToUse = getProcessorModuleVersion(project);
 
             var extension = project.getExtensions().findByType(AutodocExtension.class);
             if (extension != null && extension.getProcessorVersion().isPresent()) {
-                versionToUse = extension.getProcessorVersion().get();
+                var versionToUse = extension.getProcessorVersion().get();
                 project.getLogger().debug("{}: use configured version from AutodocExtension (override) [{}]", project.getName(), versionToUse);
-            } else {
-                project.getLogger().debug("{}: use default version [{}]", project.getName(), versionToUse);
+                return versionToUse;
             }
-            return versionToUse;
+            return null;
         };
-    }
-
-    private String getProcessorModuleVersion(Project project) {
-        Configuration classpath = project.getRootProject().getBuildscript().getConfigurations().getByName("classpath");
-        return classpath.getResolvedConfiguration().getResolvedArtifacts().stream()
-                .map(artifact -> artifact.getModuleVersion().getId())
-                .filter(id -> GROUP_NAME.equals(id.getGroup()) && PLUGIN_ARTIFACT_NAME.equals(id.getName()))
-                .findAny()
-                .map(ModuleVersionIdentifier::getVersion)
-                .orElse(null);
     }
 }

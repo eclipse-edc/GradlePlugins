@@ -47,7 +47,16 @@ class AutodocDependencyInjector implements DependencyResolutionListener {
 
     @Override
     public void beforeResolve(ResolvableDependencies dependencies) {
-        var artifact = dependencyName + versionSupplier.get();
+        var version = versionSupplier.get();
+
+        var artifact = dependencyName;
+        if (version != null) {
+            artifact += ":" + version;
+        } else {
+            artifact += ":+";
+            project.getLogger().warn("No explicit configuration value for the annotationProcessor version was found. Please supply a configuration for the Autodoc Plugin's annotationProcessor.");
+        }
+
         if (addDependency(project, artifact)) {
             var task = project.getTasks().findByName("compileJava");
             if ((task instanceof JavaCompile)) {

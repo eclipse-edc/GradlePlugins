@@ -19,6 +19,9 @@ val assertj: String by project
 val groupId: String by project
 
 gradlePlugin {
+    website.set("https://projects.eclipse.org/proposals/eclipse-dataspace-connector")
+    vcsUrl.set("https://github.com/eclipse-dataspaceconnector/GradlePlugins.git")
+
     // Define the plugin
     plugins {
         create("autodoc") {
@@ -27,13 +30,7 @@ gradlePlugin {
                 "Plugin to generate a documentation manifest for the EDC Metamodel, i.e. extensions, SPIs, etc."
             id = "${groupId}.autodoc"
             implementationClass = "org.eclipse.edc.plugins.autodoc.AutodocPlugin"
+            tags.set(listOf("build", "documentation", "generated", "autodoc"))
         }
     }
-}
-
-pluginBundle {
-    website = "https://projects.eclipse.org/proposals/eclipse-dataspace-connector"
-    vcsUrl = "https://github.com/eclipse-dataspaceconnector/GradlePlugins.git"
-    version = version
-    tags = listOf("build", "documentation", "generated", "autodoc")
 }
