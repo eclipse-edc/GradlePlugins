@@ -25,10 +25,12 @@ import static org.eclipse.edc.plugins.edcbuild.conventions.ConventionFunctions.r
  * Adds a Maven publication to a project.
  */
 public class MavenPublicationConvention implements EdcConvention {
-    
-    /** Default setting for publication of a project. */
+
+    /**
+     * Default setting for publication of a project.
+     */
     private static final boolean DEFAULT_SHOULD_PUBLISH = true;
-    
+
     /**
      * Checks whether publishing is explicitly set to false for the target project and, if it is
      * not, adds a Maven publication to the project, if none exists. This only applies for
@@ -42,18 +44,21 @@ public class MavenPublicationConvention implements EdcConvention {
         if (target.getRootProject() == target || !target.file("build.gradle.kts").exists()) {
             return;
         }
-        
+
         var buildExt = requireExtension(target, BuildExtension.class);
         var shouldPublish = buildExt.getPublish().getOrElse(DEFAULT_SHOULD_PUBLISH);
-        
+
         if (shouldPublish) {
             var pe = requireExtension(target, PublishingExtension.class);
-            
+
             if (pe.getPublications().findByName(target.getName()) == null) {
                 pe.publications(publications -> publications.create(target.getName(), MavenPublication.class,
-                        mavenPublication -> mavenPublication.from(target.getComponents().getByName("java"))));
+                        mavenPublication -> {
+                            mavenPublication.from(target.getComponents().getByName("java"));
+                            mavenPublication.setGroupId(buildExt.getPom().getGroupId());
+                        }));
             }
         }
     }
-    
+
 }
