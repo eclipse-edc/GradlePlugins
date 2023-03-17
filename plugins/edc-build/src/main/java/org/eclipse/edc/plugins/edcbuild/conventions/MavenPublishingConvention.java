@@ -17,7 +17,6 @@ package org.eclipse.edc.plugins.edcbuild.conventions;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.dsl.RepositoryHandler;
-import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
 import org.gradle.api.publish.PublishingExtension;
 
 import java.util.Optional;
@@ -37,10 +36,8 @@ class MavenPublishingConvention implements EdcConvention {
         }
         var pubExt = requireExtension(target, PublishingExtension.class);
 
-        if (pubExt.getRepositories().stream().noneMatch(repo -> repo.getName().equals(Repositories.REPO_NAME_SONATYPE) && repo instanceof MavenArtifactRepository)) {
-            Optional.ofNullable(getRepoOverride())
-                    .ifPresent(pubExt::repositories);
-        }
+        Optional.ofNullable(getRepoOverride())
+                .ifPresent(pubExt::repositories);
     }
 
     private Action<? super RepositoryHandler> getRepoOverride() {
