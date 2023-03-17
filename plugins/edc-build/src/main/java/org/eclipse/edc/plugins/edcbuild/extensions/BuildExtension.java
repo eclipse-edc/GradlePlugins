@@ -60,6 +60,7 @@ public abstract class BuildExtension {
     public SwaggerGeneratorExtension getSwagger() {
         return swagger;
     }
-    
+
     public abstract Property<Boolean> getPublish();
+
 }
