@@ -5,8 +5,6 @@ plugins {
     signing
     `java-library`
     `version-catalog`
-    // for publishing to nexus/ossrh/mavencentral
-//    id("org.gradle.crypto.checksum") version "1.4.0"
     id("com.gradle.plugin-publish") version "1.1.0" apply false
 }
 
@@ -15,6 +13,7 @@ val defaultVersion: String by project
 val jupiterVersion: String by project
 val assertj: String by project
 val mockitoVersion: String by project
+val annotationProcessorVersion: String by project
 
 var actualVersion: String = (project.findProperty("version") ?: defaultVersion) as String
 if (actualVersion == "unspecified") {
@@ -28,6 +27,11 @@ allprojects {
     version = actualVersion
     group = groupId
 
+    configure<org.eclipse.edc.plugins.autodoc.AutodocExtension> {
+        processorVersion.set(annotationProcessorVersion)
+        outputDirectory.set(project.buildDir)
+    }
+
     // for all gradle plugins:
     pluginManager.withPlugin("java-gradle-plugin") {
         apply(plugin = "com.gradle.plugin-publish")
@@ -35,7 +39,6 @@ allprojects {
 
     // for all java libs:
     pluginManager.withPlugin("java-library") {
-
 
         java {
             val javaVersion = 11
@@ -88,6 +91,8 @@ allprojects {
     }
 
     tasks.withType<Jar> {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
         metaInf {
             from("${rootProject.projectDir.path}/NOTICE.md")
             from("${rootProject.projectDir.path}/LICENSE")

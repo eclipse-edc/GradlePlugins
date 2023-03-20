@@ -20,10 +20,6 @@ tasks.test {
     }
 }
 
-tasks.withType<Jar> {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
 publishing {
     publications {
         create<MavenPublication>("runtime-metamodel") {

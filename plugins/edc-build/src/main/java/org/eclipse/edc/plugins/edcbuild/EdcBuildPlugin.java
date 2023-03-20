@@ -18,6 +18,8 @@ package org.eclipse.edc.plugins.edcbuild;
 import org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.publish.Publication;
+import org.gradle.plugins.signing.Sign;
 
 import static java.util.List.of;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.checkstyle;
@@ -58,6 +60,7 @@ public class EdcBuildPlugin implements Plugin<Project> {
             if (project.getState().getFailure() != null) {
                 return;
             }
+
             // apply the conventions
             of(
                     rootBuildScript(),
