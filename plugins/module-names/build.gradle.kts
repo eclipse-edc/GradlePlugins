@@ -1,6 +1,6 @@
 plugins {
     `java-gradle-plugin`
-    id("org.gradle.crypto.checksum") version "1.4.0"
+//    id("org.gradle.crypto.checksum") version "1.4.0"
 }
 
 val jupiterVersion: String by project

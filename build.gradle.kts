@@ -6,7 +6,7 @@ plugins {
     `java-library`
     `version-catalog`
     // for publishing to nexus/ossrh/mavencentral
-    id("org.gradle.crypto.checksum") version "1.4.0"
+//    id("org.gradle.crypto.checksum") version "1.4.0"
     id("com.gradle.plugin-publish") version "1.1.0" apply false
 }
 
@@ -22,6 +22,7 @@ if (actualVersion == "unspecified") {
 }
 
 allprojects {
+    apply(plugin = "org.eclipse.edc.edc-build")
     apply(plugin = "checkstyle")
     apply(plugin = "maven-publish")
     version = actualVersion
@@ -34,6 +35,7 @@ allprojects {
 
     // for all java libs:
     pluginManager.withPlugin("java-library") {
+
 
         java {
             val javaVersion = 11

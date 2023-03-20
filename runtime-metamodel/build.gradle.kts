@@ -3,16 +3,13 @@ plugins {
     `maven-publish`
 }
 
-val jetBrainsAnnotationsVersion: String by project
-val jacksonVersion: String by project
-
 dependencies {
 
-    api("org.jetbrains:annotations:${jetBrainsAnnotationsVersion}")
-    api("com.fasterxml.jackson.core:jackson-core:${jacksonVersion}")
-    api("com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}")
-    api("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
-    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
+    api(libs.jetbrains.annotations)
+    api(libs.jackson.core)
+    api(libs.jackson.annotations)
+    api(libs.jackson.databind)
+    api(libs.jackson.datatypeJsr310)
 
 }
 
@@ -21,6 +18,10 @@ tasks.test {
     testLogging {
         showStandardStreams = true
     }
+}
+
+tasks.withType<Jar> {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 publishing {

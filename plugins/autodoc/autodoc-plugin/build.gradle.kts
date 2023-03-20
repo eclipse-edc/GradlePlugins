@@ -1,17 +1,14 @@
 plugins {
     `java-gradle-plugin`
-    id("org.gradle.crypto.checksum") version "1.4.0"
+//    id("org.gradle.crypto.checksum") version "1.4.0"
 }
 
-val jetBrainsAnnotationsVersion: String by project
-val jacksonVersion: String by project
-
 dependencies {
-    implementation("org.jetbrains:annotations:${jetBrainsAnnotationsVersion}")
-    implementation("com.fasterxml.jackson.core:jackson-core:${jacksonVersion}")
-    implementation("com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}")
-    implementation("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
+    implementation(libs.jetbrains.annotations)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.annotations)
+    implementation(libs.jackson.databind)
+    implementation(libs.jackson.datatypeJsr310)
 }
 
 val jupiterVersion: String by project

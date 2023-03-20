@@ -36,7 +36,6 @@ class DefaultDependencyConvention implements EdcConvention {
     public void apply(Project target) {
         target.getPluginManager().withPlugin("java-library", plugin -> {
 
-
             var ext = requireExtension(target, BuildExtension.class).getVersions();
             var catalogReader = new CatalogReader(target, ext.getCatalogName());
             var group = EDC_GROUP_ID;
@@ -46,7 +45,7 @@ class DefaultDependencyConvention implements EdcConvention {
             // classpath dependencies
             var d = target.getDependencies();
             d.add(JavaPlugin.API_CONFIGURATION_NAME, format("org.jetbrains:annotations:%s", ext.getJetbrainsAnnotation().getOrElse(catalogReader.versionFor("jetbrainsAnnotation", "15.0"))));
-            var jacksonVersion = ext.getJackson().getOrElse(catalogReader.versionFor("jackson", "2.14.0-rc2"));
+            var jacksonVersion = ext.getJackson().getOrElse(catalogReader.versionFor("jackson", "2.14.0"));
             d.add(JavaPlugin.API_CONFIGURATION_NAME, format("com.fasterxml.jackson.core:jackson-core:%s", jacksonVersion));
             d.add(JavaPlugin.API_CONFIGURATION_NAME, format("com.fasterxml.jackson.core:jackson-annotations:%s", jacksonVersion));
             d.add(JavaPlugin.API_CONFIGURATION_NAME, format("com.fasterxml.jackson.core:jackson-databind:%s", jacksonVersion));
