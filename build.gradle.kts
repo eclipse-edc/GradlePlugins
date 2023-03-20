@@ -7,7 +7,6 @@ plugins {
     `version-catalog`
     // for publishing to nexus/ossrh/mavencentral
     id("org.gradle.crypto.checksum") version "1.4.0"
-    id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
     id("com.gradle.plugin-publish") version "1.1.0" apply false
 }
 
@@ -16,7 +15,6 @@ val defaultVersion: String by project
 val jupiterVersion: String by project
 val assertj: String by project
 val mockitoVersion: String by project
-
 
 var actualVersion: String = (project.findProperty("version") ?: defaultVersion) as String
 if (actualVersion == "unspecified") {
@@ -33,35 +31,9 @@ allprojects {
     pluginManager.withPlugin("java-gradle-plugin") {
         apply(plugin = "com.gradle.plugin-publish")
     }
-    if (!project.hasProperty("skip.signing")) {
-        apply(plugin = "signing")
 
-        //set the deploy-url only for java libraries
-        val deployUrl =
-            if (actualVersion.contains("SNAPSHOT")) "https://oss.sonatype.org/content/repositories/snapshots/"
-            else "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-        publishing {
-            repositories {
-                maven {
-                    name = "OSSRH"
-                    setUrl(deployUrl)
-                    credentials {
-                        username = System.getenv("OSSRH_USER") ?: return@credentials
-                        password = System.getenv("OSSRH_PASSWORD") ?: return@credentials
-                    }
-                }
-            }
-
-            signing {
-                useGpgCmd()
-                sign(publishing.publications)
-            }
-        }
-
-    }
     // for all java libs:
     pluginManager.withPlugin("java-library") {
-
 
         java {
             val javaVersion = 11
@@ -113,60 +85,10 @@ allprojects {
         }
     }
 
-    afterEvaluate {
-        // values needed for publishing
-        val pluginsWebsiteUrl: String by project
-        val pluginsDeveloperId: String by project
-        val pluginsDeveloperName: String by project
-        val pluginsDeveloperEmail: String by project
-        val pluginsScmConnection: String by project
-        val pluginsScmUrl: String by project
-        publishing {
-            publications.forEach { i ->
-                val mp = (i as MavenPublication)
-                mp.pom {
-                    name.set(project.name)
-                    description.set("edc :: ${project.name}")
-                    url.set(pluginsWebsiteUrl)
-
-                    licenses {
-                        license {
-                            name.set("The Apache License, Version 2.0")
-                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                        }
-                        developers {
-                            developer {
-                                id.set(pluginsDeveloperId)
-                                name.set(pluginsDeveloperName)
-                                email.set(pluginsDeveloperEmail)
-                            }
-                        }
-                        scm {
-                            connection.set(pluginsScmConnection)
-                            url.set(pluginsScmUrl)
-                        }
-                    }
-                }
-//                println("\nset POM for: ${mp.groupId}:${mp.artifactId}:${mp.version}")
-            }
-        }
-    }
-
     tasks.withType<Jar> {
         metaInf {
             from("${rootProject.projectDir.path}/NOTICE.md")
             from("${rootProject.projectDir.path}/LICENSE")
-        }
-    }
-}
-
-nexusPublishing {
-    repositories {
-        sonatype {
-            nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots/"))
-            username.set(System.getenv("OSSRH_USER") ?: return@sonatype)
-            password.set(System.getenv("OSSRH_PASSWORD") ?: return@sonatype)
         }
     }
 }
