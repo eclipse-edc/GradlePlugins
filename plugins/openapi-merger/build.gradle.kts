@@ -15,8 +15,6 @@ dependencies {
 }
 
 gradlePlugin {
-    website.set("https://projects.eclipse.org/proposals/eclipse-dataspace-connector")
-    vcsUrl.set("https://github.com/eclipse-dataspaceconnector/GradlePlugins.git")
     // Define the plugin
     plugins {
         create("openapi-merger") {
@@ -25,7 +23,13 @@ gradlePlugin {
                 "Plugin to several OpenAPI spec files into one"
             id = "${groupId}.openapi-merger"
             implementationClass = "org.eclipse.edc.plugins.openapimerger.OpenApiMergerPlugin"
-            tags.set(listOf("build", "openapi", "merge", "documentation"))
         }
     }
+}
+
+pluginBundle {
+    website = "https://projects.eclipse.org/proposals/eclipse-dataspace-connector"
+    vcsUrl = "https://github.com/eclipse-dataspaceconnector/GradlePlugins.git"
+    version = version
+    tags = listOf("build", "openapi", "merge", "documentation")
 }

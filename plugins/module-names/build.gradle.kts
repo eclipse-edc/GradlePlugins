@@ -8,8 +8,6 @@ val assertj: String by project
 val groupId: String by project
 
 gradlePlugin {
-    website.set("https://projects.eclipse.org/proposals/eclipse-dataspace-connector")
-    vcsUrl.set("https://github.com/eclipse-dataspaceconnector/GradlePlugins.git")
     // Define the plugin
     plugins {
         create("module-names") {
@@ -18,8 +16,13 @@ gradlePlugin {
                 "Plugin to verify that a project has no duplicate submodules (by name)"
             id = "${groupId}.module-names"
             implementationClass = "org.eclipse.edc.plugins.modulenames.ModuleNamesPlugin"
-            tags.set(listOf("build", "verification"))
-            version = version
         }
     }
+}
+
+pluginBundle {
+    website = "https://projects.eclipse.org/proposals/eclipse-dataspace-connector"
+    vcsUrl = "https://github.com/eclipse-dataspaceconnector/GradlePlugins.git"
+    version = version
+    tags = listOf("build", "verification")
 }

@@ -27,8 +27,6 @@ dependencies {
 }
 
 gradlePlugin {
-    website.set("https://projects.eclipse.org/proposals/eclipse-dataspace-connector")
-    vcsUrl.set("https://github.com/eclipse-dataspaceconnector/GradlePlugins.git")
     // Define the plugins
     plugins {
         create("edc-build-base") {
@@ -37,7 +35,6 @@ gradlePlugin {
                 "Meta-plugin that provides the capabilities of the EDC build"
             id = "${groupId}.edc-build-base"
             implementationClass = "org.eclipse.edc.plugins.edcbuild.EdcBuildBasePlugin"
-            tags.set(listOf("build", "verification", "test"))
         }
         create("edc-build") {
             displayName = "edc-build"
@@ -45,7 +42,13 @@ gradlePlugin {
                 "Plugin that applies the base capabilities and provides default configuration for the EDC build"
             id = "${groupId}.edc-build"
             implementationClass = "org.eclipse.edc.plugins.edcbuild.EdcBuildPlugin"
-            tags.set(listOf("build", "verification", "test"))
         }
     }
+}
+
+pluginBundle {
+    website = "https://projects.eclipse.org/proposals/eclipse-dataspace-connector"
+    vcsUrl = "https://github.com/eclipse-dataspaceconnector/GradlePlugins.git"
+    version = version
+    tags = listOf("build", "verification", "test")
 }
