@@ -2,8 +2,6 @@ plugins {
     `java-gradle-plugin`
 }
 
-val jupiterVersion: String by project
-val assertj: String by project
 val groupId: String by project
 
 repositories {
@@ -17,12 +15,12 @@ dependencies {
     implementation(project(":plugins:module-names"))
     implementation(project(":plugins:openapi-merger"))
 
-    implementation("com.autonomousapps:dependency-analysis-gradle-plugin:1.19.0")
-    implementation("io.github.gradle-nexus:publish-plugin:1.3.0")
-    implementation("gradle.plugin.org.gradle.crypto:checksum:1.4.0")
-    implementation("gradle.plugin.org.hidetake:gradle-swagger-generator-plugin:2.19.2")
-    implementation("io.swagger.core.v3:swagger-gradle-plugin:2.2.7")
-    implementation("com.rameshkp:openapi-merger-gradle-plugin:1.0.5")
+    implementation(libs.plugin.dependency.analysis)
+    implementation(libs.plugin.nexus.publish)
+    implementation(libs.plugin.checksum)
+    implementation(libs.plugin.swagger.generator)
+    implementation(libs.plugin.swagger)
+    implementation(libs.plugin.openapi.merger)
 }
 
 gradlePlugin {

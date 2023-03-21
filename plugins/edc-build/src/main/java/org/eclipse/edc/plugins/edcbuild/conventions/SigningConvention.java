@@ -15,7 +15,6 @@
 package org.eclipse.edc.plugins.edcbuild.conventions;
 
 import org.gradle.api.Project;
-import org.gradle.api.publish.PublicationContainer;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.plugins.signing.SigningExtension;
 import org.gradle.plugins.signing.SigningPlugin;

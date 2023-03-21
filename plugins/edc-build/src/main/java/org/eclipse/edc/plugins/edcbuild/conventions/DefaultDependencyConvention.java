@@ -53,7 +53,7 @@ class DefaultDependencyConvention implements EdcConvention {
             d.add(JavaPlugin.API_CONFIGURATION_NAME, format("%s:runtime-metamodel:%s", group, ext.getMetaModel().getOrElse("0.0.1-SNAPSHOT")));
 
             //test classpath dependencies
-            var jupiterVersion = ext.getJupiter().getOrElse(catalogReader.versionFor("jupiter", "5.8.2"));
+            var jupiterVersion = ext.getJupiter().getOrElse(catalogReader.versionFor("jupiter", "5.9.0"));
             d.add(JavaPlugin.TEST_IMPLEMENTATION_CONFIGURATION_NAME, format("org.junit.jupiter:junit-jupiter-api:%s", jupiterVersion));
             d.add(JavaPlugin.TEST_IMPLEMENTATION_CONFIGURATION_NAME, format("org.junit.jupiter:junit-jupiter-params:%s", jupiterVersion));
             d.add(JavaPlugin.TEST_RUNTIME_ONLY_CONFIGURATION_NAME, format("org.junit.jupiter:junit-jupiter-engine:%s", jupiterVersion));

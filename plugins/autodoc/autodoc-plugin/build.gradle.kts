@@ -10,8 +10,6 @@ dependencies {
     implementation(libs.jackson.datatypeJsr310)
 }
 
-val jupiterVersion: String by project
-val assertj: String by project
 val groupId: String by project
 
 gradlePlugin {

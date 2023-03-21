@@ -4,12 +4,11 @@ format.version = "1.1"
 [versions]
 azure-rm = "2.12.0"
 apacheCommonsPool2 = "2.11.1"
-assertj = "3.22.0"
+assertj = "3.23.1"
 atomikos = "5.0.9"
 awaitility = "4.2.0"
 aws = "2.19.26"
 bouncyCastle-jdk18on = "1.72"
-bouncyCastle = "1.70" # this bouncycastle version is deprecated in favor of the jdk18on
 cloudEvents = "2.3.0"
 failsafe = "3.2.4"
 gatling = "3.7.5"
@@ -25,7 +24,7 @@ jersey = "3.0.8"
 jetbrainsAnnotation = "15.0"
 jetty = "11.0.14"
 jta = "1.3"
-jupiter = "5.8.2"
+jupiter = "5.9.0"
 jwt = "3.13.0"
 micrometer = "1.8.2"
 mockito = "5.2.0"
@@ -44,9 +43,6 @@ assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility" }
 bouncyCastle-bcprovJdk18on = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncyCastle-jdk18on" }
 bouncyCastle-bcpkixJdk18on = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bouncyCastle-jdk18on" }
-# these two bouncycastle versions are deprecated in favor of the jdk18on
-bouncyCastle-bcprov = { module = "org.bouncycastle:bcprov-jdk15on", version.ref = "bouncyCastle" }
-bouncyCastle-bcpkix = { module = "org.bouncycastle:bcpkix-jdk15on", version.ref = "bouncyCastle" }
 cloudEvents = { module = "io.cloudevents:cloudevents-http-basic", version.ref = "cloudEvents" }
 failsafe-core = { module = "dev.failsafe:failsafe", version.ref = "failsafe" }
 failsafe-okhttp = { module = "dev.failsafe:failsafe-okhttp", version.ref = "failsafe" }
@@ -114,6 +110,15 @@ atomikos-jta = { module = "com.atomikos:transactions-jta", version.ref = "atomik
 atomikos-jdbc = { module = "com.atomikos:transactions-jdbc", version.ref = "atomikos" }
 postgres = { module = "org.postgresql:postgresql", version.ref = "postgres" }
 
+# plugin dependencies
+plugin-dependency-analysis = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version = "1.19.0" }
+plugin-nexus-publish = { module = "io.github.gradle-nexus:publish-plugin", version = "1.3.0" }
+plugin-checksum = { module = "gradle.plugin.org.gradle.crypto:checksum", version = "1.4.0" }
+plugin-openapi-merger = { module = "com.rameshkp:openapi-merger-gradle-plugin", version = "1.0.5" }
+plugin-openapi-merger-app = { module = "com.rameshkp:openapi-merger-app", version = "1.0.5" }
+plugin-swagger = { module = "io.swagger.core.v3:swagger-gradle-plugin", version = "2.2.7" }
+plugin-swagger-generator = { module = "gradle.plugin.org.hidetake:gradle-swagger-generator-plugin", version = "2.19.2" }
+
 [bundles]
 # to be used in jersey-core and jetty-core
 jersey-core = ["jersey.server", "jersey.common", "jersey.jackson", "jersey.multipart", "jersey.inject", "jersey.servlet", "jersey.servletcore"]
@@ -125,4 +130,4 @@ jackson = ["jackson.core", "jackson.annotations", "jackson.databind", "jackson-d
 jupiter = ["junit-jupiter-api", "junit-jupiter-params"]
 
 [plugins]
-# nothing here yet
+publish = { id = "com.gradle.plugin-publish", version = "1.1.0" }

@@ -2,8 +2,6 @@ plugins {
     `java-gradle-plugin`
 }
 
-val jupiterVersion: String by project
-val assertj: String by project
 val groupId: String by project
 
 gradlePlugin {
