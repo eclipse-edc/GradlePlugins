@@ -13,8 +13,8 @@ dependencies {
 val groupId: String by project
 
 gradlePlugin {
-    website.set("https://projects.eclipse.org/proposals/eclipse-dataspace-connector")
-    vcsUrl.set("https://github.com/eclipse-dataspaceconnector/GradlePlugins.git")
+    website.set("https://projects.eclipse.org/projects/technology.edc")
+    vcsUrl.set("https://github.com/eclipse-edc/GradlePlugins.git")
 
     // Define the plugin
     plugins {
