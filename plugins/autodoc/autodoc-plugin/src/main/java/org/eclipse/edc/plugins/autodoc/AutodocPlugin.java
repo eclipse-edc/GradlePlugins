@@ -20,6 +20,7 @@ import org.gradle.api.Project;
 import org.gradle.api.provider.Provider;
 
 import java.io.File;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -34,10 +35,9 @@ public class AutodocPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        project.getExtensions().create("autodocextension", AutodocExtension.class);
+        var extension = project.getExtensions().create("autodocextension", AutodocExtension.class);
 
-        // adds the annotation processor dependency
-        if (!project.getName().equals("runtime-metamodel")) {
+        if (!extension.getExcluded().getOrElse(false)) {
             project.getGradle().addListener(new AutodocDependencyInjector(project, format("%s:%s", project.getGroup(), PROCESSOR_ARTIFACT_NAME),
                     createVersionProvider(project),
                     getOutputDirectoryProvider(project)));

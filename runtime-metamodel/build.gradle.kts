@@ -10,3 +10,7 @@ dependencies {
     api(libs.jackson.databind)
     api(libs.jackson.datatypeJsr310)
 }
+
+configure<org.eclipse.edc.plugins.autodoc.AutodocExtension> {
+    excluded.set(true)
+}

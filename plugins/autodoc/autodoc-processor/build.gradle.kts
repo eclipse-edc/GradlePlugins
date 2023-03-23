@@ -19,11 +19,6 @@ dependencies {
     api(project(":runtime-metamodel"))
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("autodoc-processor") {
-            artifactId = "autodoc-processor"
-            from(components["java"])
-        }
-    }
+configure<org.eclipse.edc.plugins.autodoc.AutodocExtension> {
+    excluded.set(true)
 }

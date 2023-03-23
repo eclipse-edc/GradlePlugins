@@ -29,5 +29,11 @@ public abstract class AutodocExtension {
      */
     public abstract Property<String> getProcessorVersion();
 
+    /**
+     * Override the exclusion flag. By default, it's false.
+     * @return the property object
+     */
+    public abstract Property<Boolean> getExcluded();
+
 
 }
