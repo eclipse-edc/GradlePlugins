@@ -17,8 +17,10 @@ package org.eclipse.edc.plugins.autodoc;
 import org.eclipse.edc.plugins.autodoc.merge.MergeManifestsTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.provider.Provider;
 
 import java.io.File;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import static java.lang.String.format;
@@ -29,16 +31,13 @@ import static java.lang.String.format;
 public class AutodocPlugin implements Plugin<Project> {
 
     private static final String PROCESSOR_ARTIFACT_NAME = "autodoc-processor";
-    private static final String PLUGIN_ARTIFACT_NAME = "autodoc-plugin";
-    private static final String GROUP_NAME = "org.eclipse.edc";
 
     @Override
     public void apply(Project project) {
-
         project.getExtensions().create("autodocextension", AutodocExtension.class);
 
         // adds the annotation processor dependency
-        project.getGradle().addListener(new AutodocDependencyInjector(project, format("%s:%s", GROUP_NAME, PROCESSOR_ARTIFACT_NAME),
+        project.getGradle().addListener(new AutodocDependencyInjector(project, format("%s:%s", project.getGroup(), PROCESSOR_ARTIFACT_NAME),
                 createVersionProvider(project),
                 getOutputDirectoryProvider(project)));
 
@@ -59,17 +58,23 @@ public class AutodocPlugin implements Plugin<Project> {
         };
     }
 
+    /**
+     * runtime version of the actual annotation processor, or override in config
+     *
+     * @param project the Project
+     * @return a supplier that returns the AutodocProvider version if found, null otherwise
+     */
     private Supplier<String> createVersionProvider(Project project) {
-        return () -> {
-            // runtime version of the actual annotation processor, or override in config
-
-            var extension = project.getExtensions().findByType(AutodocExtension.class);
-            if (extension != null && extension.getProcessorVersion().isPresent()) {
-                var versionToUse = extension.getProcessorVersion().get();
-                project.getLogger().debug("{}: use configured version from AutodocExtension (override) [{}]", project.getName(), versionToUse);
-                return versionToUse;
-            }
-            return null;
-        };
+        return () -> Optional.of(project.getExtensions())
+                .map(e -> e.findByType(AutodocExtension.class))
+                .map(AutodocExtension::getProcessorVersion)
+                .filter(Provider::isPresent)
+                .map(Provider::get)
+                .map(versionToUse -> {
+                    project.getLogger().debug("{}: use configured version from AutodocExtension (override) [{}]", project.getName(), versionToUse);
+                    return versionToUse;
+                })
+                .orElse(null);
     }
+
 }

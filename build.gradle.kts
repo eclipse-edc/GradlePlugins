@@ -9,17 +9,10 @@ plugins {
 }
 
 val groupId: String by project
-val defaultVersion: String by project
 val annotationProcessorVersion: String by project
-
-var actualVersion: String = (project.findProperty("version") ?: defaultVersion) as String
-if (actualVersion == "unspecified") {
-    actualVersion = defaultVersion
-}
 
 allprojects {
     apply(plugin = "org.eclipse.edc.edc-build")
-    version = actualVersion
     group = groupId
 
     configure<org.eclipse.edc.plugins.autodoc.AutodocExtension> {
@@ -58,7 +51,7 @@ allprojects {
     }
 
     tasks.withType<Jar> {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
         metaInf {
             from("${rootProject.projectDir.path}/NOTICE.md")
