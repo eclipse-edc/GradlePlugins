@@ -37,9 +37,11 @@ public class AutodocPlugin implements Plugin<Project> {
         project.getExtensions().create("autodocextension", AutodocExtension.class);
 
         // adds the annotation processor dependency
-        project.getGradle().addListener(new AutodocDependencyInjector(project, format("%s:%s", project.getGroup(), PROCESSOR_ARTIFACT_NAME),
-                createVersionProvider(project),
-                getOutputDirectoryProvider(project)));
+        if (!project.getName().equals("runtime-metamodel")) {
+            project.getGradle().addListener(new AutodocDependencyInjector(project, format("%s:%s", project.getGroup(), PROCESSOR_ARTIFACT_NAME),
+                    createVersionProvider(project),
+                    getOutputDirectoryProvider(project)));
+        }
 
         // registers a "named" task, that does nothing, except depend on the compileTask, which then runs the annotation processor
         project.getTasks().register("autodoc", t -> t.dependsOn("compileJava"));

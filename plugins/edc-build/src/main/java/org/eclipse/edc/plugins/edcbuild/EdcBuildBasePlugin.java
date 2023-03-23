@@ -39,10 +39,7 @@ public class EdcBuildBasePlugin implements Plugin<Project> {
 
         target.getPlugins().apply(JavaLibraryPlugin.class);
         target.getPlugins().apply(JacocoPlugin.class);
-        // Autodoc must not run on runtime-metamodel
-        if (!target.getName().equals("runtime-metamodel")) {
-            target.getPlugins().apply(AutodocPlugin.class);
-        }
+        target.getPlugins().apply(AutodocPlugin.class);
         target.getPlugins().apply(CheckstylePlugin.class);
         target.getPlugins().apply(MavenPublishPlugin.class);
         target.getPlugins().apply(JavaPlugin.class);
