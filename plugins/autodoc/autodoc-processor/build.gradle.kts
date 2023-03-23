@@ -18,7 +18,3 @@ plugins {
 dependencies {
     api(project(":runtime-metamodel"))
 }
-
-configure<org.eclipse.edc.plugins.autodoc.AutodocExtension> {
-    excluded.set(true)
-}
