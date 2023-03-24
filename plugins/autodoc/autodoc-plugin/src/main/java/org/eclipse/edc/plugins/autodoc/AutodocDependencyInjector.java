@@ -31,13 +31,12 @@ class AutodocDependencyInjector implements DependencyResolutionListener {
     private static final String VERSION = "edc.version"; // must be identical to EdcModuleProcessor.VERSION
     private static final String ID = "edc.id"; // must be identical to EdcModuleProcessor.ID
     private static final String OUTPUTDIR = "edc.outputDir"; // must be identical to EdcModuleProcessor.EDC_OUTPUTDIR_OVERRIDE
+    private static final String DEPENDENCY_NAME = format("%s:%s", "org.eclipse.edc", "autodoc-processor");
     private final Project project;
-    private final String dependencyName;
     private final AutodocExtension extension;
 
-    AutodocDependencyInjector(Project project, String dependencyName, AutodocExtension extension) {
+    AutodocDependencyInjector(Project project, AutodocExtension extension) {
         this.project = project;
-        this.dependencyName = dependencyName;
         this.extension = extension;
     }
 
@@ -45,7 +44,7 @@ class AutodocDependencyInjector implements DependencyResolutionListener {
     public void beforeResolve(ResolvableDependencies dependencies) {
         var processorVersion = extension.getProcessorVersion();
 
-        var artifact = dependencyName;
+        var artifact = DEPENDENCY_NAME;
         if (processorVersion.isPresent()) {
             var version = processorVersion.get();
             artifact += ":" + version;

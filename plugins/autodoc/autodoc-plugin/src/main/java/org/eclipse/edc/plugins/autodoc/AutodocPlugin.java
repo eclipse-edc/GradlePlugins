@@ -20,14 +20,11 @@ import org.gradle.api.Project;
 
 import java.util.List;
 
-import static java.lang.String.format;
-
 /**
  * Gradle plugin that injects an {@code annotationProcessor} dependency to any Gradle project so that the autodoc processor can run during compile.
  */
 public class AutodocPlugin implements Plugin<Project> {
 
-    private static final String PROCESSOR_ARTIFACT_NAME = "autodoc-processor";
     private final List<String> exclusions = List.of("runtime-metamodel", "version-catalog", "edc-build", "module-names", "openapi-merger", "test-summary", "autodoc-plugin", "autodoc-processor");
 
     @Override
@@ -35,8 +32,7 @@ public class AutodocPlugin implements Plugin<Project> {
         var extension = project.getExtensions().create("autodocextension", AutodocExtension.class);
 
         if (!exclusions.contains(project.getName())) {
-            var dependencyName = format("%s:%s", project.getGroup(), PROCESSOR_ARTIFACT_NAME);
-            project.getGradle().addListener(new AutodocDependencyInjector(project, dependencyName, extension));
+            project.getGradle().addListener(new AutodocDependencyInjector(project, extension));
         }
 
         // registers a "named" task, that does nothing, except depend on the compileTask, which then runs the annotation processor
