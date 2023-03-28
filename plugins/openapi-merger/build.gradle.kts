@@ -2,7 +2,7 @@ plugins {
     `java-gradle-plugin`
 }
 
-val groupId: String by project
+val group: String by project
 
 dependencies {
     // contains the actual merger task
@@ -20,7 +20,7 @@ gradlePlugin {
             displayName = "openapi-merger"
             description =
                 "Plugin to several OpenAPI spec files into one"
-            id = "${groupId}.openapi-merger"
+            id = "${group}.openapi-merger"
             implementationClass = "org.eclipse.edc.plugins.openapimerger.OpenApiMergerPlugin"
             tags.set(listOf("build", "openapi", "merge", "documentation"))
         }

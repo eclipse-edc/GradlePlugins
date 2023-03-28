@@ -8,12 +8,11 @@ plugins {
     alias(libs.plugins.publish) apply false
 }
 
-val groupId: String by project
+val group: String by project
 val annotationProcessorVersion: String by project
 
 allprojects {
-    apply(plugin = "org.eclipse.edc.edc-build")
-    group = groupId
+    apply(plugin = "${group}.edc-build")
 
     configure<org.eclipse.edc.plugins.autodoc.AutodocExtension> {
         processorVersion.set(annotationProcessorVersion)

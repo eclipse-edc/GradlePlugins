@@ -2,7 +2,7 @@ plugins {
     `java-gradle-plugin`
 }
 
-val groupId: String by project
+val group: String by project
 
 repositories {
     mavenCentral()
@@ -32,7 +32,7 @@ gradlePlugin {
             displayName = "edc-build-base"
             description =
                 "Meta-plugin that provides the capabilities of the EDC build"
-            id = "${groupId}.edc-build-base"
+            id = "${group}.edc-build-base"
             implementationClass = "org.eclipse.edc.plugins.edcbuild.EdcBuildBasePlugin"
             tags.set(listOf("build", "verification", "test"))
         }
@@ -40,7 +40,7 @@ gradlePlugin {
             displayName = "edc-build"
             description =
                 "Plugin that applies the base capabilities and provides default configuration for the EDC build"
-            id = "${groupId}.edc-build"
+            id = "${group}.edc-build"
             implementationClass = "org.eclipse.edc.plugins.edcbuild.EdcBuildPlugin"
             tags.set(listOf("build", "verification", "test"))
         }

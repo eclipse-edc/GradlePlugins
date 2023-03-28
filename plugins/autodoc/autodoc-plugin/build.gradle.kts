@@ -10,7 +10,7 @@ dependencies {
     implementation(libs.jackson.datatypeJsr310)
 }
 
-val groupId: String by project
+val group: String by project
 
 gradlePlugin {
     website.set("https://projects.eclipse.org/projects/technology.edc")
@@ -22,7 +22,7 @@ gradlePlugin {
             displayName = "autodoc"
             description =
                 "Plugin to generate a documentation manifest for the EDC Metamodel, i.e. extensions, SPIs, etc."
-            id = "${groupId}.autodoc"
+            id = "${group}.autodoc"
             implementationClass = "org.eclipse.edc.plugins.autodoc.AutodocPlugin"
             tags.set(listOf("build", "documentation", "generated", "autodoc"))
         }

@@ -18,5 +18,4 @@ This module contains a Gradle Plugin, that acts as a "meta-plugin" of sorts, bec
   Note that the `edc.publish.repoName=foobar` is important, because it will define actual
   command `publishAllPublicationsToFoobar`
 - performs general configuration, e.g. adding standard dependencies to all projects
-- applies the `groupId`
 - applies all values for the signing config, e.g. developer name, etc.

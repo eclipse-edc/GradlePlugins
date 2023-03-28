@@ -2,7 +2,7 @@ plugins {
     `java-gradle-plugin`
 }
 
-val groupId: String by project
+val group: String by project
 
 gradlePlugin {
     website.set("https://projects.eclipse.org/projects/technology.edc")
@@ -13,7 +13,7 @@ gradlePlugin {
             displayName = "module-names"
             description =
                 "Plugin to verify that a project has no duplicate submodules (by name)"
-            id = "${groupId}.module-names"
+            id = "${group}.module-names"
             implementationClass = "org.eclipse.edc.plugins.modulenames.ModuleNamesPlugin"
             tags.set(listOf("build", "verification"))
             version = version
