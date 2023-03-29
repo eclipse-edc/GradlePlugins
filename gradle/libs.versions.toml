@@ -54,6 +54,7 @@ fraunhofer-infomodel = { module = "de.fraunhofer.iais.eis.ids.infomodel:java", v
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
 jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+jackson-dataformat-xml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jackson" }
 jackson-datatypeJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
 jakarta-validation = { module = "jakarta.validation:jakarta.validation-api", version.ref = "jakartaValidation" }
 jakarta-rsApi = { module = "jakarta.ws.rs:jakarta.ws.rs-api", version.ref = "rsApi" }
@@ -65,7 +66,7 @@ jersey-servlet = { module = "org.glassfish.jersey.containers:jersey-container-se
 jersey-servletcore = { module = "org.glassfish.jersey.containers:jersey-container-servlet-core", version.ref = "jersey" }
 jersey-jackson = { module = "org.glassfish.jersey.media:jersey-media-json-jackson", version.ref = "jersey" }
 jersey-inject = { module = "org.glassfish.jersey.inject:jersey-hk2", version.ref = "jersey" }
-jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotation"}
+jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotation" }
 jetty-websocket = { module = "org.eclipse.jetty.websocket:websocket-jakarta-server", version.ref = "jetty" }
 jta = { module = "javax.transaction:javax.transaction-api", version.ref = "jta" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jupiter" }
