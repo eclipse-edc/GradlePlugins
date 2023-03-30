@@ -46,6 +46,10 @@ class DefaultDependencyConvention implements EdcConvention {
             d.add(JavaPlugin.API_CONFIGURATION_NAME, format("com.fasterxml.jackson.core:jackson-core:%s", jacksonVersion));
             d.add(JavaPlugin.API_CONFIGURATION_NAME, format("com.fasterxml.jackson.core:jackson-annotations:%s", jacksonVersion));
             d.add(JavaPlugin.API_CONFIGURATION_NAME, format("com.fasterxml.jackson.core:jackson-databind:%s", jacksonVersion));
+            // this is a temporary workaround to compensate for azure libs, that use XmlMapper, but don't correctly list it as a dependency
+            if (hasAzureDependency(target)) {
+                d.add(JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME, format("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:%s", jacksonVersion));
+            }
             d.add(JavaPlugin.API_CONFIGURATION_NAME, format("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:%s", jacksonVersion));
             d.add(JavaPlugin.API_CONFIGURATION_NAME, format("%s:runtime-metamodel:%s", EDC_GROUP_ID, ext.getMetaModel().getOrElse("0.0.1-SNAPSHOT")));
 
@@ -57,6 +61,11 @@ class DefaultDependencyConvention implements EdcConvention {
             d.add(JavaPlugin.TEST_IMPLEMENTATION_CONFIGURATION_NAME, format("org.mockito:mockito-core:%s", ext.getMockito().getOrElse(catalogReader.versionFor("mockito", "5.2.0"))));
             d.add(JavaPlugin.TEST_IMPLEMENTATION_CONFIGURATION_NAME, format("org.assertj:assertj-core:%s", ext.getAssertJ().getOrElse(catalogReader.versionFor("assertj", "3.23.1"))));
         });
+    }
+
+    private boolean hasAzureDependency(Project target) {
+        return target.getConfigurations().stream().flatMap(c -> c.getDependencies().stream())
+                .anyMatch(d -> d.getGroup() != null && d.getGroup().contains("azure"));
     }
 
     private static class CatalogReader {
