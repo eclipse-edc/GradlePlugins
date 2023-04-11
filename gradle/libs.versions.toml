@@ -11,7 +11,6 @@ aws = "2.20.39"
 bouncyCastle-jdk18on = "1.72"
 cloudEvents = "2.4.2"
 failsafe = "3.3.1"
-gatling = "3.7.5"
 googleCloudIamAdmin = "1.2.5"
 googleCloudIamCredentials = "2.14.0"
 googleCloudStorage = "2.21.0"
@@ -46,7 +45,6 @@ bouncyCastle-bcpkixJdk18on = { module = "org.bouncycastle:bcpkix-jdk18on", versi
 cloudEvents = { module = "io.cloudevents:cloudevents-http-basic", version.ref = "cloudEvents" }
 failsafe-core = { module = "dev.failsafe:failsafe", version.ref = "failsafe" }
 failsafe-okhttp = { module = "dev.failsafe:failsafe-okhttp", version.ref = "failsafe" }
-gatling = { module = "io.gatling.highcharts:gatling-charts-highcharts", version.ref = "gatling" }
 h2 = { module = "com.h2database:h2", version.ref = "h2" }
 mockserver-netty = { module = "org.mock-server:mockserver-netty", version.ref = "httpMockServer" }
 mockserver-client = { module = "org.mock-server:mockserver-client-java", version.ref = "httpMockServer" }
