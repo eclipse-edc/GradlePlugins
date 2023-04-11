@@ -56,6 +56,8 @@ public class MavenPublicationConvention implements EdcConvention {
                         mavenPublication -> {
                             mavenPublication.from(target.getComponents().getByName("java"));
                             mavenPublication.setGroupId(buildExt.getPom().getGroupId());
+                            mavenPublication.suppressPomMetadataWarningsFor("testFixturesApiElements");
+                            mavenPublication.suppressPomMetadataWarningsFor("testFixturesRuntimeElements");
                         }));
             }
         }
