@@ -24,6 +24,12 @@ allprojects {
         apply(plugin = "com.gradle.plugin-publish")
     }
 
+    configure<org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension> {
+        pom {
+            githubOrgRepo.set("eclipse-edc/GradlePlugins")
+        }
+    }
+
     tasks.withType<Test> {
         useJUnitPlatform()
         testLogging {
