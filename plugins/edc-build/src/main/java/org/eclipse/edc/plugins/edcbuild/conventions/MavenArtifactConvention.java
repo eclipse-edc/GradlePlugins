@@ -75,9 +75,12 @@ class MavenArtifactConvention implements EdcConvention {
 
     private static void setPomInformation(MavenPomExtension pomExt, Project project, MavenPom pom) {
         // these properties are mandatory!
-        pom.getName().set(project.getName());
-        pom.getDescription().set("edc :: " + project.getName());
-        pom.getUrl().set(PROJECT_URL);
+        var projectName = pomExt.getProjectName().getOrElse(project.getName());
+        var description = pomExt.getDescription().getOrElse("edc :: " + project.getName());
+        var projectUrl = pomExt.getProjectUrl().getOrElse(PROJECT_URL);
+        pom.getName().set(projectName);
+        pom.getDescription().set(description);
+        pom.getUrl().set(projectUrl);
 
         // we'll provide a sane default for these properties
         pom.licenses(l -> l.license(pl -> {
@@ -92,15 +95,8 @@ class MavenArtifactConvention implements EdcConvention {
         }));
 
         pom.scm(scm -> {
-            var githubOrgRepo = pomExt.getGithubOrgRepo();
-            if (githubOrgRepo.isPresent()) {
-                scm.getUrl().set("https://github.com/" + githubOrgRepo.get());
-                scm.getConnection().set("scm:git:git@github.com:" + githubOrgRepo.get() + ".git");
-            } else {
-                // deprecated way, will be removed in the future
-                scm.getUrl().set(pomExt.getScmUrl());
-                scm.getConnection().set(pomExt.getScmConnection());
-            }
+            scm.getUrl().set(pomExt.getScmUrl());
+            scm.getConnection().set(pomExt.getScmConnection());
         });
     }
 

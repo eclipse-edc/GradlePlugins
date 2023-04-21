@@ -10,6 +10,8 @@ plugins {
 
 val group: String by project
 val annotationProcessorVersion: String by project
+val edcScmUrl: String by project
+val edcScmConnection: String by project
 
 allprojects {
     apply(plugin = "${group}.edc-build")
@@ -26,7 +28,8 @@ allprojects {
 
     configure<org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension> {
         pom {
-            githubOrgRepo.set("eclipse-edc/GradlePlugins")
+            scmUrl.set(edcScmUrl)
+            scmConnection.set(edcScmConnection)
         }
     }
 
