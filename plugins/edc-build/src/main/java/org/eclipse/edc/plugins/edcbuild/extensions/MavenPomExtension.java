@@ -17,7 +17,7 @@ package org.eclipse.edc.plugins.edcbuild.extensions;
 import org.gradle.api.provider.Property;
 
 public abstract class MavenPomExtension {
-    private final String groupId = "org.eclipse.edc";
+    private String groupId = "org.eclipse.edc";
 
     public abstract Property<String> getProjectName();
 
@@ -43,4 +43,7 @@ public abstract class MavenPomExtension {
         return groupId;
     }
 
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
 }
