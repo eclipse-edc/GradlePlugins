@@ -36,7 +36,7 @@ runs:
         echo "Bumped the version from $oldVersion to $newVersion"
 
         # Commit and push to the desired branch, defaults to 'main'
-        git add gradle.properties
+        git add .
         git commit --message "Bump version from $oldVersion to $newVersion [skip ci]"
 
         git push origin ${{ inputs.target_branch }}
