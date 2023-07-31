@@ -47,7 +47,6 @@ class MarkdownManifestRendererTest {
         assertThat(result).isNotNull();
         assertThat(os).isEqualTo(testOutputStream);
 
-        System.out.println(result);
     }
 
     @Test
@@ -59,7 +58,21 @@ class MarkdownManifestRendererTest {
         assertThat(result).isNotNull();
         assertThat(os).isEqualTo(testOutputStream);
 
-        System.out.println(result);
+    }
+
+    @Test
+    void convert_emptyObject() {
+        var list = List.of(EdcModule.Builder.newInstance().modulePath("foo").version("0.1.0-bar").build());
+        var os = writer.convert(list);
+
+        var result = testOutputStream.toString();
+        assertThat(result).isNotNull();
+        assertThat(os).isEqualTo(testOutputStream);
+
+        assertThat(result).contains("Module `foo:0.1.0-bar`");
+        assertThat(result).contains("### Extension points");
+        assertThat(result).contains("### Extensions");
+        assertThat(result).doesNotContain("Configuration:");
     }
 
     private List<EdcModule> generateManifest(String filename) {
