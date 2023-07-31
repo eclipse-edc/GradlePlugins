@@ -39,7 +39,7 @@ public class ManifestWriter {
     }
 
     protected void beginConversion(List<EdcModule> input) {
-        renderer.handleDocumentHeader();
+        renderer.renderDocumentHeader();
         input.forEach(this::handleModule);
     }
 
@@ -51,34 +51,34 @@ public class ManifestWriter {
      * @param edcModule The module to render
      */
     protected void handleModule(EdcModule edcModule) {
-        renderer.handleModuleHeading(edcModule.getName(), edcModule.getModulePath(), edcModule.getVersion());
+        renderer.renderModuleHeading(edcModule.getName(), edcModule.getModulePath(), edcModule.getVersion());
 
         // append categories as italic text
-        renderer.handleModuleCategories(edcModule.getCategories());
+        renderer.renderCategories(edcModule.getCategories());
 
         // append extension points
-        renderer.handleExtensionPoints(edcModule.getExtensionPoints());
+        renderer.renderExtensionPoints(edcModule.getExtensionPoints());
 
         // append extensions
         handleExtensions(edcModule.getExtensions());
     }
 
     protected void handleExtensions(Set<EdcServiceExtension> extensions) {
-        renderer.handleExtensionHeading();
+        renderer.renderExtensionHeading();
         extensions.forEach(this::handleServiceExtension);
     }
 
     protected void handleServiceExtension(EdcServiceExtension serviceExtension) {
-        renderer.handleExtensionHeader(serviceExtension.getClassName(), serviceExtension.getName(), serviceExtension.getOverview(), serviceExtension.getType());
+        renderer.renderExtensionHeader(serviceExtension.getClassName(), serviceExtension.getName(), serviceExtension.getOverview(), serviceExtension.getType());
 
         // add configuration table
-        renderer.handleConfigurations(serviceExtension.getConfiguration());
+        renderer.renderConfigurations(serviceExtension.getConfiguration());
 
         // add exposed services
-        renderer.handleExposedServices(serviceExtension.getProvides());
+        renderer.renderExposedServices(serviceExtension.getProvides());
 
         // add injected services
-        renderer.handleReferencedServices(serviceExtension.getReferences());
+        renderer.renderReferencedServices(serviceExtension.getReferences());
     }
 
 }

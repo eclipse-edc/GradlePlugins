@@ -37,29 +37,29 @@ public interface ManifestRenderer {
     /**
      * Renders the document header
      */
-    void handleDocumentHeader();
+    void renderDocumentHeader();
 
     /**
      * Render the heading for a module.
      */
-    void handleModuleHeading(@Nullable String moduleName, @NotNull String modulePath, @NotNull String version);
+    void renderModuleHeading(@Nullable String moduleName, @NotNull String modulePath, @NotNull String version);
 
     /**
      * Render a document section for the categories of a module.
      *
      * @param categories May be empty, may contain empty strings.
      */
-    void handleModuleCategories(List<String> categories);
+    void renderCategories(List<String> categories);
 
     /**
      * Handles the creation of an {@link EdcServiceExtension} object, which usually represents all the services in a module, that are intended to be implemented or subclassed.
      */
-    void handleExtensionPoints(List<Service> extensionPoints);
+    void renderExtensionPoints(List<Service> extensionPoints);
 
     /**
      * Create a sub-heading for an extension
      */
-    void handleExtensionHeading();
+    void renderExtensionHeading();
 
     /**
      * Render the header for an extension.
@@ -69,22 +69,22 @@ public interface ManifestRenderer {
      * @param overview  A string containing more information about the extension. Can be null, empty or even multiline.
      * @param type      The type of extension module, it can either be an SPI module or an implementation module
      */
-    void handleExtensionHeader(@NotNull String className, @Nullable String name, @Nullable String overview, ModuleType type);
+    void renderExtensionHeader(@NotNull String className, @Nullable String name, @Nullable String overview, ModuleType type);
 
     /**
      * Render all configuration values that are declared by a particular extension
      */
-    void handleConfigurations(List<ConfigurationSetting> configuration);
+    void renderConfigurations(List<ConfigurationSetting> configuration);
 
     /**
      * Render all services, that are <em>provided</em> by a particular module.
      */
-    void handleExposedServices(List<Service> provides);
+    void renderExposedServices(List<Service> provides);
 
     /**
      * Render all services, that an extension <em>requires</em>, i.e. that must be provided by <em>other extensions</em>.
      */
-    void handleReferencedServices(List<ServiceReference> references);
+    void renderReferencedServices(List<ServiceReference> references);
 
     /**
      * Finalizes the conversion, e.g. by adding closing tags, adding footnotes, validation, etc.

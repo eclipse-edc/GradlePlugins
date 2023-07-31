@@ -53,13 +53,13 @@ public class MarkdownManifestRenderer implements ManifestRenderer {
     }
 
     @Override
-    public void handleDocumentHeader() {
+    public void renderDocumentHeader() {
         stringBuilder.append(heading(DOCUMENT_HEADING, 1)).append(NEWLINE);
         stringBuilder.append(NEWLINE);
     }
 
     @Override
-    public void handleModuleHeading(@Nullable String moduleName, @NotNull String modulePath, @NotNull String version) {
+    public void renderModuleHeading(@Nullable String moduleName, @NotNull String modulePath, @NotNull String version) {
         var name = ofNullable(moduleName).orElse(modulePath);
 
         var moduleHeading = heading(format("Module `%s:%s`", name, version), 2);
@@ -72,7 +72,7 @@ public class MarkdownManifestRenderer implements ManifestRenderer {
     }
 
     @Override
-    public void handleModuleCategories(List<String> categories) {
+    public void renderCategories(List<String> categories) {
         // append categories as italic text
         var cat = categories
                 .stream()
@@ -88,7 +88,7 @@ public class MarkdownManifestRenderer implements ManifestRenderer {
     }
 
     @Override
-    public void handleExtensionPoints(List<Service> extensionPoints) {
+    public void renderExtensionPoints(List<Service> extensionPoints) {
         // append extension points
         stringBuilder.append(heading(EXTENSION_POINTS, 3)).append(NEWLINE);
         stringBuilder.append(listOrNone(unorderedList(extensionPoints.stream().map(s -> code(s.getService())).toList().toArray()))).append(NEWLINE);
@@ -96,12 +96,12 @@ public class MarkdownManifestRenderer implements ManifestRenderer {
     }
 
     @Override
-    public void handleExtensionHeading() {
+    public void renderExtensionHeading() {
         stringBuilder.append(heading(EXTENSIONS, 3)).append(NEWLINE);
     }
 
     @Override
-    public void handleExtensionHeader(@NotNull String className, String name, String overview, ModuleType type) {
+    public void renderExtensionHeader(@NotNull String className, String name, String overview, ModuleType type) {
         stringBuilder.append(heading("Class: " + code(className), 4)).append(NEWLINE);
 
         stringBuilder.append(bold("Name:")).append(format(" \"%s\"", name)).append(NEWLINE);
@@ -112,7 +112,7 @@ public class MarkdownManifestRenderer implements ManifestRenderer {
     }
 
     @Override
-    public void handleConfigurations(List<ConfigurationSetting> configuration) {
+    public void renderConfigurations(List<ConfigurationSetting> configuration) {
         // add configuration table
         var tableBuilder = new Table.Builder()
                 .addRow("Key", "Required", "Type", "Pattern", "Min", "Max", "Description");
@@ -135,7 +135,7 @@ public class MarkdownManifestRenderer implements ManifestRenderer {
     }
 
     @Override
-    public void handleExposedServices(List<Service> provides) {
+    public void renderExposedServices(List<Service> provides) {
         // add exposed services
         stringBuilder.append(heading("Provided services:", 5)).append(NEWLINE);
         stringBuilder.append(listOrNone(provides.stream().map(s -> code(s.getService())).toList().toArray())).append(NEWLINE);
@@ -143,7 +143,7 @@ public class MarkdownManifestRenderer implements ManifestRenderer {
     }
 
     @Override
-    public void handleReferencedServices(List<ServiceReference> references) {
+    public void renderReferencedServices(List<ServiceReference> references) {
         // add injected services
         stringBuilder.append(heading("Referenced (injected) services:", 5)).append(NEWLINE);
         stringBuilder.append(listOrNone(references.stream().map(s -> format("%s (%s)", code(s.getService()), s.isRequired() ? "required" : "optional")).toList().toArray())).append(NEWLINE);
