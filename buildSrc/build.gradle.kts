@@ -29,7 +29,7 @@ dependencies {
     implementation(libs.jackson.datatypeJsr310)
 
     api(libs.edc.runtime.metamodel)
-
+    implementation(libs.markdown.gen)
 }
 
 gradlePlugin {
@@ -47,6 +47,7 @@ sourceSets {
             srcDirs(
                 "../plugins/autodoc/autodoc-plugin/src/main",
                 "../plugins/autodoc/autodoc-processor/src/main",
+                "../plugins/autodoc/autodoc-converters/src/main",
                 "../plugins/edc-build/src/main",
                 "../plugins/module-names/src/main",
                 "../plugins/openapi-merger/src/main",

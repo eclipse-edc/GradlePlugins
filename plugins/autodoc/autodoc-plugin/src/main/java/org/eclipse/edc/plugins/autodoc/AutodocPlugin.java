@@ -14,7 +14,8 @@
 
 package org.eclipse.edc.plugins.autodoc;
 
-import org.eclipse.edc.plugins.autodoc.merge.MergeManifestsTask;
+import org.eclipse.edc.plugins.autodoc.tasks.MarkdownRendererTask;
+import org.eclipse.edc.plugins.autodoc.tasks.MergeManifestsTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
@@ -37,7 +38,8 @@ public class AutodocPlugin implements Plugin<Project> {
 
         // registers a "named" task, that does nothing, except depend on the compileTask, which then runs the annotation processor
         project.getTasks().register("autodoc", t -> t.dependsOn("compileJava"));
-        project.getTasks().register("mergeManifest", MergeManifestsTask.class, t -> t.dependsOn("autodoc"));
+        project.getTasks().register("mergeManifest", MergeManifestsTask.class, t -> t.dependsOn("autodoc").finalizedBy("doc2md"));
+        project.getTasks().register("doc2md", MarkdownRendererTask.class, t -> t.dependsOn("autodoc"));
 
     }
 

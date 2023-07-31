@@ -12,7 +12,7 @@
  *
  */
 
-package org.eclipse.edc.plugins.autodoc.merge;
+package org.eclipse.edc.plugins.autodoc.tasks;
 
 import org.eclipse.edc.plugins.autodoc.AutodocExtension;
 import org.gradle.api.DefaultTask;
