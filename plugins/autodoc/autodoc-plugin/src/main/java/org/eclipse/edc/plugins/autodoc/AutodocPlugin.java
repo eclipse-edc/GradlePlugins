@@ -38,9 +38,8 @@ public class AutodocPlugin implements Plugin<Project> {
 
         // registers a "named" task, that does nothing, except depend on the compileTask, which then runs the annotation processor
         project.getTasks().register("autodoc", t -> t.dependsOn("compileJava"));
-        project.getTasks().register("mergeManifest", MergeManifestsTask.class, t -> t.dependsOn("autodoc").finalizedBy("doc2md"));
+        project.getTasks().register("mergeManifest", MergeManifestsTask.class, t -> t.dependsOn("autodoc"));
         project.getTasks().register("doc2md", MarkdownRendererTask.class, t -> t.dependsOn("autodoc"));
 
     }
-
 }

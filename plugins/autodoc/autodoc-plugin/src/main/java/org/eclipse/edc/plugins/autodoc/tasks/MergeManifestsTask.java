@@ -19,6 +19,7 @@ import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
+import org.gradle.util.internal.GFileUtils;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -52,6 +53,12 @@ public class MergeManifestsTask extends DefaultTask {
             throw new GradleException("destinationFile must be configured but was null!");
         }
 
+        // if an additional input directory was specified, lets include the files in it.
+        if (autodocExt.getAdditionalInputDirectory().isPresent() && getProject().equals(getProject().getRootProject())) {
+            var dir = autodocExt.getAdditionalInputDirectory().get();
+            var files = GFileUtils.listFiles(dir, new String[]{ "json" }, false);
+            files.forEach(f -> appender.append(destination, f));
+        }
 
         if (sourceFile.exists()) {
             appender.append(destination, sourceFile);
