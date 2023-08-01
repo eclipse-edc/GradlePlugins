@@ -19,6 +19,8 @@ import org.gradle.api.provider.Property;
 import java.io.File;
 
 public abstract class AutodocExtension {
+    private boolean includeTransitive = true;
+
     /**
      * Overrides the default output directory relative to the current project dir
      */
@@ -37,4 +39,18 @@ public abstract class AutodocExtension {
      */
     public abstract Property<File> getAdditionalInputDirectory();
 
+    /**
+     * Determines whether to include transitive dependencies in the merge process.
+     * If set to {@code true}, the merge task will download the manifests of transitive (EDC) dependencies and include them in the merged manifest.
+     * If set to {@code false}, only the direct dependencies will be merged.
+     *
+     * @return {@code true} if transitive dependencies should be included, {@code false} otherwise.
+     */
+    public boolean isIncludeTransitive() {
+        return includeTransitive;
+    }
+
+    public void setIncludeTransitive(boolean includeTransitive) {
+        this.includeTransitive = includeTransitive;
+    }
 }

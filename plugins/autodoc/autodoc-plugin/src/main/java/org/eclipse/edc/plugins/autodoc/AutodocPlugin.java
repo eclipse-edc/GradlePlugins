@@ -14,6 +14,7 @@
 
 package org.eclipse.edc.plugins.autodoc;
 
+import org.eclipse.edc.plugins.autodoc.tasks.ManifestDownloadTask;
 import org.eclipse.edc.plugins.autodoc.tasks.MarkdownRendererTask;
 import org.eclipse.edc.plugins.autodoc.tasks.MergeManifestsTask;
 import org.gradle.api.Plugin;
@@ -26,6 +27,7 @@ import java.util.List;
  */
 public class AutodocPlugin implements Plugin<Project> {
 
+    public static final String GROUP_NAME = "autodoc";
     private final List<String> exclusions = List.of("version-catalog", "edc-build", "module-names", "openapi-merger", "test-summary", "autodoc-plugin", "autodoc-processor");
 
     @Override
@@ -37,9 +39,9 @@ public class AutodocPlugin implements Plugin<Project> {
         }
 
         // registers a "named" task, that does nothing, except depend on the compileTask, which then runs the annotation processor
-        project.getTasks().register("autodoc", t -> t.dependsOn("compileJava"));
-        project.getTasks().register("mergeManifest", MergeManifestsTask.class, t -> t.dependsOn("autodoc"));
-        project.getTasks().register("doc2md", MarkdownRendererTask.class, t -> t.dependsOn("autodoc"));
-
+        project.getTasks().register("autodoc", t -> t.dependsOn("compileJava").setGroup(GROUP_NAME));
+        project.getTasks().register("mergeManifest", MergeManifestsTask.class, t -> t.dependsOn(GROUP_NAME).setGroup(GROUP_NAME));
+        project.getTasks().register("doc2md", MarkdownRendererTask.class, t -> t.dependsOn(GROUP_NAME).setGroup(GROUP_NAME));
+        project.getTasks().register("downloadManifests", ManifestDownloadTask.class, t -> t.setGroup(GROUP_NAME));
     }
 }

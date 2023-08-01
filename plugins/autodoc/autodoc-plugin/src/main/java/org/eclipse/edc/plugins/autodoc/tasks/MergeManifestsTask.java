@@ -53,17 +53,21 @@ public class MergeManifestsTask extends DefaultTask {
             throw new GradleException("destinationFile must be configured but was null!");
         }
 
-        // if an additional input directory was specified, lets include the files in it.
-        if (autodocExt.getAdditionalInputDirectory().isPresent() && getProject().equals(getProject().getRootProject())) {
-            var dir = autodocExt.getAdditionalInputDirectory().get();
-            var files = GFileUtils.listFiles(dir, new String[]{ "json" }, false);
-            files.forEach(f -> appender.append(destination, f));
-        }
-
         if (sourceFile.exists()) {
             appender.append(destination, sourceFile);
         } else {
             getProject().getLogger().lifecycle("Skip project [{}] - no manifest file found", sourceFile);
+        }
+
+        // if an additional input directory was specified, lets include the files in it.
+        if (autodocExt.getAdditionalInputDirectory().isPresent() &&
+                autodocExt.getAdditionalInputDirectory().get().exists() &&
+                getProject().equals(getProject().getRootProject()) &&
+                autodocExt.isIncludeTransitive()) {
+            var dir = autodocExt.getAdditionalInputDirectory().get();
+            var files = GFileUtils.listFiles(dir, new String[]{ "json" }, false);
+            getLogger().lifecycle("Appending [{}] additional JSON files to the merged manifest", files.size());
+            files.forEach(f -> appender.append(destination, f));
         }
 
     }
