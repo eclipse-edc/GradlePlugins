@@ -36,8 +36,19 @@ public abstract class AutodocExtension {
      * Use this, if you have a directory that contains multiple autodoc manifests, e.g. of third-party or transitive deps.
      * <p>
      * If this is set, the merge task will take all manifests found in this directory and append them to the {@code manifest.json} file.
+     * Usually, this points to wherever the downloaded manifests are store.
+     *
+     * @see AutodocExtension#getDownloadDirectory()
      */
     public abstract Property<File> getAdditionalInputDirectory();
+
+    /**
+     * Retrieves the directory where downloaded manifests are to be stored. Defaults to {@code <rootProject>/build/manifests}
+     *
+     * @return The property representing the download directory, or null if not specified.
+     */
+    public abstract Property<File> getDownloadDirectory();
+
 
     /**
      * Determines whether to include transitive dependencies in the merge process.

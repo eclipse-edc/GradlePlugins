@@ -32,6 +32,7 @@ import static java.lang.String.format;
 
 public class MarkdownRendererTask extends DefaultTask {
 
+    public static final String NAME = "doc2md";
     private final JsonManifestReader reader = new JsonManifestReader(new ObjectMapper());
 
     @TaskAction

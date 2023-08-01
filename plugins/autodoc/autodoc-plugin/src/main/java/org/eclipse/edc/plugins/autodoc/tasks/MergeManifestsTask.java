@@ -30,6 +30,7 @@ import java.util.Objects;
  */
 public class MergeManifestsTask extends DefaultTask {
 
+    public static final String NAME = "mergeManifests";
     private static final String MERGED_MANIFEST_FILENAME = "manifest.json";
     private final JsonFileAppender appender;
     private File destinationFile;
