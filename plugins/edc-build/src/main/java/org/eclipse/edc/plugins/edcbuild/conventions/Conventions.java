@@ -52,6 +52,10 @@ public class Conventions {
         return new JavaConvention();
     }
 
+    public static EdcConvention allDependencies() {
+        return new AllDependenciesConvention();
+    }
+
     public static EdcConvention tests() {
         return new TestConvention();
     }

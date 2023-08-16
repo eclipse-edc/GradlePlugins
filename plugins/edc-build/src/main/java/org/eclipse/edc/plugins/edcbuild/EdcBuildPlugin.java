@@ -20,6 +20,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
 import static java.util.List.of;
+import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.allDependencies;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.checkstyle;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.defaultDependencies;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.jacoco;
@@ -70,6 +71,7 @@ public class EdcBuildPlugin implements Plugin<Project> {
                     signing(),
                     mavenPom(),
                     jacoco(),
+                    allDependencies(),
                     tests(),
                     jar(),
                     swagger()
