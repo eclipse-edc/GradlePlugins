@@ -14,7 +14,6 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.plugin.dependency.analysis)
     implementation(libs.plugin.nexus.publish)
     implementation(libs.plugin.checksum)
     implementation(libs.plugin.swagger.generator)
