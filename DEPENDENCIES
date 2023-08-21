@@ -89,7 +89,7 @@ maven/mavencentral/net.bytebuddy/byte-buddy/1.14.1, Apache-2.0 AND BSD-3-Clause,
 maven/mavencentral/net.sf.jopt-simple/jopt-simple/5.0.3, MIT, approved, CQ13174
 maven/mavencentral/net.sf.jopt-simple/jopt-simple/5.0.4, MIT, approved, CQ13174
 maven/mavencentral/net.sf.saxon/Saxon-HE/10.6, MPL-2.0 AND W3C, approved, #7945
-maven/mavencentral/net.steppschuh.markdowngenerator/markdowngenerator/1.3.1.1, , restricted, clearlydefined
+maven/mavencentral/net.steppschuh.markdowngenerator/markdowngenerator/1.3.1.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.antlr/antlr4-runtime/4.9.3, BSD-3-Clause, approved, #322
 maven/mavencentral/org.apache.commons/commons-lang3/3.12.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.apache.commons/commons-lang3/3.2.1, Apache-2.0, approved, clearlydefined
