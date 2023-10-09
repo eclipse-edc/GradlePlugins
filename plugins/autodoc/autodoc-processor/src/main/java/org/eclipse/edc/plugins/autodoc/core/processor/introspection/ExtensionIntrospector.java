@@ -27,15 +27,15 @@ import org.eclipse.edc.runtime.metamodel.domain.Service;
 import org.eclipse.edc.runtime.metamodel.domain.ServiceReference;
 import org.jetbrains.annotations.NotNull;
 
+import javax.lang.model.element.Element;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Elements;
 import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.Elements;
 
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
@@ -134,27 +134,16 @@ public class ExtensionIntrospector {
     private ConfigurationSetting createConfigurationSetting(VariableElement settingElement) {
         var prefix = resolveConfigurationPrefix(settingElement);
         var keyValue = prefix + settingElement.getConstantValue().toString();
-
-        var settingBuilder = ConfigurationSetting.Builder.newInstance().key(keyValue);
-
         var settingMirror = mirrorFor(Setting.class, settingElement);
 
-        var description = attributeValue(String.class, "value", settingMirror, elementUtils);
-        settingBuilder.description(description);
-
-        var type = attributeValue(String.class, "type", settingMirror, elementUtils);
-        settingBuilder.type(type);
-
-        var required = attributeValue(Boolean.class, "required", settingMirror, elementUtils);
-        settingBuilder.required(required);
-
-        var max = attributeValue(Long.class, "max", settingMirror, elementUtils);
-        settingBuilder.maximum(max);
-
-        var min = attributeValue(Long.class, "min", settingMirror, elementUtils);
-        settingBuilder.minimum(min);
-
-        return settingBuilder.build();
+        return ConfigurationSetting.Builder.newInstance().key(keyValue)
+                .description(attributeValue(String.class, "value", settingMirror, elementUtils))
+                .type(attributeValue(String.class, "type", settingMirror, elementUtils))
+                .required(attributeValue(Boolean.class, "required", settingMirror, elementUtils))
+                .maximum(attributeValue(Long.class, "max", settingMirror, elementUtils))
+                .minimum(attributeValue(Long.class, "min", settingMirror, elementUtils))
+                .defaultValue(attributeValue(String.class, "defaultValue", settingMirror, elementUtils))
+                .build();
     }
 
     /**

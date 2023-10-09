@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.edc.plugins.autodoc.core.processor.Constants.TEST_SETTING_DEFAULT_VALUE;
 import static org.eclipse.edc.plugins.autodoc.core.processor.TestFunctions.filterManifest;
 import static org.eclipse.edc.plugins.autodoc.core.processor.TestFunctions.readManifest;
 
@@ -80,11 +81,13 @@ class EdcModuleProcessorExtensionTest extends EdcModuleProcessorTest {
         assertThat(references).contains(new ServiceReference(OptionalService.class.getName(), false));
         assertThat(references).contains(new ServiceReference(RequiredService.class.getName(), true));
 
-        var configuration = ext1.getConfiguration().get(0);
-        assertThat(configuration).isNotNull();
-        assertThat(configuration.getKey()).isEqualTo(SampleExtensionWithoutAnnotation.TEST_SETTING);
-        assertThat(configuration.isRequired()).isTrue();
-        assertThat(configuration.getDescription()).isNotEmpty();
+        assertThat(ext1.getConfiguration()).first().isNotNull().satisfies(configuration -> {
+            assertThat(configuration).isNotNull();
+            assertThat(configuration.getKey()).isEqualTo(SampleExtensionWithoutAnnotation.TEST_SETTING);
+            assertThat(configuration.isRequired()).isTrue();
+            assertThat(configuration.getDefaultValue()).isEqualTo(TEST_SETTING_DEFAULT_VALUE);
+            assertThat(configuration.getDescription()).isNotEmpty();
+        });
 
         var ext2 = extensions.stream().filter(e -> e.getName().equals(SecondExtension.class.getSimpleName()))
                 .findFirst()

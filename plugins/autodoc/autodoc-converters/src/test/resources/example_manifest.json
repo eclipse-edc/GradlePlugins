@@ -378,7 +378,8 @@
             "key": "edc.negotiation.state-machine.iteration-wait-millis",
             "required": false,
             "type": "long",
-            "description": "the iteration wait time in milliseconds in the negotiation state machine. Default value 1000"
+            "description": "the iteration wait time in milliseconds in the negotiation state machine.",
+            "defaultValue": "1000"
           },
           {
             "key": "edc.negotiation.consumer.state-machine.batch-size",

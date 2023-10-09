@@ -17,5 +17,6 @@ package org.eclipse.edc.plugins.autodoc.core.processor;
 public interface Constants {
     String TEST_SETTING_NAME = "Test setting name";
     String TEST_SETTING_KEY = "edc.test.setting";
+    String TEST_SETTING_DEFAULT_VALUE = "default value";
     String TEST_SPI_MODULE = "Test SPI Module";
 }
