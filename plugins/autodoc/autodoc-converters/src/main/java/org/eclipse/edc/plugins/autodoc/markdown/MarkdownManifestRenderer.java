@@ -17,7 +17,6 @@ package org.eclipse.edc.plugins.autodoc.markdown;
 import net.steppschuh.markdowngenerator.Markdown;
 import net.steppschuh.markdowngenerator.MarkdownElement;
 import net.steppschuh.markdowngenerator.table.Table;
-import net.steppschuh.markdowngenerator.table.TableRow;
 import org.eclipse.edc.plugins.autodoc.spi.ManifestConverterException;
 import org.eclipse.edc.plugins.autodoc.spi.ManifestRenderer;
 import org.eclipse.edc.runtime.metamodel.domain.ConfigurationSetting;
