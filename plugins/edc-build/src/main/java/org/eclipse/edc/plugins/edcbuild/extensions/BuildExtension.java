@@ -34,7 +34,6 @@ public abstract class BuildExtension {
         swagger = objectFactory.newInstance(SwaggerGeneratorExtension.class);
     }
 
-
     public void versions(Action<? super VersionsExtension> action) {
         action.execute(versions);
     }

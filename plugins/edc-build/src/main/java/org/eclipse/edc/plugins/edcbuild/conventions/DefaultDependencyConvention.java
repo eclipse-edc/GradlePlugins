@@ -37,13 +37,11 @@ import static org.gradle.api.plugins.JavaPlugin.TEST_RUNTIME_ONLY_CONFIGURATION_
  */
 class DefaultDependencyConvention implements EdcConvention {
 
-    private static final String EDC_GROUP_ID = "org.eclipse.edc";
     private static final String DEFAULT_JETBRAINS_ANNOTATION_VERSION = "24.0.1";
-    private static final String DEFAULT_JACKSON_VERSION = "2.14.2";
-    private static final String DEFAULT_METAMODEL_VERSION = "0.4.2-SNAPSHOT";
-    private static final String DEFAULT_MOCKITO_VERSION = "5.2.0";
-    private static final String DEFAULT_ASSERTJ_VERSION = "3.23.1";
-    private static final String DEFAULT_JUPITER_VERSION = "5.9.2";
+    private static final String DEFAULT_JACKSON_VERSION = "2.16.0";
+    private static final String DEFAULT_MOCKITO_VERSION = "5.8.0";
+    private static final String DEFAULT_ASSERTJ_VERSION = "3.24.2";
+    private static final String DEFAULT_JUPITER_VERSION = "5.10.1";
 
     @Override
     public void apply(Project target) {
@@ -56,7 +54,6 @@ class DefaultDependencyConvention implements EdcConvention {
             // classpath dependencies
             var jetbrainsAnnotationVersion = ext.getJetbrainsAnnotation().getOrElse(catalogReader.versionFor("jetbrainsAnnotation", DEFAULT_JETBRAINS_ANNOTATION_VERSION));
             var jacksonVersion = ext.getJackson().getOrElse(catalogReader.versionFor("jackson", DEFAULT_JACKSON_VERSION));
-            var metamodelVersion = ext.getMetaModel().getOrElse(DEFAULT_METAMODEL_VERSION);
             d.add(API_CONFIGURATION_NAME, format("org.jetbrains:annotations:%s", jetbrainsAnnotationVersion));
             d.add(API_CONFIGURATION_NAME, format("com.fasterxml.jackson.core:jackson-core:%s", jacksonVersion));
             d.add(API_CONFIGURATION_NAME, format("com.fasterxml.jackson.core:jackson-annotations:%s", jacksonVersion));
@@ -66,7 +63,6 @@ class DefaultDependencyConvention implements EdcConvention {
                 d.add(JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME, format("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:%s", jacksonVersion));
             }
             d.add(API_CONFIGURATION_NAME, format("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:%s", jacksonVersion));
-            d.add(API_CONFIGURATION_NAME, format("%s:runtime-metamodel:%s", EDC_GROUP_ID, metamodelVersion));
 
             //test classpath dependencies
             var jupiterVersion = ext.getJupiter().getOrElse(catalogReader.versionFor("jupiter", DEFAULT_JUPITER_VERSION));

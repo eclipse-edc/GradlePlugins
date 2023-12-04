@@ -25,6 +25,7 @@ public abstract class VersionsExtension {
 
     public abstract Property<String> getJackson();
 
+    @Deprecated(since = "0.4.1")
     public abstract Property<String> getMetaModel();
 
     public abstract Property<String> getJupiter();
