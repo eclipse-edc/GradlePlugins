@@ -45,3 +45,11 @@ gradlePlugin {
         }
     }
 }
+
+sourceSets {
+    main {
+        java {
+            srcDir(rootDir.resolve("buildSrc").resolve("build").resolve("generated").resolve("sources"))
+        }
+    }
+}
