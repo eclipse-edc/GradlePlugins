@@ -49,7 +49,8 @@ gradlePlugin {
 sourceSets {
     main {
         java {
-            srcDir(rootDir.resolve("buildSrc").resolve("build").resolve("generated").resolve("sources"))
+            val rootProjectDir = projectDir.resolve("..").resolve("..")
+            srcDir(rootProjectDir.resolve("buildSrc").resolve("build").resolve("generated").resolve("sources"))
         }
     }
 }
