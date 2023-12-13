@@ -65,21 +65,27 @@ val createVersions = tasks.register("createVersions") {
         .resolve("edcbuild")
     folder.mkdirs()
 
-    versionCatalogs.find("libs")
-        .ifPresent { catalog ->
-            val head = "package org.eclipse.edc.plugins.edcbuild;\npublic interface Versions {\n"
-            val tail = "\n}";
+    val versionsClassFile = folder.resolve("Versions.java");
+    outputs.file(versionsClassFile)
 
-            val constants = listOf("jupiter", "mockito", "assertj")
-                .mapNotNull { name ->
-                    catalog.findVersion(name)
-                        .map { version -> "    String %s = \"%s\";".format(name.toUpperCase(), version) }
-                        .orElse(null)
-                }
-                .joinToString("\n", head, tail)
+    doLast {
+        versionCatalogs.find("libs")
+            .ifPresent { catalog ->
+                val head = "package org.eclipse.edc.plugins.edcbuild;\npublic interface Versions {\n"
+                val tail = "\n}";
 
-            Files.writeString(folder.resolve("Versions.java").toPath(), constants)
-        }
+                val constants = listOf("jupiter", "mockito", "assertj")
+                    .mapNotNull { name ->
+                        catalog.findVersion(name)
+                            .map { version -> "    String %s = \"%s\";".format(name.toUpperCase(), version) }
+                            .orElse(null)
+                    }
+                    .joinToString("\n", head, tail)
+
+                Files.writeString(versionsClassFile.toPath(), constants)
+            }
+    }
+
 }
 
 tasks.compileJava {
