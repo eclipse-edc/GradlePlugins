@@ -6,7 +6,7 @@ assertj = "3.25.1"
 edc = "0.5.1-SNAPSHOT"
 jackson = "2.16.0"
 jetbrainsAnnotation = "24.0.1"
-jupiter = "5.10.1"
+jupiter = "5.10.2"
 mockito = "5.9.0"
 
 [libraries]
