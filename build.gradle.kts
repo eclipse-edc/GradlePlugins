@@ -35,18 +35,8 @@ allprojects {
         }
     }
 
-    // configure checkstyle version
     checkstyle {
-        toolVersion = "10.0"
         maxErrors = 0 // does not tolerate errors
-    }
-
-    // let's not generate any reports because that is done from within the Github Actions workflow
-    tasks.withType<Checkstyle> {
-        reports {
-            html.required.set(false)
-            xml.required.set(true)
-        }
     }
 
     tasks.withType<Jar> {
