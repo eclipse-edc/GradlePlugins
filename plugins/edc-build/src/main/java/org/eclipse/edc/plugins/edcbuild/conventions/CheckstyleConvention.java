@@ -33,11 +33,13 @@ class CheckstyleConvention implements EdcConvention {
 
     @Override
     public void apply(Project target) {
-        var cse = requireExtension(target, CheckstyleExtension.class);
+        var extension = requireExtension(target, CheckstyleExtension.class);
 
-        cse.setToolVersion(Versions.CHECKSTYLE);
-        cse.setMaxErrors(0);
-        target.getTasks().withType(Checkstyle.class, cs -> cs.reports(r -> {
+        extension.setToolVersion(Versions.CHECKSTYLE);
+        extension.setMaxErrors(0);
+        extension.setMaxWarnings(0);
+
+        target.getTasks().withType(Checkstyle.class, checkstyle -> checkstyle.reports(r -> {
             r.getHtml().getRequired().set(false);
             r.getXml().getRequired().set(true);
         }));
