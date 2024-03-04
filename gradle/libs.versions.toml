@@ -8,7 +8,7 @@ edc = "0.5.2-SNAPSHOT"
 jackson = "2.16.0"
 jetbrainsAnnotation = "24.0.1"
 jupiter = "5.10.1"
-mockito = "5.9.0"
+mockito = "5.11.0"
 
 [libraries]
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
