@@ -3,7 +3,7 @@ format.version = "1.1"
 
 [versions]
 assertj = "3.25.3"
-checkstyle = "10.14.0"
+checkstyle = "10.14.1"
 edc = "0.5.2-SNAPSHOT"
 jackson = "2.16.2"
 jetbrainsAnnotation = "24.0.1"
