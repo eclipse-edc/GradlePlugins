@@ -28,27 +28,25 @@ import org.eclipse.edc.runtime.metamodel.domain.Service;
 import org.eclipse.edc.runtime.metamodel.domain.ServiceReference;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import static javax.tools.Diagnostic.Kind.WARNING;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.edc.plugins.autodoc.core.processor.Constants.TEST_CLASS_PREFIX_SETTING_KEY;
 import static org.eclipse.edc.plugins.autodoc.core.processor.Constants.TEST_FIELD_PREFIX_SETTING_KEY;
 import static org.eclipse.edc.plugins.autodoc.core.processor.Constants.TEST_SETTING_DEFAULT_VALUE;
 import static org.eclipse.edc.plugins.autodoc.core.processor.Constants.TEST_SETTING_ID_KEY;
-import static org.eclipse.edc.plugins.autodoc.core.processor.TestFunctions.filterManifest;
-import static org.eclipse.edc.plugins.autodoc.core.processor.TestFunctions.readManifest;
 
 class EdcModuleProcessorExtensionTest extends EdcModuleProcessorTest {
+
+    EdcModuleProcessorExtensionTest() {
+        super("src/test/java/org/eclipse/edc/plugins/autodoc/core/processor/testextensions/");
+    }
+
     @Test
     void verifyManifestContainsExtension() {
         task.call();
 
-        var modules = readManifest(filterManifest(tempDir));
+        var modules = readManifest();
+
         assertThat(modules).hasSize(1);
         assertThat(modules.get(0).getExtensions())
                 .hasSize(3)
@@ -62,7 +60,7 @@ class EdcModuleProcessorExtensionTest extends EdcModuleProcessorTest {
     void verifyManifestContainsCorrectElements() {
         task.call();
 
-        var modules = readManifest(filterManifest(tempDir));
+        var modules = readManifest();
         assertThat(modules).hasSize(1);
         var extensions = modules.get(0).getExtensions();
 
@@ -111,7 +109,7 @@ class EdcModuleProcessorExtensionTest extends EdcModuleProcessorTest {
     void verifyManifestContainsCorrectSettingsWithContext() {
         task.call();
 
-        var modules = readManifest(filterManifest(tempDir));
+        var modules = readManifest();
         assertThat(modules).hasSize(1);
         var extensions = modules.get(0).getExtensions();
 
@@ -119,20 +117,15 @@ class EdcModuleProcessorExtensionTest extends EdcModuleProcessorTest {
                 .findFirst()
                 .orElseThrow();
 
-
         assertThat(ext1.getConfiguration())
                 .extracting(ConfigurationSetting::getKey)
                 .contains(TEST_CLASS_PREFIX_SETTING_KEY + TEST_SETTING_ID_KEY, TEST_FIELD_PREFIX_SETTING_KEY + TEST_SETTING_ID_KEY);
-
     }
 
-    @Override
-    protected List<File> getCompilationUnits() {
-        var f = new File("src/test/java/org/eclipse/edc/plugins/autodoc/core/processor/testextensions/");
-        try (var files = Files.list(f.toPath())) {
-            return files.map(Path::toFile).collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    @Test
+    void shouldPrintWarning_whenSettingUsedOutsideAnExtension() {
+        task.call();
+
+        assertThat(diagnostics.getDiagnostics().stream().filter(it -> it.getKind() == WARNING)).hasSize(1);
     }
 }

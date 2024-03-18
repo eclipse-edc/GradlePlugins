@@ -18,24 +18,20 @@ import org.eclipse.edc.plugins.autodoc.core.processor.testspi.ExtensionService;
 import org.eclipse.edc.runtime.metamodel.domain.Service;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.edc.plugins.autodoc.core.processor.Constants.TEST_SPI_MODULE;
-import static org.eclipse.edc.plugins.autodoc.core.processor.TestFunctions.filterManifest;
-import static org.eclipse.edc.plugins.autodoc.core.processor.TestFunctions.readManifest;
 
 public class EdcModuleProcessorSpiTest extends EdcModuleProcessorTest {
+
+    EdcModuleProcessorSpiTest() {
+        super("src/test/java/org/eclipse/edc/plugins/autodoc/core/processor/testspi/");
+    }
+
     @Test
     void verifyCorrectManifest() {
         task.call();
 
-        var manifest = readManifest(filterManifest(tempDir));
+        var manifest = readManifest();
 
         assertThat(manifest).hasSize(1);
 
@@ -48,13 +44,4 @@ public class EdcModuleProcessorSpiTest extends EdcModuleProcessorTest {
         assertThat(module.getExtensions()).isEmpty();
     }
 
-    @Override
-    protected List<File> getCompilationUnits() {
-        var f = new File("src/test/java/org/eclipse/edc/plugins/autodoc/core/processor/testspi/");
-        try (var files = Files.list(f.toPath())) {
-            return files.map(Path::toFile).collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

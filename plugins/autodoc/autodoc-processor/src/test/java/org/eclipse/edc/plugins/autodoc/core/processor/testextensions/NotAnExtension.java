@@ -15,8 +15,12 @@
 package org.eclipse.edc.plugins.autodoc.core.processor.testextensions;
 
 import org.eclipse.edc.runtime.metamodel.annotation.Inject;
+import org.eclipse.edc.runtime.metamodel.annotation.Setting;
 
 public class NotAnExtension {
     @Inject(required = false)
     private OptionalService optionalService;
+
+    @Setting("this should be defined only in an extension class")
+    public static final String SETTING = "invalid position";
 }

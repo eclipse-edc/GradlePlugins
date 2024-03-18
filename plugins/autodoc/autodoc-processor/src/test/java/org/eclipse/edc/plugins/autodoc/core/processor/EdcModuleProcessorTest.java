@@ -14,7 +14,9 @@
 
 package org.eclipse.edc.plugins.autodoc.core.processor;
 
-import org.junit.jupiter.api.AfterEach;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.eclipse.edc.runtime.metamodel.domain.EdcModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -45,76 +47,47 @@ abstract class EdcModuleProcessorTest {
 
     protected static final String EDC_ID = "test-edc-id";
     protected static final String EDC_VERSION = "test-edc-version";
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @TempDir
     protected Path tempDir;
     protected JavaCompiler.CompilationTask task;
-    private DiagnosticCollector<JavaFileObject> diagnostics;
+    protected final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
+    private final String compilationUnitsPath;
+
+    EdcModuleProcessorTest(String compilationUnitsPath) {
+        this.compilationUnitsPath = compilationUnitsPath;
+    }
 
     @BeforeEach
     void setUp() throws IOException {
-        var compiler = ToolProvider.getSystemJavaCompiler();
-        diagnostics = new DiagnosticCollector<>();
-        var fileManager = compiler.getStandardFileManager(diagnostics, null, null);
-        fileManager.setLocation(StandardLocation.CLASS_OUTPUT, List.of(tempDir.toFile()));
-        fileManager.setLocation(StandardLocation.SOURCE_OUTPUT, List.of(tempDir.toFile()));
-
-
-        var compilationUnits = fileManager.getJavaFileObjects(getCompilationUnits().toArray(File[]::new));
-
-        var options = List.of("-Aedc.id=" + EDC_ID, "-Aedc.version=" + EDC_VERSION);
-        task = compiler.getTask(null, fileManager, diagnostics, options, null, compilationUnits);
-
-        task.setProcessors(Collections.singletonList(new EdcModuleProcessor()));
+        task = createTask("-Aedc.id=" + EDC_ID, "-Aedc.version=" + EDC_VERSION, null);
     }
 
     @ParameterizedTest
     @ArgumentsSource(ValidCompilerArgsProvider.class)
-    void verifyOptionalCompilerArgs(String edcId, String edcVersion, String edcOutputdir) throws IOException {
-        var compiler = ToolProvider.getSystemJavaCompiler();
-        diagnostics = new DiagnosticCollector<>();
-        var fileManager = compiler.getStandardFileManager(diagnostics, null, null);
-        fileManager.setLocation(StandardLocation.CLASS_OUTPUT, List.of(tempDir.toFile()));
-        fileManager.setLocation(StandardLocation.SOURCE_OUTPUT, List.of(tempDir.toFile()));
+    void verifyOptionalCompilerArgs(String edcId, String edcVersion, String edcOutputDir) throws IOException {
+        task = createTask(edcId, edcVersion, edcOutputDir);
 
-
-        var compilationUnits = fileManager.getJavaFileObjects(getCompilationUnits().toArray(File[]::new));
-
-        var options = Stream.of(edcId, edcVersion, edcOutputdir).filter(Objects::nonNull).collect(Collectors.toList());
-        task = compiler.getTask(null, fileManager, diagnostics, options, null, compilationUnits);
-
-        task.setProcessors(Collections.singletonList(new EdcModuleProcessor()));
         var errorMsg = diagnostics.getDiagnostics().stream().map(Object::toString).collect(Collectors.joining(", "));
+
         assertThat(task.call()).withFailMessage(errorMsg).isTrue();
     }
 
     @ParameterizedTest
     @ArgumentsSource(InvalidCompilerArgsProvider.class)
-    void verifyRequiredCompilerArgs(String edcId, String edcVersion, String edcOutputdir) throws IOException {
-        var compiler = ToolProvider.getSystemJavaCompiler();
-        diagnostics = new DiagnosticCollector<>();
-        var fileManager = compiler.getStandardFileManager(diagnostics, null, null);
-        fileManager.setLocation(StandardLocation.CLASS_OUTPUT, List.of(tempDir.toFile()));
-        fileManager.setLocation(StandardLocation.SOURCE_OUTPUT, List.of(tempDir.toFile()));
+    void verifyRequiredCompilerArgs(String edcId, String edcVersion, String edcOutputDir) throws IOException {
+        task = createTask(edcId, edcVersion, edcOutputDir);
 
-
-        var compilationUnits = fileManager.getJavaFileObjects(getCompilationUnits().toArray(File[]::new));
-
-        var options = Stream.of(edcId, edcVersion, edcOutputdir).filter(Objects::nonNull).collect(Collectors.toList());
-        task = compiler.getTask(null, fileManager, diagnostics, options, null, compilationUnits);
-
-        task.setProcessors(Collections.singletonList(new EdcModuleProcessor()));
         assertThat(task.call()).isFalse();
-    }
-
-    @AfterEach
-    void tearDown() {
     }
 
     @Test
     void verifySuccessfulCompilation() {
         var success = task.call();
+
         var errorMsg = diagnostics.getDiagnostics().stream().map(Object::toString).collect(Collectors.joining(", "));
+
         assertThat(success).withFailMessage(errorMsg).isTrue();
     }
 
@@ -126,8 +99,38 @@ abstract class EdcModuleProcessorTest {
                 .anyMatch(p -> p.getFileName().endsWith("edc.json"));
     }
 
+    protected List<EdcModule> readManifest() {
+        try (var files = Files.list(tempDir)) {
+            var url = files.filter(p -> p.endsWith("edc.json")).findFirst().orElseThrow(AssertionError::new).toUri().toURL();
+            return OBJECT_MAPPER.readValue(url, new TypeReference<>() { });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+    }
 
-    protected abstract List<File> getCompilationUnits();
+    private JavaCompiler.CompilationTask createTask(String edcId, String edcVersion, String edcOutputDir) throws IOException {
+        var compiler = ToolProvider.getSystemJavaCompiler();
+
+        var fileManager = compiler.getStandardFileManager(diagnostics, null, null);
+        fileManager.setLocation(StandardLocation.CLASS_OUTPUT, List.of(tempDir.toFile()));
+        fileManager.setLocation(StandardLocation.SOURCE_OUTPUT, List.of(tempDir.toFile()));
+
+        var compilationUnits = fileManager.getJavaFileObjects(getCompilationUnits().toArray(File[]::new));
+
+        var options = Stream.of(edcId, edcVersion, edcOutputDir).filter(Objects::nonNull).toList();
+        var task = compiler.getTask(null, fileManager, diagnostics, options, null, compilationUnits);
+        task.setProcessors(Collections.singletonList(new EdcModuleProcessor()));
+        return task;
+    }
+
+    private List<File> getCompilationUnits() {
+        var f = new File(compilationUnitsPath);
+        try (var files = Files.list(f.toPath())) {
+            return files.map(Path::toFile).collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private static class ValidCompilerArgsProvider implements ArgumentsProvider {
         @Override
@@ -150,5 +153,6 @@ abstract class EdcModuleProcessorTest {
                     Arguments.of(null, "-Aedc.id=someid", "-Aedc.outputDir=some/dir")
             );
         }
+
     }
 }
