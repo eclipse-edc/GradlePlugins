@@ -46,6 +46,7 @@ import static org.eclipse.edc.plugins.autodoc.core.processor.compiler.Annotation
  */
 public class ModuleIntrospector {
     private static final String SERVICE_EXTENSION_NAME = "org.eclipse.edc.spi.system.ServiceExtension";
+    private static final String SYSTEM_EXTENSION_NAME = "org.eclipse.edc.spi.system.SystemExtension";
     private final Elements elementUtils;
     private final Types typeUtils;
     private final ProcessingEnvironment processingEnv;
@@ -55,7 +56,6 @@ public class ModuleIntrospector {
         this.elementUtils = processingEnv.getElementUtils();
         this.typeUtils = processingEnv.getTypeUtils();
     }
-
 
     public List<String> getCategories(RoundEnvironment environment) {
         var extensionElement = environment.getElementsAnnotatedWith(Spi.class).iterator().next();
@@ -96,7 +96,7 @@ public class ModuleIntrospector {
         var settingsSymbols = environment.getElementsAnnotatedWith(Setting.class).stream()
                 .peek(setting -> {
                     var enclosingElement = setting.getEnclosingElement().asType();
-                    var serviceExtensionType = typeUtils.erasure(elementUtils.getTypeElement(SERVICE_EXTENSION_NAME).asType());
+                    var serviceExtensionType = typeUtils.erasure(elementUtils.getTypeElement(SYSTEM_EXTENSION_NAME).asType());
                     if (!typeUtils.isAssignable(enclosingElement, serviceExtensionType)) {
                         var message = "@Setting annotation must be used inside a ServiceExtension implementation, the " +
                                 "ones defined in %s will be excluded from the autodoc manifest".formatted(enclosingElement);

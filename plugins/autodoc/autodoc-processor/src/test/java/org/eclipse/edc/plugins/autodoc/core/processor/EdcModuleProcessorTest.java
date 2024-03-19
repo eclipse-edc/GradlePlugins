@@ -265,6 +265,13 @@ public class EdcModuleProcessorTest {
         });
     }
 
+    @Test
+    void shouldPass_whenSettingIsDefinedInExtensionSubclass() {
+        var task = createTask("test/ConfigurationExtensionWithSetting.java");
+
+        assertThat(task.call()).isTrue();
+    }
+
     private JavaCompiler.@NotNull CompilationTask createTask(String classPath) {
         try {
             var classes = getFiles(classPath);
