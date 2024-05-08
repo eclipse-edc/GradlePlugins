@@ -90,10 +90,11 @@ val createVersions = tasks.register("createVersions") {
                 val head = "$copyright\n\npackage org.eclipse.edc.plugins.edcbuild;\npublic interface Versions {\n"
                 val tail = "\n}";
 
-                val constants = listOf("assertj", "checkstyle", "jupiter", "mockito")
+                val constants = listOf("assertj", "checkstyle", "jakarta-ws-rs", "jupiter", "mockito", "swagger")
                     .mapNotNull { name ->
+                        val constantName = name.uppercase().replace("-", "_")
                         catalog.findVersion(name)
-                            .map { version -> "    String %s = \"%s\";".format(name.uppercase(), version) }
+                            .map { version -> "    String %s = \"%s\";".format(constantName, version) }
                             .orElse(null)
                     }
                     .joinToString("\n", head, tail)
