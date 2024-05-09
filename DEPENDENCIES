@@ -1,9 +1,7 @@
 maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.11.1, Apache-2.0, approved, CQ23491
-maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.17.0, Apache-2.0, approved, #13672
 maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.17.1, Apache-2.0, approved, #13672
 maven/mavencentral/com.fasterxml.jackson.core/jackson-core/2.17.1, , approved, #13665
 maven/mavencentral/com.fasterxml.jackson.core/jackson-databind/2.11.1, Apache-2.0, approved, CQ23093
-maven/mavencentral/com.fasterxml.jackson.core/jackson-databind/2.17.0, Apache-2.0, approved, #13671
 maven/mavencentral/com.fasterxml.jackson.core/jackson-databind/2.17.1, Apache-2.0, approved, #13671
 maven/mavencentral/com.fasterxml.jackson.core/jackson-databind/2.2.3, Apache-2.0, approved, #10357
 maven/mavencentral/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/2.11.1, Apache-2.0, approved, CQ23094
@@ -56,7 +54,7 @@ maven/mavencentral/io.opentelemetry/opentelemetry-api/1.32.0, Apache-2.0, approv
 maven/mavencentral/io.opentelemetry/opentelemetry-context/1.32.0, Apache-2.0, approved, #11683
 maven/mavencentral/io.swagger.core.v3/swagger-annotations/2.1.5, Apache-2.0, approved, clearlydefined
 maven/mavencentral/io.swagger.core.v3/swagger-core/2.1.5, Apache-2.0, approved, clearlydefined
-maven/mavencentral/io.swagger.core.v3/swagger-gradle-plugin/2.2.15, Apache-2.0 AND MIT, approved, #10356
+maven/mavencentral/io.swagger.core.v3/swagger-gradle-plugin/2.2.21, Apache-2.0 AND MIT, approved, #10356
 maven/mavencentral/io.swagger.core.v3/swagger-models/2.1.5, Apache-2.0, approved, clearlydefined
 maven/mavencentral/io.swagger.parser.v3/swagger-parser-core/2.0.23, Apache-2.0, approved, clearlydefined
 maven/mavencentral/io.swagger.parser.v3/swagger-parser-v2-converter/2.0.23, Apache-2.0, approved, clearlydefined
@@ -85,7 +83,7 @@ maven/mavencentral/net.sf.jopt-simple/jopt-simple/5.0.3, MIT, approved, CQ13174
 maven/mavencentral/net.sf.saxon/Saxon-HE/12.4, MPL-2.0 AND (MPL-2.0 AND Apache-2.0) AND (MPL-2.0 AND LicenseRef-X11-style) AND MPL-1.0 AND W3C, approved, #12716
 maven/mavencentral/net.steppschuh.markdowngenerator/markdowngenerator/1.3.1.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.antlr/antlr4-runtime/4.13.1, BSD-3-Clause, approved, #10767
-maven/mavencentral/org.apache.commons/commons-lang3/3.12.0, Apache-2.0, approved, clearlydefined
+maven/mavencentral/org.apache.commons/commons-lang3/3.14.0, Apache-2.0, approved, #11677
 maven/mavencentral/org.apache.commons/commons-lang3/3.2.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.apache.commons/commons-lang3/3.7, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.apache.commons/commons-lang3/3.8.1, Apache-2.0, approved, #815
