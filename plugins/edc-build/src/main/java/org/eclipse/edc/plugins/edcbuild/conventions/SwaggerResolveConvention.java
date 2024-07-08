@@ -56,8 +56,8 @@ class SwaggerResolveConvention implements EdcConvention {
 
             target.getTasks().withType(ResolveTask.class, task -> {
                 var outputFileName = swaggerExt.getOutputFilename().getOrElse(target.getName());
-                var apiGroup = swaggerExt.getApiGroup().getOrElse(DEFAULT_API_GROUP);
                 var fallbackOutputDir = defaultOutputDirectory(target);
+                var apiGroup = swaggerExt.getApiGroup().getOrElse(DEFAULT_API_GROUP);
 
                 var outputDir = Path.of(swaggerExt.getOutputDirectory().getOrElse(fallbackOutputDir.toFile()).toURI())
                         .resolve(apiGroup)
@@ -81,7 +81,7 @@ class SwaggerResolveConvention implements EdcConvention {
                 target.getTasks().findByName("jar").dependsOn(task);
                 task.setGroup("documentation");
                 task.setDescription("Generates openapi specification documentation.");
-                task.setOutputFileName("openapi");
+                task.setOutputFileName(swaggerExt.getApiGroup().getOrElse("openapi"));
                 task.setOutputDir(outputDir);
                 task.setOutputFormat(ResolveTask.Format.YAML);
                 task.setSortOutput(true);

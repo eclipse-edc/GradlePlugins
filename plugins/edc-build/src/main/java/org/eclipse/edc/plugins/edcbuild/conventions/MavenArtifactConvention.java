@@ -53,20 +53,32 @@ class MavenArtifactConvention implements EdcConvention {
                     .map(p -> (MavenPublication) p)
                     .peek(mavenPub -> mavenPub.pom(pom -> setPomInformation(pomExt, target, pom)))
                     .forEach(mavenPub -> {
-
                         addArtifactIfExist(target, getManifestFile(target), mavenPub, artifact -> {
                             artifact.setClassifier("manifest");
                             artifact.setType("json");
                             artifact.builtBy("autodoc");
                         });
 
-                        addArtifactIfExist(target, getOpenapiFile(target), mavenPub, artifact -> {
-                            artifact.setClassifier("openapi");
-                            artifact.setType("yaml");
-                            artifact.builtBy("openapi");
-                        });
+                        var openapiFiles = target.getLayout().getBuildDirectory().getAsFile().get().toPath()
+                                .resolve("docs").resolve("openapi").toFile()
+                                .listFiles((dir, name) -> name.endsWith(".yaml"));
+
+                        if (openapiFiles != null) {
+                            for (var openapiFile : openapiFiles) {
+                                addArtifactIfExist(target, openapiFile, mavenPub, artifact -> {
+                                    artifact.setClassifier(getFilenameWithoutExtension(openapiFile));
+                                    artifact.setType("yaml");
+                                    artifact.builtBy("openapi");
+                                });
+                            }
+                        }
+
                     });
         });
+    }
+
+    private String getFilenameWithoutExtension(File openapiFile) {
+        return openapiFile.getName().substring(0, openapiFile.getName().lastIndexOf("."));
     }
 
     private void addArtifactIfExist(Project project, File location, MavenPublication mavenPublication, Action<ConfigurablePublishArtifact> configureAction) {
@@ -81,12 +93,6 @@ class MavenArtifactConvention implements EdcConvention {
         var pathToManifest = autodocExt.getOutputDirectory().getOrElse(target.getLayout().getBuildDirectory().getAsFile().get()).getAbsolutePath();
         var manifestFileName = "edc.json";
         return Path.of(pathToManifest, manifestFileName).toFile();
-    }
-
-    private static @NotNull File getOpenapiFile(Project target) {
-        return target.getLayout().getBuildDirectory().getAsFile().get().toPath()
-                .resolve("docs").resolve("openapi").resolve("openapi.yaml")
-                .toFile();
     }
 
     private static void setPomInformation(MavenPomExtension pomExt, Project project, MavenPom pom) {
