@@ -26,7 +26,7 @@ jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.re
 markdown-gen = { module = "net.steppschuh.markdowngenerator:markdowngenerator", version = "1.3.1.1" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 plugin-checksum = { module = "gradle.plugin.org.gradle.crypto:checksum", version = "1.4.0" }
-plugin-nexus-publish = { module = "io.github.gradle-nexus:publish-plugin", version = "1.3.0" }
+plugin-nexus-publish = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
 plugin-openapi-merger = { module = "com.rameshkp:openapi-merger-gradle-plugin", version = "1.0.5" }
 plugin-openapi-merger-app = { module = "com.rameshkp:openapi-merger-app", version = "1.0.5" }
 plugin-swagger = { module = "io.swagger.core.v3:swagger-gradle-plugin", version.ref = "swagger" }
