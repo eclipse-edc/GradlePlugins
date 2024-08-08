@@ -19,6 +19,7 @@ import j2html.tags.Text;
 import j2html.tags.specialized.ArticleTag;
 import j2html.tags.specialized.CodeTag;
 import j2html.tags.specialized.HeadTag;
+import j2html.tags.specialized.TrTag;
 import j2html.tags.specialized.UlTag;
 import org.eclipse.edc.plugins.autodoc.spi.ManifestConverterException;
 import org.eclipse.edc.plugins.autodoc.spi.ManifestRenderer;
@@ -54,6 +55,7 @@ import static j2html.TagCreator.section;
 import static j2html.TagCreator.span;
 import static j2html.TagCreator.style;
 import static j2html.TagCreator.table;
+import static j2html.TagCreator.tag;
 import static j2html.TagCreator.tbody;
 import static j2html.TagCreator.td;
 import static j2html.TagCreator.th;
@@ -77,43 +79,15 @@ public class HtmlManifestRenderer implements ManifestRenderer {
 
     @Override
     public void renderDocumentHeader() {
-        head.with(style("""
-                * {
-                  box-sizing: border-box;
-                }
-                nav {
-                  float: left;
-                  width: 20%;
-                  padding: 20px;
-                }
-                article {
-                  float: left;
-                  padding: 20px;
-                  width: 80%;
-                }
-                table {
-                  margin: 1em 0;
-                  border-collapse: collapse;
-                  width: 100%;
-                  overflow-x: auto;
-                  display: block;
-                  font-variant-numeric: lining-nums tabular-nums;
-                }
-                tbody {
-                  margin-top: 0.5em;
-                  border-top: 1px solid #1a1a1a;
-                  border-bottom: 1px solid #1a1a1a;
-                }
-                td {
-                    padding: 5px
-                }
-                .odd {
-                  background-color: cccccc;
-                }
-                .even {
-                  background-color: eeeeee;
-                }
-                """));
+        try (var stream = getClass().getClassLoader().getResourceAsStream("style.css")) {
+            if (stream == null) {
+                throw new IllegalArgumentException("Resource not found");
+            }
+
+            head.with(style(new String(stream.readAllBytes())));
+        } catch (Exception exception) {
+            throw new RuntimeException("Cannot read style.css resource: " + exception.getMessage());
+        }
     }
 
     @Override
@@ -188,23 +162,27 @@ public class HtmlManifestRenderer implements ManifestRenderer {
 
             var tbody = tbody();
 
-            range(0, configuration.size()).mapToObj(index -> {
-                var setting = configuration.get(index);
-                var clazz = index % 2 == 0 ? "even" : "odd";
-                return tr(
-                        td(code(setting.getKey())),
-                        td(setting.isRequired() ? code("x") : null).attr("align", "center"),
-                        td(code(setting.getType())).attr("align", "center"),
-                        td(code(setting.getDefaultValue())),
-                        td(codeOrNull(setting.getPattern())).attr("align", "center"),
-                        td(codeOrNull(setting.getMinimum())).attr("align", "right"),
-                        td(codeOrNull(setting.getMaximum())).attr("align", "right"),
-                        td(setting.getDescription()).attr("width", "40%")
-                ).withClass(clazz);
-            }).forEach(tbody::with);
+            range(0, configuration.size())
+                    .mapToObj(index -> renderConfigurationRow(configuration.get(index), index))
+                    .forEach(tbody::with);
 
             content.with(table().with(thead(header)).with(tbody));
         }
+    }
+
+    private TrTag renderConfigurationRow(ConfigurationSetting setting, int index) {
+        var key = code(setting.getKey());
+
+        return tr(
+                td(setting.isDeprecated() ? tag("s").with(key) : key),
+                td(setting.isRequired() ? code("x") : null).attr("align", "center"),
+                td(code(setting.getType())).attr("align", "center"),
+                td(code(setting.getDefaultValue())),
+                td(codeOrNull(setting.getPattern())).attr("align", "center"),
+                td(codeOrNull(setting.getMinimum())).attr("align", "right"),
+                td(codeOrNull(setting.getMaximum())).attr("align", "right"),
+                td(setting.getDescription()).attr("width", "40%")
+        ).withClass(index % 2 == 0 ? "even" : "odd");
     }
 
     @Override

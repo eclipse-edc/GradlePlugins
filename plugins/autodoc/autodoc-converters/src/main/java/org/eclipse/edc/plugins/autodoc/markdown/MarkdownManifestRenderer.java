@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
@@ -117,17 +118,9 @@ public class MarkdownManifestRenderer implements ManifestRenderer {
         var tableBuilder = new Table.Builder()
                 .addRow("Key", "Required", "Type", "Default", "Pattern", "Min", "Max", "Description");
 
-
-
-        configuration.forEach(setting -> tableBuilder.addRow(
-                code(setting.getKey()),
-                setting.isRequired() ? code("*") : null,
-                code(setting.getType()),
-                ofNullable(setting.getDefaultValue()).map(Markdown::code).orElse(null),
-                ofNullable(setting.getPattern()).map(Markdown::code).orElse(null),
-                ofNullable(setting.getMinimum()).map(m -> code(String.valueOf(m))).orElse(null),
-                ofNullable(setting.getMaximum()).map(m -> code(String.valueOf(m))).orElse(null),
-                setting.getDescription()));
+        configuration.stream()
+                .map(this::renderConfigurationSetting)
+                .forEach(tableBuilder::addRow);
 
         stringBuilder.append(heading("Configuration: ", 5));
         if (!configuration.isEmpty()) {
@@ -162,6 +155,19 @@ public class MarkdownManifestRenderer implements ManifestRenderer {
             throw new ManifestConverterException(e);
         }
         return output;
+    }
+
+    private Object @NotNull [] renderConfigurationSetting(ConfigurationSetting setting) {
+        return Stream.of(
+                        setting.isDeprecated() ? Markdown.strikeThrough(setting.getKey()) : code(setting.getKey()),
+                        setting.isRequired() ? code("*") : null,
+                        code(setting.getType()),
+                        ofNullable(setting.getDefaultValue()).map(Markdown::code).orElse(null),
+                        ofNullable(setting.getPattern()).map(Markdown::code).orElse(null),
+                        ofNullable(setting.getMinimum()).map(m -> code(String.valueOf(m))).orElse(null),
+                        ofNullable(setting.getMaximum()).map(m -> code(String.valueOf(m))).orElse(null),
+                        setting.getDescription()
+                ).toArray();
     }
 
     private MarkdownElement listOrNone(Object... items) {

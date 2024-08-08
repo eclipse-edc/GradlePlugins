@@ -148,6 +148,7 @@ public class ExtensionIntrospector {
                 .maximum(attributeValue(Long.class, "max", settingMirror, elementUtils))
                 .minimum(attributeValue(Long.class, "min", settingMirror, elementUtils))
                 .defaultValue(attributeValue(String.class, "defaultValue", settingMirror, elementUtils))
+                .deprecated(mirrorFor(Deprecated.class, settingElement) != null)
                 .build();
     }
 

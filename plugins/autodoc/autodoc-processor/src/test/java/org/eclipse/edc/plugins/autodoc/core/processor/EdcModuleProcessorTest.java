@@ -184,53 +184,60 @@ public class EdcModuleProcessorTest {
 
         @Test
         void verifyManifestContainsCorrectElements() {
-            var task = createTask("testextensions");
-
-            task.call();
+            createTask("testextensions").call();
 
             var modules = readManifest();
-            assertThat(modules).hasSize(1);
-            var extensions = modules.get(0).getExtensions();
 
-            assertThat(extensions)
-                    .allSatisfy(e -> assertThat(e.getCategories()).isNotNull().isEmpty())
-                    .allSatisfy(e -> assertThat(e.getOverview()).isNull())
-                    .extracting(EdcServiceExtension::getName)
-                    .containsOnly(SampleExtensionWithoutAnnotation.class.getSimpleName(), SecondExtension.class.getSimpleName(), SettingContextExtension.class.getSimpleName());
+            assertThat(modules).hasSize(1).first().extracting(EdcModule::getExtensions).satisfies(extensions -> {
+                assertThat(extensions)
+                        .allSatisfy(e -> assertThat(e.getCategories()).isNotNull().isEmpty())
+                        .allSatisfy(e -> assertThat(e.getOverview()).isNull())
+                        .extracting(EdcServiceExtension::getName)
+                        .containsOnly(SampleExtensionWithoutAnnotation.class.getSimpleName(), SecondExtension.class.getSimpleName(), SettingContextExtension.class.getSimpleName());
 
-            var ext1 = extensions.stream().filter(e -> e.getName().equals(SampleExtensionWithoutAnnotation.class.getSimpleName()))
-                    .findFirst()
-                    .orElseThrow();
+                var ext1 = extensions.stream().filter(e -> e.getName().equals(SampleExtensionWithoutAnnotation.class.getSimpleName()))
+                        .findFirst()
+                        .orElseThrow();
 
-            var providedServices = ext1.getProvides();
-            assertThat(providedServices).hasSize(2)
-                    .extracting(Service::getService)
-                    .containsExactlyInAnyOrder(SomeService.class.getName(), SomeOtherService.class.getName());
+                var providedServices = ext1.getProvides();
+                assertThat(providedServices).hasSize(2)
+                        .extracting(Service::getService)
+                        .containsExactlyInAnyOrder(SomeService.class.getName(), SomeOtherService.class.getName());
 
-            var references = ext1.getReferences();
-            assertThat(references.size()).isEqualTo(2);
-            assertThat(references).contains(new ServiceReference(OptionalService.class.getName(), false));
-            assertThat(references).contains(new ServiceReference(RequiredService.class.getName(), true));
+                var references = ext1.getReferences();
+                assertThat(references.size()).isEqualTo(2);
+                assertThat(references).contains(new ServiceReference(OptionalService.class.getName(), false));
+                assertThat(references).contains(new ServiceReference(RequiredService.class.getName(), true));
 
-            assertThat(ext1.getConfiguration()).first().isNotNull().satisfies(configuration -> {
-                assertThat(configuration).isNotNull();
-                assertThat(configuration.getKey()).isEqualTo(SampleExtensionWithoutAnnotation.TEST_SETTING);
-                assertThat(configuration.isRequired()).isTrue();
-                assertThat(configuration.getDefaultValue()).isEqualTo(TEST_SETTING_DEFAULT_VALUE);
-                assertThat(configuration.getDescription()).isNotEmpty();
+                assertThat(ext1.getConfiguration()).hasSize(2).satisfies(configurations -> {
+                    assertThat(configurations).element(0).satisfies(configuration -> {
+                        assertThat(configuration).isNotNull();
+                        assertThat(configuration.getKey()).isEqualTo(SampleExtensionWithoutAnnotation.TEST_SETTING);
+                        assertThat(configuration.isRequired()).isTrue();
+                        assertThat(configuration.getDefaultValue()).isEqualTo(TEST_SETTING_DEFAULT_VALUE);
+                        assertThat(configuration.getDescription()).isNotEmpty();
+                        assertThat(configuration.isDeprecated()).isFalse();
+                    });
+
+                    assertThat(configurations).element(1).satisfies(deprecatedConfiguration -> {
+                        assertThat(deprecatedConfiguration.getKey()).isEqualTo(SampleExtensionWithoutAnnotation.DEPRECATED_TEST_SETTING);
+                        assertThat(deprecatedConfiguration.isDeprecated()).isEqualTo(true);
+                    });
+                });
+
+                var ext2 = extensions.stream().filter(e -> e.getName().equals(SecondExtension.class.getSimpleName()))
+                        .findFirst()
+                        .orElseThrow();
+
+                assertThat(ext2.getProvides()).isEmpty();
+
+                assertThat(ext2.getReferences())
+                        .hasSize(1)
+                        .containsOnly(new ServiceReference(SomeService.class.getName(), true));
+
+                assertThat(ext2.getConfiguration()).isEmpty();
             });
 
-            var ext2 = extensions.stream().filter(e -> e.getName().equals(SecondExtension.class.getSimpleName()))
-                    .findFirst()
-                    .orElseThrow();
-
-            assertThat(ext2.getProvides()).isEmpty();
-
-            assertThat(ext2.getReferences())
-                    .hasSize(1)
-                    .containsOnly(new ServiceReference(SomeService.class.getName(), true));
-
-            assertThat(ext2.getConfiguration()).isEmpty();
         }
 
         @Test

@@ -173,6 +173,21 @@ public class HtmlManifestRendererTest {
                     .contains("<table>", "<thead>", "<tbody>", "<tr>", "<td>")
                     .contains("<td><code>edc.setting.path</code></td>");
         }
+
+        @Test
+        void shouldRenderDeprecatedConfiguration() {
+            var setting = ConfigurationSetting.Builder.newInstance()
+                    .key("edc.setting.path")
+                    .deprecated(true)
+                    .build();
+            renderer.renderConfigurations(List.of(setting));
+
+            var output = renderer.finalizeRendering();
+
+            assertThat(output).asString()
+                    .contains("<table>", "<thead>", "<tbody>", "<tr>", "<td>")
+                    .contains("<td><s><code>edc.setting.path</code></s></td>");
+        }
     }
 
     @Nested

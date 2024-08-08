@@ -28,6 +28,10 @@ public class SampleExtensionWithoutAnnotation implements ServiceExtension {
     @Setting(value = Constants.TEST_SETTING_NAME, required = true, defaultValue = TEST_SETTING_DEFAULT_VALUE)
     public static final String TEST_SETTING = Constants.TEST_SETTING_KEY;
 
+    @Deprecated(since = "forever")
+    @Setting(value = "deprecated")
+    public static final String DEPRECATED_TEST_SETTING = Constants.TEST_DEPRECATED_SETTING_KEY;
+
     @Inject
     protected RequiredService requiredService;
 

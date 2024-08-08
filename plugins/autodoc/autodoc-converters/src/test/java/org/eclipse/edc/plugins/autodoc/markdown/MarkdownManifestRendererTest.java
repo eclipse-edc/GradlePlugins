@@ -17,8 +17,11 @@ package org.eclipse.edc.plugins.autodoc.markdown;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.edc.plugins.autodoc.spi.ManifestWriter;
+import org.eclipse.edc.runtime.metamodel.domain.ConfigurationSetting;
 import org.eclipse.edc.runtime.metamodel.domain.EdcModule;
+import org.eclipse.edc.runtime.metamodel.domain.EdcServiceExtension;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -58,6 +61,7 @@ class MarkdownManifestRendererTest {
     @Test
     void convert_emptyObject() {
         var list = List.of(EdcModule.Builder.newInstance().modulePath("foo").version("0.1.0-bar").build());
+
         var result = writer.convert(list);
 
         assertThat(result).isNotNull().isEqualTo(testOutputStream).extracting(Object::toString).satisfies(markdown -> {
@@ -66,6 +70,32 @@ class MarkdownManifestRendererTest {
             assertThat(markdown).contains("### Extensions");
             assertThat(markdown).doesNotContain("Configuration:");
         });
+    }
+
+    @Nested
+    class Configuration {
+
+        @Test
+        void shouldRenderConfiguration() {
+            var configurationSetting = ConfigurationSetting.Builder.newInstance().key("test.key").build();
+            var extension = EdcServiceExtension.Builder.newInstance().name("name").className("className").configuration(List.of(configurationSetting)).build();
+            var list = List.of(EdcModule.Builder.newInstance().modulePath("foo").version("0.1.0-bar").extension(extension).build());
+
+            var result = writer.convert(list);
+
+            assertThat(result).isNotNull().extracting(Object::toString).asString().contains("Configuration:").contains("`test.key`");
+        }
+
+        @Test
+        void shouldRenderDeprecatedConfiguration() {
+            var configurationSetting = ConfigurationSetting.Builder.newInstance().key("test.key").deprecated(true).build();
+            var extension = EdcServiceExtension.Builder.newInstance().name("name").className("className").configuration(List.of(configurationSetting)).build();
+            var list = List.of(EdcModule.Builder.newInstance().modulePath("foo").version("0.1.0-bar").extension(extension).build());
+
+            var result = writer.convert(list);
+
+            assertThat(result).isNotNull().extracting(Object::toString).asString().contains("Configuration:").contains("~~test.key~~");
+        }
     }
 
     private List<EdcModule> generateManifest(String filename) {
