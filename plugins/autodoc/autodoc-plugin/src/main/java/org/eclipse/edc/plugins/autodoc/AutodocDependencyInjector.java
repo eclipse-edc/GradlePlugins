@@ -18,6 +18,7 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.DependencyResolutionListener;
 import org.gradle.api.artifacts.ResolvableDependencies;
 import org.gradle.api.tasks.compile.JavaCompile;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -42,17 +43,7 @@ class AutodocDependencyInjector implements DependencyResolutionListener {
 
     @Override
     public void beforeResolve(ResolvableDependencies dependencies) {
-        var processorVersion = extension.getProcessorVersion();
-
-        var artifact = DEPENDENCY_NAME;
-        if (processorVersion.isPresent()) {
-            var version = processorVersion.get();
-            artifact += ":" + version;
-            project.getLogger().debug("{}: use configured version from AutodocExtension (override) [{}]", project.getName(), version);
-        } else {
-            artifact += ":+";
-            project.getLogger().info("No explicit configuration value for the annotationProcessor version was found. Current one will be used");
-        }
+        var artifact = DEPENDENCY_NAME + ":" + getProcessorVersion();
 
         if (addDependency(project, artifact)) {
             var task = project.getTasks().findByName("compileJava");
@@ -70,6 +61,20 @@ class AutodocDependencyInjector implements DependencyResolutionListener {
     @Override
     public void afterResolve(ResolvableDependencies dependencies) {
 
+    }
+
+    private @NotNull String getProcessorVersion() {
+        var processorVersion = extension.getProcessorVersion();
+
+        if (processorVersion.isPresent()) {
+            var version = processorVersion.get();
+            project.getLogger().debug("{}: use configured version from AutodocExtension (override) [{}]", project.getName(), version);
+            return version;
+        } else {
+            var version = project.getVersion().toString();
+            project.getLogger().info("No explicit configuration value for the annotationProcessor version was found. Project version {} will be used", version);
+            return version;
+        }
     }
 
     /**

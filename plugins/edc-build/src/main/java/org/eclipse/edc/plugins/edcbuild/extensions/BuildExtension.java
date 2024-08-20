@@ -24,19 +24,12 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion;
  * Root configuration resource for the EDC Build plugin
  */
 public abstract class BuildExtension {
-    private final VersionsExtension versions;
     private final MavenPomExtension pom;
     private final SwaggerGeneratorExtension swagger;
 
     public BuildExtension(ObjectFactory objectFactory) {
-        versions = objectFactory.newInstance(VersionsExtension.class);
         pom = objectFactory.newInstance(MavenPomExtension.class);
         swagger = objectFactory.newInstance(SwaggerGeneratorExtension.class);
-    }
-
-
-    public void versions(Action<? super VersionsExtension> action) {
-        action.execute(versions);
     }
 
     public void pom(Action<? super MavenPomExtension> action) {
@@ -45,10 +38,6 @@ public abstract class BuildExtension {
 
     public void swagger(Action<? super SwaggerGeneratorExtension> action) {
         action.execute(swagger);
-    }
-
-    public VersionsExtension getVersions() {
-        return versions;
     }
 
     public MavenPomExtension getPom() {
