@@ -18,6 +18,8 @@ import com.rameshkp.openapi.merger.gradle.extensions.OpenApiMergerExtension;
 import org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension;
 import org.gradle.api.Project;
 
+import java.util.function.Supplier;
+
 import static org.eclipse.edc.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
 import static org.eclipse.edc.plugins.edcbuild.conventions.SwaggerConvention.defaultOutputDirectory;
 
@@ -46,12 +48,16 @@ class OpenApiMergerConvention implements EdcConvention {
                 outputExtension.getFileName().set("openapi");
             });
 
+            var apiTitle = propertyOrElse(target, "apiTitle", () -> swaggerExt.getTitle().getOrNull());
+            var apiDescription = propertyOrElse(target, "apiDescription", () -> swaggerExt.getDescription().getOrNull());
+            var apiVersion = propertyOrElse(target, "apiVersion", () -> target.getVersion().toString());
+
             mergerExt.openApi(openApi -> {
                 openApi.getOpenApiVersion().set(OPEN_API_VERSION);
                 openApi.info(info -> {
-                    info.getTitle().set(swaggerExt.getTitle());
-                    info.getDescription().set(swaggerExt.getDescription());
-                    info.getVersion().set(target.getVersion().toString());
+                    info.getTitle().set(apiTitle);
+                    info.getDescription().set(apiDescription);
+                    info.getVersion().set(apiVersion);
                     info.license(license -> {
                         var mavenPomExt = buildExtension.getPom();
                         license.getName().set(mavenPomExt.getLicenseName());
@@ -60,5 +66,11 @@ class OpenApiMergerConvention implements EdcConvention {
                 });
             });
         }
+    }
+
+    private String propertyOrElse(Project target, String key, Supplier<String> orElse) {
+        return target.hasProperty(key)
+                ? target.property(key).toString()
+                : orElse.get();
     }
 }

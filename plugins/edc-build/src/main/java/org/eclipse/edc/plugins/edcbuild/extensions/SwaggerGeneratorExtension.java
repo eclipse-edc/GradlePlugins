@@ -22,9 +22,6 @@ import java.util.Set;
 public abstract class SwaggerGeneratorExtension {
 
     private Set<String> resourcePackages = Set.of("org.eclipse.edc");
-    private String mergedFileName = "openapi";
-    private String mergedFileExtension = "yaml";
-    private String description = "All files merged by open api merger";
 
     public abstract Property<String> getOutputFilename();
 
@@ -46,37 +43,7 @@ public abstract class SwaggerGeneratorExtension {
     /**
      * OpenAPI description of the merged openapi.yaml file
      */
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    /**
-     * File name of the file into which all the openapi files of all the modules are merged.
-     * Defaults to "openapi"
-     */
-    public String getMergedFileName() {
-        return mergedFileName;
-    }
-
-    public void setMergedFileName(String mergedFileName) {
-        this.mergedFileName = mergedFileName;
-    }
-
-    /**
-     * File extension of the file into which all the openapi files of all the modules are merged.
-     * Defaults to "yaml"
-     */
-    public String getMergedFileExtension() {
-        return mergedFileExtension;
-    }
-
-    public void setMergedFileExtension(String mergedFileExtension) {
-        this.mergedFileExtension = mergedFileExtension;
-    }
+    public abstract Property<String> getDescription();
 
     public abstract Property<String> getApiGroup();
 
