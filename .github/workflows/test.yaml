@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
   pull_request:
-    branches: [ main ]
+    branches: [ main, release/*, bugfix/* ]
     paths-ignore:
       - '**.md'
       - 'docs/**'
@@ -16,6 +16,24 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+
+  Checkstyle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: eclipse-edc/.github/.github/actions/setup-build@main
+
+      - name: Run Checkstyle
+        run: ./gradlew checkstyleMain checkstyleTest
+
+  CodeQL:
+    uses: eclipse-edc/.github/.github/workflows/codeql-analysis.yml@main
+    secrets: inherit
+
+  Dependency-Check:
+    uses: eclipse-edc/.github/.github/workflows/dependency-check.yml@main
+    secrets: inherit
+
   Unit-Tests:
     runs-on: ubuntu-latest
     steps:
