@@ -23,7 +23,6 @@ import static java.util.List.of;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.allDependencies;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.checkstyle;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.defaultDependencies;
-import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.jacoco;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.jar;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.java;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.mavenPom;
@@ -71,7 +70,6 @@ public class EdcBuildPlugin implements Plugin<Project> {
                     mavenPublication(),
                     signing(),
                     mavenPom(),
-                    jacoco(),
                     allDependencies(),
                     tests(),
                     jar(),

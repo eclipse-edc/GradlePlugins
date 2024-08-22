@@ -43,10 +43,6 @@ public class Conventions {
         return new MavenArtifactConvention();
     }
 
-    public static EdcConvention jacoco() {
-        return new JacocoConvention();
-    }
-
     public static EdcConvention java() {
         return new JavaConvention();
     }

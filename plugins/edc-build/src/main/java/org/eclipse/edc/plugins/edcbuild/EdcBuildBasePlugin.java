@@ -26,7 +26,6 @@ import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.plugins.quality.CheckstylePlugin;
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
 import org.gradle.crypto.checksum.ChecksumPlugin;
-import org.gradle.testing.jacoco.plugins.JacocoPlugin;
 
 /**
  * Defines the capabilities of the EDC build as specified in the Gradle Documentation
@@ -37,7 +36,6 @@ public class EdcBuildBasePlugin implements Plugin<Project> {
     private static void defineCapabilities(Project target) {
 
         target.getPlugins().apply(JavaLibraryPlugin.class);
-        target.getPlugins().apply(JacocoPlugin.class);
         target.getPlugins().apply(AutodocPlugin.class);
         target.getPlugins().apply(CheckstylePlugin.class);
         target.getPlugins().apply(MavenPublishPlugin.class);
