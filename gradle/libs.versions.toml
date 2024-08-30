@@ -34,4 +34,4 @@ plugin-swagger = { module = "io.swagger.core.v3:swagger-gradle-plugin", version.
 [bundles]
 
 [plugins]
-publish = { id = "com.gradle.plugin-publish", version = "1.2.1" }
+publish = { id = "com.gradle.plugin-publish", version = "1.2.2" }
