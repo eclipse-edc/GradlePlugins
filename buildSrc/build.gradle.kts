@@ -17,11 +17,16 @@ repositories {
 }
 
 dependencies {
+    constraints {
+        implementation(libs.swagger.parser) {
+            because("OpenAPI merger plugin uses an old version that caused this issue: https://github.com/eclipse-edc/GradlePlugins/issues/183")
+        }
+    }
+
     implementation(libs.plugin.nexus.publish)
     implementation(libs.plugin.checksum)
     implementation(libs.plugin.swagger)
     implementation(libs.plugin.openapi.merger)
-    implementation(libs.plugin.openapi.merger.app)
 
     implementation(libs.jetbrains.annotations)
     implementation(libs.jackson.core)

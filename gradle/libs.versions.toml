@@ -11,6 +11,7 @@ jakarta-ws-rs = "4.0.0"
 jupiter = "5.11.0"
 mockito = "5.13.0"
 swagger = "2.2.22"
+swagger-parser = "2.1.22"
 
 [libraries]
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
@@ -28,8 +29,8 @@ mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 plugin-checksum = { module = "gradle.plugin.org.gradle.crypto:checksum", version = "1.4.0" }
 plugin-nexus-publish = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
 plugin-openapi-merger = { module = "com.rameshkp:openapi-merger-gradle-plugin", version = "1.0.5" }
-plugin-openapi-merger-app = { module = "com.rameshkp:openapi-merger-app", version = "1.0.5" }
 plugin-swagger = { module = "io.swagger.core.v3:swagger-gradle-plugin", version.ref = "swagger" }
+swagger-parser = { module = "io.swagger.parser.v3:swagger-parser", version.ref = "swagger-parser" }
 
 [bundles]
 

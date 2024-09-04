@@ -5,13 +5,7 @@ plugins {
 val group: String by project
 
 dependencies {
-    // contains the actual merger task
     implementation(libs.plugin.openapi.merger)
-    // needed for the OpenApiDataInvalidException:
-    implementation(libs.plugin.openapi.merger.app)
-
-    implementation(libs.edc.runtime.metamodel)
-
 }
 
 gradlePlugin {
