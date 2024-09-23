@@ -29,7 +29,6 @@ import java.util.List;
  * The ManifestRenderer interface provides callback methods to render a manifest document.
  */
 public interface ManifestRenderer {
-    String DOCUMENT_HEADING = "EDC Autodoc Manifest";
     String EXTENSION_POINTS = "Extension points";
     String EXTENSIONS = "Extensions";
     String NONE = "None";

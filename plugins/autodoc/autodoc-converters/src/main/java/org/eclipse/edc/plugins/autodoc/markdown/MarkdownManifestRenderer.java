@@ -55,21 +55,24 @@ public class MarkdownManifestRenderer implements ManifestRenderer {
 
     @Override
     public void renderDocumentHeader() {
-        stringBuilder.append(heading(DOCUMENT_HEADING, 1)).append(NEWLINE);
-        stringBuilder.append(NEWLINE);
+
     }
 
     @Override
     public void renderModuleHeading(@Nullable String moduleName, @NotNull String modulePath, @NotNull String version) {
-        var name = ofNullable(moduleName).orElse(modulePath);
+        var modulePathTokens = modulePath.split(":");
+        var artifactId = modulePathTokens.length == 2 ? modulePathTokens[1] : modulePath;
 
-        var moduleHeading = heading(format("Module `%s:%s`", name, version), 2);
+        var moduleHeading = heading(format("Module `%s`", artifactId), 2);
         stringBuilder.append(moduleHeading).append(NEWLINE);
 
         if (moduleName != null) {
-            stringBuilder.append(italic(modulePath)).append(NEWLINE);
+            stringBuilder.append(italic("name: ")).append(moduleName).append(NEWLINE);
         }
-        stringBuilder.append(NEWLINE);
+
+        stringBuilder
+                .append(italic("artifact: ")).append(modulePath).append(":").append(version).append(NEWLINE)
+                .append(NEWLINE);
     }
 
     @Override
@@ -122,7 +125,7 @@ public class MarkdownManifestRenderer implements ManifestRenderer {
                 .map(this::renderConfigurationSetting)
                 .forEach(tableBuilder::addRow);
 
-        stringBuilder.append(heading("Configuration: ", 5));
+        stringBuilder.append(heading("Configuration: ", 3));
         if (!configuration.isEmpty()) {
             stringBuilder.append(NEWLINE).append(NEWLINE).append(tableBuilder.build()).append(NEWLINE);
         } else {
