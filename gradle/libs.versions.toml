@@ -9,7 +9,7 @@ jackson = "2.18.0"
 jetbrainsAnnotation = "25.0.0"
 jakarta-ws-rs = "4.0.0"
 jupiter = "5.11.2"
-mockito = "5.14.0"
+mockito = "5.14.1"
 swagger = "2.2.22"
 swagger-parser = "2.1.22"
 
