@@ -1,13 +1,13 @@
 /*
- * Copyright (c) 2024 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
+ *  Copyright (c) 2024 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
  *
- * This program and the accompanying materials are made available under the
- * terms of the Apache License, Version 2.0 which is available at
- * https://www.apache.org/licenses/LICENSE-2.0
+ *  This program and the accompanying materials are made available under the
+ *  terms of the Apache License, Version 2.0 which is available at
+ *  https://www.apache.org/licenses/LICENSE-2.0
  *
- * SPDX-License-Identifier: Apache-2.0
+ *  SPDX-License-Identifier: Apache-2.0
  *
- * Contributors:
+ *  Contributors:
  *       Bayerische Motoren Werke Aktiengesellschaft (BMW AG) - initial API and implementation
  *
  */
@@ -41,12 +41,11 @@ import static java.util.Objects.requireNonNull;
 public abstract class AbstractManifestResolveTask extends DefaultTask {
     public static final String MANIFEST_CLASSIFIER = "manifest";
     public static final String MANIFEST_TYPE = "json";
-    private static final String EDC_GROUP = "org.eclipse.edc";
     protected Path downloadDirectory;
     private File outputDirectoryOverride;
 
     public AbstractManifestResolveTask() {
-        downloadDirectory = getProject().getBuildDir().toPath().resolve("autodoc");
+        downloadDirectory = getProject().getLayout().getBuildDirectory().getAsFile().get().toPath().resolve("autodoc");
     }
 
     @TaskAction
