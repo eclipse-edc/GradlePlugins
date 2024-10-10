@@ -14,10 +14,11 @@
 
 package org.eclipse.edc.plugins.autodoc;
 
-import org.eclipse.edc.plugins.autodoc.tasks.ManifestDownloadTask;
+import org.eclipse.edc.plugins.autodoc.tasks.DownloadManifestTask;
 import org.eclipse.edc.plugins.autodoc.tasks.MarkdownRendererTask.ToHtml;
 import org.eclipse.edc.plugins.autodoc.tasks.MarkdownRendererTask.ToMarkdown;
 import org.eclipse.edc.plugins.autodoc.tasks.MergeManifestsTask;
+import org.eclipse.edc.plugins.autodoc.tasks.ResolveManifestTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
@@ -44,6 +45,8 @@ public class AutodocPlugin implements Plugin<Project> {
         project.getTasks().register(MergeManifestsTask.NAME, MergeManifestsTask.class, t -> t.dependsOn(AUTODOC_TASK_NAME).setGroup(GROUP_NAME));
         project.getTasks().register(ToMarkdown.NAME, ToMarkdown.class, t -> t.setGroup(GROUP_NAME));
         project.getTasks().register(ToHtml.NAME, ToHtml.class, t -> t.setGroup(GROUP_NAME));
-        project.getTasks().register(ManifestDownloadTask.NAME, ManifestDownloadTask.class, t -> t.setGroup(GROUP_NAME));
+        project.getTasks().register(DownloadManifestTask.NAME, DownloadManifestTask.class, t -> t.setGroup(GROUP_NAME));
+        // resolving manifests requires the Autodoc manifests of all dependencies to exist already
+        project.getTasks().register(ResolveManifestTask.NAME, ResolveManifestTask.class, t -> t.dependsOn(AUTODOC_TASK_NAME).setGroup(GROUP_NAME));
     }
 }
