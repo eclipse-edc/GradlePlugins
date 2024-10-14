@@ -37,11 +37,12 @@ public abstract class MergeManifestsTask extends DefaultTask {
     private final File projectBuildDirectory;
     private File destinationFile;
     private File inputDirectory;
+    private String outputDirectoryOption;
 
     public MergeManifestsTask() {
         appender = new JsonFileAppender(getProject().getLogger());
         projectBuildDirectory = getProject().getLayout().getBuildDirectory().getAsFile().get();
-        destinationFile = projectBuildDirectory.toPath().resolve(MERGED_MANIFEST_FILENAME).toFile();
+        destinationFile = getProject().getRootProject().getLayout().getBuildDirectory().get().getAsFile().toPath().resolve(MERGED_MANIFEST_FILENAME).toFile();
         inputDirectory = projectBuildDirectory.toPath().resolve("autodoc").toFile();
     }
 
@@ -59,11 +60,18 @@ public abstract class MergeManifestsTask extends DefaultTask {
 
     @TaskAction
     public void mergeManifests() {
+        File destination;
+        if (outputDirectoryOption != null) {
+            var customOutputDir = new File(outputDirectoryOption);
+            customOutputDir.mkdirs();
+            destination = new File(customOutputDir, MERGED_MANIFEST_FILENAME);
+        } else {
+            destination = destinationFile;
+        }
+
         var autodocExt = getProject().getExtensions().findByType(AutodocExtension.class);
 
         Objects.requireNonNull(autodocExt, "AutodocExtension cannot be null");
-
-        var destination = getDestinationFile();
 
         if (destination == null) {
             throw new GradleException("destinationFile must be configured but was null!");
@@ -103,5 +111,10 @@ public abstract class MergeManifestsTask extends DefaultTask {
     @Option(option = "input", description = "Directory where previously downloaded or resolved manifest files reside")
     public void setInputDirectory(String inputDirectory) {
         this.inputDirectory = new File(inputDirectory);
+    }
+
+    @Option(option = "output", description = "Directory where the merged manifest should be stored")
+    public void setOutputDirectory(String outputDirectory) {
+        this.outputDirectoryOption = outputDirectory;
     }
 }
