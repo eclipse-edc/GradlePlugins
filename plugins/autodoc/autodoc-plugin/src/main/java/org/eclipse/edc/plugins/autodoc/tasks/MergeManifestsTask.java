@@ -41,7 +41,8 @@ public abstract class MergeManifestsTask extends DefaultTask {
     public MergeManifestsTask() {
         appender = new JsonFileAppender(getProject().getLogger());
         projectBuildDirectory = getProject().getLayout().getBuildDirectory().getAsFile().get();
-        destinationFile = projectBuildDirectory.toPath().resolve(MERGED_MANIFEST_FILENAME).toFile();
+        destinationFile = getProject().getRootProject().getLayout().getBuildDirectory().get().getAsFile().toPath()
+                .resolve(MERGED_MANIFEST_FILENAME).toFile();
         inputDirectory = projectBuildDirectory.toPath().resolve("autodoc").toFile();
     }
 
