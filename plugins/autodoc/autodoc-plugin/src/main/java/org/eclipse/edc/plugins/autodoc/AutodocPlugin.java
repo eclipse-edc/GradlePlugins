@@ -14,6 +14,7 @@
 
 package org.eclipse.edc.plugins.autodoc;
 
+import org.eclipse.edc.plugins.autodoc.tasks.AutodocBomTask;
 import org.eclipse.edc.plugins.autodoc.tasks.DownloadManifestTask;
 import org.eclipse.edc.plugins.autodoc.tasks.MarkdownRendererTask.ToHtml;
 import org.eclipse.edc.plugins.autodoc.tasks.MarkdownRendererTask.ToMarkdown;
@@ -47,6 +48,15 @@ public class AutodocPlugin implements Plugin<Project> {
         project.getTasks().register(ToHtml.NAME, ToHtml.class, t -> t.setGroup(GROUP_NAME));
         project.getTasks().register(DownloadManifestTask.NAME, DownloadManifestTask.class, t -> t.setGroup(GROUP_NAME));
         // resolving manifests requires the Autodoc manifests of all dependencies to exist already
-        project.getTasks().register(ResolveManifestTask.NAME, ResolveManifestTask.class, t -> t.dependsOn(AUTODOC_TASK_NAME).setGroup(GROUP_NAME));
+        project.getTasks().register(ResolveManifestTask.NAME, ResolveManifestTask.class, t -> {
+            t.dependsOn(AUTODOC_TASK_NAME);
+            t.setGroup(GROUP_NAME);
+            t.setDescription(ResolveManifestTask.DESCRIPTION);
+        });
+        project.getTasks().register(AutodocBomTask.NAME, AutodocBomTask.class, t -> {
+            t.dependsOn(ResolveManifestTask.NAME);
+            t.setDescription(AutodocBomTask.DESCRIPTION);
+            t.setGroup(GROUP_NAME);
+        });
     }
 }

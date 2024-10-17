@@ -26,6 +26,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Objects;
 
+import static org.eclipse.edc.plugins.autodoc.tasks.Constants.DEFAULT_AUTODOC_FOLDER;
+
 /**
  * Task that takes an input file (JSON) and appends its contents to a destination file. This task is intended to be called per-project.
  */
@@ -43,7 +45,7 @@ public abstract class MergeManifestsTask extends DefaultTask {
         appender = new JsonFileAppender(getProject().getLogger());
         projectBuildDirectory = getProject().getLayout().getBuildDirectory().getAsFile().get();
         destinationFile = getProject().getRootProject().getLayout().getBuildDirectory().get().getAsFile().toPath().resolve(MERGED_MANIFEST_FILENAME).toFile();
-        inputDirectory = projectBuildDirectory.toPath().resolve("autodoc").toFile();
+        inputDirectory = projectBuildDirectory.toPath().resolve(DEFAULT_AUTODOC_FOLDER).toFile();
     }
 
     /**

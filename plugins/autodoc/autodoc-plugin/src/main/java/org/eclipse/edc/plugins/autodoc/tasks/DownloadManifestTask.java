@@ -53,7 +53,7 @@ public class DownloadManifestTask extends AbstractManifestResolveTask {
         }
         if (response.statusCode() != 200) {
             getLogger().warn("Could not download {}, HTTP response: {}", autodocManifest.dependency(), response);
-            return InputStream.nullInputStream();
+            return null;
         }
         return response.body();
     }

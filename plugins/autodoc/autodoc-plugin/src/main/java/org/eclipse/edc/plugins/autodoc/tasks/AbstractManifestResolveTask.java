@@ -31,6 +31,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
+import static org.eclipse.edc.plugins.autodoc.tasks.Constants.DEFAULT_AUTODOC_FOLDER;
 
 /**
  * Abstract gradle task, that "resolves" an already-existing autodoc manifest from a URI and transfers (=copies, downloads,...)
@@ -45,7 +46,7 @@ public abstract class AbstractManifestResolveTask extends DefaultTask {
     private File outputDirectoryOverride;
 
     public AbstractManifestResolveTask() {
-        downloadDirectory = getProject().getLayout().getBuildDirectory().getAsFile().get().toPath().resolve("autodoc");
+        downloadDirectory = getProject().getLayout().getBuildDirectory().getAsFile().get().toPath().resolve(DEFAULT_AUTODOC_FOLDER);
     }
 
     @TaskAction
@@ -92,10 +93,12 @@ public abstract class AbstractManifestResolveTask extends DefaultTask {
     private void transferDependencyFile(DependencySource dependencySource, Path downloadDirectory) {
         var targetFilePath = downloadDirectory.resolve(dependencySource.filename());
         try (var inputStream = resolveManifest(dependencySource)) {
-            downloadDirectory.toFile().mkdirs();
-            getLogger().debug("Downloading {} into {}", dependencySource, downloadDirectory);
-            try (var fos = new FileOutputStream(targetFilePath.toFile())) {
-                inputStream.transferTo(fos);
+            if (inputStream != null) {
+                downloadDirectory.toFile().mkdirs();
+                getLogger().debug("Downloading {} into {}", dependencySource, downloadDirectory);
+                try (var fos = new FileOutputStream(targetFilePath.toFile())) {
+                    inputStream.transferTo(fos);
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

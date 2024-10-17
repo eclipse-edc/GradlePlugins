@@ -23,12 +23,10 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Optional;
 
-import static java.io.InputStream.nullInputStream;
-
 public class ResolveManifestTask extends AbstractManifestResolveTask {
 
     public static final String NAME = "resolveManifests";
-
+    public static final String DESCRIPTION = "This task is intended for BOM modules and resolves the autodoc manifests of all modules that the project depends on. By default, all manifests are stored in {project}/build/autodoc.";
 
     @Override
     protected InputStream resolveManifest(DependencySource autodocManifest) {
@@ -40,7 +38,7 @@ public class ResolveManifestTask extends AbstractManifestResolveTask {
             }
 
             getLogger().info("File {} does not exist", file);
-            return nullInputStream();
+            return null;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -62,5 +60,4 @@ public class ResolveManifestTask extends AbstractManifestResolveTask {
 
         return Optional.empty();
     }
-
 }
