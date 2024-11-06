@@ -4,7 +4,7 @@ format.version = "1.1"
 [versions]
 assertj = "3.26.3"
 checkstyle = "10.18.2"
-edc = "0.10.1-SNAPSHOT"
+edc = "0.10.1"
 jackson = "2.18.0"
 jetbrainsAnnotation = "26.0.1"
 jakarta-ws-rs = "4.0.0"
