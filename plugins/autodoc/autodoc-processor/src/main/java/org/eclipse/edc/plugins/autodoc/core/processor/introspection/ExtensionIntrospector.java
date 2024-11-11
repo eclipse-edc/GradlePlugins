@@ -15,6 +15,7 @@
 package org.eclipse.edc.plugins.autodoc.core.processor.introspection;
 
 import org.eclipse.edc.plugins.autodoc.core.processor.compiler.AnnotationFunctions;
+import org.eclipse.edc.runtime.metamodel.annotation.Configuration;
 import org.eclipse.edc.runtime.metamodel.annotation.Extension;
 import org.eclipse.edc.runtime.metamodel.annotation.Inject;
 import org.eclipse.edc.runtime.metamodel.annotation.Provider;
@@ -36,6 +37,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
 
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
@@ -51,9 +53,11 @@ import static org.eclipse.edc.plugins.autodoc.core.processor.compiler.ElementFun
 public class ExtensionIntrospector {
     public static final String CONTEXT_ATTRIBUTE = "context";
     private final Elements elementUtils;
+    private final Types typeUtils;
 
-    public ExtensionIntrospector(Elements elementUtils) {
+    public ExtensionIntrospector(Elements elementUtils, Types typeUtils) {
         this.elementUtils = elementUtils;
+        this.typeUtils = typeUtils;
     }
 
     /**
@@ -102,7 +106,10 @@ public class ExtensionIntrospector {
      * Resolves configuration points declared with {@link Setting}.
      */
     public List<ConfigurationSetting> resolveConfigurationSettings(Element element) {
-        return getEnclosedElementsAnnotatedWith(element, Setting.class)
+        var settingsInConfigObjects = getEnclosedElementsAnnotatedWith(element, Configuration.class)
+                .flatMap(e -> getEnclosedElementsAnnotatedWith(typeUtils.asElement(e.asType()), Setting.class));
+
+        return Stream.concat(settingsInConfigObjects, getEnclosedElementsAnnotatedWith(element, Setting.class))
                 .filter(VariableElement.class::isInstance)
                 .map(VariableElement.class::cast)
                 .map(this::createConfigurationSetting)
@@ -139,9 +146,13 @@ public class ExtensionIntrospector {
             prefix = resolveConfigurationPrefix(settingElement);
         }
 
-        var keyValue = prefix + settingElement.getConstantValue().toString();
+        // either take the config key value directly from the annotated variable or from the "key" attribute
+        var keyValue = prefix + ofNullable(settingElement.getConstantValue())
+                .orElseGet(() -> attributeValue(String.class, "key", settingMirror, elementUtils))
+                .toString();
 
-        return ConfigurationSetting.Builder.newInstance().key(keyValue)
+        return ConfigurationSetting.Builder.newInstance()
+                .key(keyValue)
                 .description(attributeValue(String.class, "value", settingMirror, elementUtils))
                 .type(attributeValue(String.class, "type", settingMirror, elementUtils))
                 .required(attributeValue(Boolean.class, "required", settingMirror, elementUtils))

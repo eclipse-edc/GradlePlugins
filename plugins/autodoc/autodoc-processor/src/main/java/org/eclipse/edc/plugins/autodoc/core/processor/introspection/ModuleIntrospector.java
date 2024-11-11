@@ -14,6 +14,7 @@
 
 package org.eclipse.edc.plugins.autodoc.core.processor.introspection;
 
+import org.eclipse.edc.runtime.metamodel.annotation.Configuration;
 import org.eclipse.edc.runtime.metamodel.annotation.Extension;
 import org.eclipse.edc.runtime.metamodel.annotation.ExtensionPoint;
 import org.eclipse.edc.runtime.metamodel.annotation.Inject;
@@ -21,6 +22,7 @@ import org.eclipse.edc.runtime.metamodel.annotation.Provider;
 import org.eclipse.edc.runtime.metamodel.annotation.Provides;
 import org.eclipse.edc.runtime.metamodel.annotation.Requires;
 import org.eclipse.edc.runtime.metamodel.annotation.Setting;
+import org.eclipse.edc.runtime.metamodel.annotation.Settings;
 import org.eclipse.edc.runtime.metamodel.annotation.Spi;
 import org.eclipse.edc.runtime.metamodel.domain.Service;
 
@@ -93,13 +95,30 @@ public class ModuleIntrospector {
      * @return a set containing the distinct extension symbols. Elements in that set are most likely of type Symbol.ClassSymbol
      */
     public Set<Element> getExtensionElements(RoundEnvironment environment) {
+
+
         var settingsSymbols = environment.getElementsAnnotatedWith(Setting.class).stream()
                 .peek(setting -> {
-                    var enclosingElement = setting.getEnclosingElement().asType();
                     var serviceExtensionType = typeUtils.erasure(elementUtils.getTypeElement(SYSTEM_EXTENSION_NAME).asType());
+                    var enclosingElement = setting.getEnclosingElement().asType();
+
+                    // @Setting annotations may only occur in extension classes or in types annotated with @Settings
+                    if (!typeUtils.isAssignable(enclosingElement, serviceExtensionType) && setting.getEnclosingElement().getAnnotation(Settings.class) == null) {
+                        var message = "@Setting annotation must be used inside a ServiceExtension implementation or a type annotated with @Settings, the " +
+                                      "ones defined in %s will be excluded from the autodoc manifest".formatted(enclosingElement);
+                        processingEnv.getMessager().printMessage(ERROR, message, setting);
+                    }
+                });
+
+        // check that fields annotated with @Configuration occur only inside extension classes
+        environment.getElementsAnnotatedWith(Configuration.class)
+                .forEach(setting -> {
+                    var serviceExtensionType = typeUtils.erasure(elementUtils.getTypeElement(SYSTEM_EXTENSION_NAME).asType());
+                    var enclosingElement = setting.getEnclosingElement().asType();
+
                     if (!typeUtils.isAssignable(enclosingElement, serviceExtensionType)) {
-                        var message = "@Setting annotation must be used inside a ServiceExtension implementation, the " +
-                                "ones defined in %s will be excluded from the autodoc manifest".formatted(enclosingElement);
+                        var message = "@Configuration annotations must be used inside a ServiceExtension implementation, the " +
+                                      "ones defined in %s will be excluded from the autodoc manifest".formatted(enclosingElement);
                         processingEnv.getMessager().printMessage(ERROR, message, setting);
                     }
                 });

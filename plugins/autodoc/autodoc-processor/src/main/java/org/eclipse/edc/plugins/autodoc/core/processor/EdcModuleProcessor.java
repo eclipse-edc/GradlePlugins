@@ -89,7 +89,7 @@ public class EdcModuleProcessor extends AbstractProcessor {
         //todo: replace this Noop converter with an actual JavadocConverter
         overviewIntrospector = new OverviewIntrospector(javadoc -> javadoc, processingEnv.getElementUtils());
 
-        extensionIntrospector = new ExtensionIntrospector(processingEnv.getElementUtils());
+        extensionIntrospector = new ExtensionIntrospector(processingEnv.getElementUtils(), processingEnv.getTypeUtils());
     }
 
     @Override
