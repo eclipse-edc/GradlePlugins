@@ -16,6 +16,7 @@ package org.eclipse.edc.plugins.autodoc.tasks;
 
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
+import org.gradle.api.internal.artifacts.dependencies.DefaultProjectDependency;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +41,11 @@ public class DownloadManifestTask extends AbstractManifestResolveTask {
 
     public DownloadManifestTask() {
         httpClient = HttpClient.newHttpClient();
+    }
+
+    @Override
+    protected boolean dependencyFilter(Dependency dependency) {
+        return !(dependency instanceof DefaultProjectDependency);
     }
 
     @Override

@@ -29,6 +29,11 @@ public class ResolveManifestTask extends AbstractManifestResolveTask {
     public static final String DESCRIPTION = "This task is intended for BOM modules and resolves the autodoc manifests of all modules that the project depends on. By default, all manifests are stored in {project}/build/autodoc.";
 
     @Override
+    protected boolean dependencyFilter(Dependency dependency) {
+        return dependency instanceof DefaultProjectDependency;
+    }
+
+    @Override
     protected InputStream resolveManifest(DependencySource autodocManifest) {
         var uri = autodocManifest.uri();
         try {
