@@ -18,6 +18,8 @@ import org.eclipse.edc.plugins.autodoc.AutodocExtension;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.tasks.Internal;
+import org.gradle.api.tasks.OutputDirectory;
+import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
 
@@ -74,6 +76,11 @@ public abstract class AbstractManifestResolveTask extends DefaultTask {
     @Option(option = "output", description = "CLI option to override the output directory")
     public void setOutput(String output) {
         this.outputDirectoryOverride = new File(output);
+    }
+
+    @OutputDirectory
+    public File getOutputFile() {
+        return downloadDirectory.toFile();
     }
 
     /**

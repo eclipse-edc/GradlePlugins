@@ -7,6 +7,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * A dependency that is represented in the local file system, e.g. the local Maven cache
@@ -24,7 +26,7 @@ public class FileSource extends DependencySource {
 
     @Override
     public boolean exists() {
-        return new File(uri()).exists();
+        return Files.exists(Path.of(uri()));
     }
 
     @Override

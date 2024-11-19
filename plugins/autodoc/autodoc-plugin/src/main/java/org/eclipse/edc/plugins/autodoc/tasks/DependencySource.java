@@ -74,11 +74,6 @@ public abstract class DependencySource {
         return type;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(dependency, uri, classifier, type);
-    }
-
     /**
      * Opens an input stream to the file located at {@link DependencySource#uri()}. It is highly recommended to check {@link DependencySource#exists()}
      * beforehand.

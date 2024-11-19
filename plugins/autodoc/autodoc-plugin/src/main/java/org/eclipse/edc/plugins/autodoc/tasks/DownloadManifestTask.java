@@ -18,7 +18,9 @@ import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.artifacts.ProjectDependency;
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
 import org.gradle.api.internal.artifacts.dependencies.DefaultProjectDependency;
+import org.gradle.api.tasks.OutputFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -48,7 +50,6 @@ public class DownloadManifestTask extends AbstractManifestResolveTask {
             getLogger().warn("Could not obtain {}", autodocManifest.dependency());
             return null;
         }
-
         return inputStream;
     }
 
@@ -122,6 +123,4 @@ public class DownloadManifestTask extends AbstractManifestResolveTask {
             throw new RuntimeException(e);
         }
     }
-
-
 }
