@@ -15,6 +15,7 @@
 package org.eclipse.edc.plugins.autodoc.tasks;
 
 import org.gradle.api.artifacts.Dependency;
+import org.gradle.api.artifacts.ProjectDependency;
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
 import org.gradle.api.internal.artifacts.dependencies.DefaultProjectDependency;
 
@@ -22,8 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.time.Duration;
 import java.time.Instant;
@@ -37,31 +36,20 @@ public class DownloadManifestTask extends AbstractManifestResolveTask {
     public static final String NAME = "downloadManifests";
     private static final Duration MAX_MANIFEST_AGE = Duration.ofHours(24);
 
-    private final HttpClient httpClient;
-
-    public DownloadManifestTask() {
-        httpClient = HttpClient.newHttpClient();
-    }
-
     @Override
-    protected boolean dependencyFilter(Dependency dependency) {
-        return !(dependency instanceof DefaultProjectDependency);
+    protected boolean includeDependency(Dependency dependency) {
+        return !(dependency instanceof ProjectDependency);
     }
 
     @Override
     protected InputStream resolveManifest(DependencySource autodocManifest) {
-        var request = HttpRequest.newBuilder().uri(autodocManifest.uri()).GET().build();
-        HttpResponse<InputStream> response;
-        try {
-            response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream());
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        if (response.statusCode() != 200) {
-            getLogger().warn("Could not download {}, HTTP response: {}", autodocManifest.dependency(), response);
+        var inputStream = autodocManifest.inputStream();
+        if (inputStream == null) {
+            getLogger().warn("Could not obtain {}", autodocManifest.dependency());
             return null;
         }
-        return response.body();
+
+        return inputStream;
     }
 
     /**
@@ -79,7 +67,7 @@ public class DownloadManifestTask extends AbstractManifestResolveTask {
     @Override
     protected Optional<DependencySource> createSource(Dependency dependency) {
         if (isLocalFileValid(dependency)) {
-            getLogger().debug("Local file {} was deemed to be viable, will not download", new DependencySource(dependency, null, MANIFEST_CLASSIFIER, MANIFEST_TYPE).filename());
+            getLogger().debug("Local file {} was deemed to be viable, will not download", dependency);
             return Optional.empty();
         }
         var repos = getProject().getRepositories().stream().toList();
@@ -89,18 +77,14 @@ public class DownloadManifestTask extends AbstractManifestResolveTask {
                 .map(repo -> {
                     var repoUrl = createArtifactUrl(dependency, repo);
                     try {
-                        // we use a HEAD request, because we only want to see whether that module has a `-manifest.json`
-                        var uri = URI.create(repoUrl);
-                        var headRequest = HttpRequest.newBuilder()
-                                .uri(uri)
-                                .method("HEAD", HttpRequest.BodyPublishers.noBody())
-                                .build();
-                        var response = httpClient.send(headRequest, HttpResponse.BodyHandlers.discarding());
-                        if (response.statusCode() == 200) {
-                            return new DependencySource(dependency, uri, MANIFEST_CLASSIFIER, MANIFEST_TYPE);
+                        var ds = DependencySourceFactory.createDependencySource(URI.create(repoUrl), dependency, MANIFEST_CLASSIFIER, MANIFEST_TYPE);
+                        if (ds.exists()) {
+                            getLogger().debug("Manifest found for '{}' at {}", dependency.getName(), ds.uri());
+                            return ds;
                         }
+                        getLogger().debug("Manifest not found for '{}' at {}", dependency.getName(), ds.uri());
                         return null;
-                    } catch (IOException | InterruptedException | IllegalArgumentException e) {
+                    } catch (IllegalArgumentException e) {
                         return null;
                     }
                 })
@@ -126,7 +110,8 @@ public class DownloadManifestTask extends AbstractManifestResolveTask {
      */
     private boolean isLocalFileValid(Dependency dep) {
         if (!downloadDirectory.toFile().exists()) return false;
-        var filePath = downloadDirectory.resolve(new DependencySource(dep, null, MANIFEST_CLASSIFIER, MANIFEST_TYPE).filename());
+        var filename = format("%s-%s-%s.%s", dep.getName(), dep.getVersion(), MANIFEST_CLASSIFIER, MANIFEST_TYPE);
+        var filePath = downloadDirectory.resolve(filename);
         var file = filePath.toFile();
         if (!file.exists() || !file.canRead()) return false;
 
