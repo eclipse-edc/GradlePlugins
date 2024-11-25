@@ -55,7 +55,7 @@ public class ResolveManifestTask extends AbstractManifestResolveTask {
         if (dependency instanceof DefaultProjectDependency localDependency) {
             var manifestFile = localDependency.getDependencyProject().getLayout().getBuildDirectory().file("edc.json");
             if (manifestFile.isPresent()) {
-                return Optional.of(DependencySourceFactory.createDependencySource( manifestFile.get().getAsFile().toURI(), dependency, MANIFEST_CLASSIFIER, MANIFEST_TYPE));
+                return Optional.of(DependencySourceFactory.createDependencySource(manifestFile.get().getAsFile().toURI(), dependency, MANIFEST_CLASSIFIER, MANIFEST_TYPE));
             } else {
                 getLogger().debug("No manifest file found for dependency {}", dependency);
             }

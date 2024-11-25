@@ -1,3 +1,17 @@
+/*
+ *  Copyright (c) 2024 Bayerische Motoren Werke Aktiengesellschaft (BMW AG)
+ *
+ *  This program and the accompanying materials are made available under the
+ *  terms of the Apache License, Version 2.0 which is available at
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  SPDX-License-Identifier: Apache-2.0
+ *
+ *  Contributors:
+ *       Bayerische Motoren Werke Aktiengesellschaft (BMW AG) - initial API and implementation
+ *
+ */
+
 package org.eclipse.edc.plugins.autodoc.tasks;
 
 import org.gradle.api.artifacts.Dependency;
@@ -17,6 +31,8 @@ public class HttpSource extends DependencySource {
 
 
     /**
+     * Instantiates a new HTTP source for dependencies
+     *
      * @param dependency the dependency in question
      * @param uri        the location where the physical file exists
      * @param classifier what type of dependency we have, e.g. sources, sources, manifest etc
@@ -49,6 +65,7 @@ public class HttpSource extends DependencySource {
 
     /**
      * Opens an input stream to the remote file. If the remote file does not exist, {@code null} is returned.
+     *
      * @throws RuntimeException if the HTTP request raises an {@link IOException} or an {@link InterruptedException}
      */
     @Override
@@ -60,7 +77,7 @@ public class HttpSource extends DependencySource {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-        if(response.statusCode() == 200) {
+        if (response.statusCode() == 200) {
             return response.body();
         }
         return null;

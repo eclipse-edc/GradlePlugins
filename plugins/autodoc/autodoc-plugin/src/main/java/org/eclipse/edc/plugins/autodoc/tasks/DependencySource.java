@@ -18,7 +18,6 @@ import org.gradle.api.artifacts.Dependency;
 
 import java.io.InputStream;
 import java.net.URI;
-import java.util.Objects;
 
 import static java.lang.String.format;
 
@@ -32,6 +31,8 @@ public abstract class DependencySource {
     private final String type;
 
     /**
+     * base constructor for a {@link DependencySource}
+     *
      * @param dependency the dependency in question
      * @param uri        the location where the physical file exists
      * @param classifier what type of dependency we have, e.g. sources, sources, manifest etc
