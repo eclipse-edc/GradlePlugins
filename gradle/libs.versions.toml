@@ -10,6 +10,7 @@ jetbrainsAnnotation = "26.0.1"
 jakarta-ws-rs = "4.0.0"
 jupiter = "5.11.3"
 mockito = "5.14.2"
+openapi-merger = "1.0.5"
 swagger = "2.2.22"
 swagger-parser = "2.1.24"
 
@@ -28,11 +29,10 @@ markdown-gen = { module = "net.steppschuh.markdowngenerator:markdowngenerator", 
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 plugin-checksum = { module = "gradle.plugin.org.gradle.crypto:checksum", version = "1.4.0" }
 plugin-nexus-publish = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
-plugin-openapi-merger = { module = "com.rameshkp:openapi-merger-gradle-plugin", version = "1.0.5" }
+plugin-openapi-merger = { module = "com.rameshkp:openapi-merger-gradle-plugin", version.ref = "openapi-merger" }
+plugin-openapi-merger-app = { module = "com.rameshkp:openapi-merger-app", version.ref = "openapi-merger" }
 plugin-swagger = { module = "io.swagger.core.v3:swagger-gradle-plugin", version.ref = "swagger" }
 swagger-parser = { module = "io.swagger.parser.v3:swagger-parser", version.ref = "swagger-parser" }
-
-[bundles]
 
 [plugins]
 publish = { id = "com.gradle.plugin-publish", version = "1.3.0" }

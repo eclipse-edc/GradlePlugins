@@ -5,6 +5,7 @@ plugins {
 val group: String by project
 
 dependencies {
+    implementation(libs.plugin.openapi.merger.app)
     implementation(libs.plugin.openapi.merger) {
         constraints {
             implementation(libs.swagger.parser) {
