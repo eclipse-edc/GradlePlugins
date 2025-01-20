@@ -17,7 +17,7 @@ package org.eclipse.edc.plugins.autodoc.tasks;
 import org.eclipse.edc.plugins.autodoc.AutodocExtension;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.artifacts.Dependency;
-import org.gradle.api.tasks.Internal;
+import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
@@ -82,6 +82,11 @@ public abstract class AbstractManifestResolveTask extends DefaultTask {
         return downloadDirectory.toFile();
     }
 
+    @Input
+    public Set<String> getExclusions() {
+        return Set.of();
+    }
+
     /**
      * Whether to consider a particular dependency for manifest resolution.
      *
@@ -95,15 +100,8 @@ public abstract class AbstractManifestResolveTask extends DefaultTask {
     /**
      * Returns an {@link InputStream} that points to the physical location of the autodoc manifest file.
      */
-    @Internal //otherwise it would get interpreted as task input :/
     protected abstract InputStream resolveManifest(DependencySource autodocManifest);
 
-    @Internal //otherwise it would get interpreted as task input :/
-    protected Set<String> getExclusions() {
-        return Set.of();
-    }
-
-    @Internal //otherwise it would get interpreted as task input :/
     protected abstract Optional<DependencySource> createSource(Dependency dependency);
 
     private void transferDependencyFile(DependencySource dependencySource, Path downloadDirectory) {
