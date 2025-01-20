@@ -15,7 +15,6 @@ dependencies {
     implementation(project(":plugins:module-names"))
     implementation(project(":plugins:openapi-merger"))
 
-    implementation(libs.edc.runtime.metamodel)
     implementation(libs.plugin.nexus.publish)
     implementation(libs.plugin.checksum)
     implementation(libs.plugin.swagger)
