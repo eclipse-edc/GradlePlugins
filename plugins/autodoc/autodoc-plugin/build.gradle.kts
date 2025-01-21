@@ -3,7 +3,6 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.edc.runtime.metamodel)
     implementation(libs.jetbrains.annotations)
     implementation(libs.jackson.core)
     implementation(libs.jackson.databind)

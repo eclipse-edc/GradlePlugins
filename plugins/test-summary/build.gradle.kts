@@ -20,7 +20,3 @@ gradlePlugin {
         }
     }
 }
-
-dependencies {
-    implementation(libs.edc.runtime.metamodel)
-}
