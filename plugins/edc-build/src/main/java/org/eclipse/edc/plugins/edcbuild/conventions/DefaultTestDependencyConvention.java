@@ -30,13 +30,13 @@ class DefaultTestDependencyConvention implements EdcConvention {
     @Override
     public void apply(Project target) {
         target.getPluginManager().withPlugin("java-library", plugin -> {
-
             var d = target.getDependencies();
 
-            //test classpath dependencies
-            d.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, format("org.junit.jupiter:junit-jupiter-api:%s", Versions.JUPITER));
-            d.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, format("org.junit.jupiter:junit-jupiter-params:%s", Versions.JUPITER));
-            d.add(TEST_RUNTIME_ONLY_CONFIGURATION_NAME, format("org.junit.jupiter:junit-jupiter-engine:%s", Versions.JUPITER));
+            d.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, d.platform(format("org.junit:junit-bom:%s", Versions.JUPITER)));
+            d.add(TEST_RUNTIME_ONLY_CONFIGURATION_NAME, "org.junit.platform:junit-platform-launcher");
+            d.add(TEST_RUNTIME_ONLY_CONFIGURATION_NAME, "org.junit.jupiter:junit-jupiter-engine");
+            d.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "org.junit.jupiter:junit-jupiter-api");
+            d.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "org.junit.jupiter:junit-jupiter-params");
             d.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, format("org.mockito:mockito-core:%s", Versions.MOCKITO));
             d.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, format("org.assertj:assertj-core:%s", Versions.ASSERTJ));
         });
