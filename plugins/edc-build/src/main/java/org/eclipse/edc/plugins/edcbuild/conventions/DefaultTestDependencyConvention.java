@@ -16,10 +16,14 @@ package org.eclipse.edc.plugins.edcbuild.conventions;
 
 import org.eclipse.edc.plugins.edcbuild.Versions;
 import org.gradle.api.Project;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 import static java.lang.String.format;
-import static org.gradle.api.plugins.JavaPlugin.TEST_IMPLEMENTATION_CONFIGURATION_NAME;
-import static org.gradle.api.plugins.JavaPlugin.TEST_RUNTIME_ONLY_CONFIGURATION_NAME;
+import static java.util.Map.entry;
 
 /**
  * Applies default test dependencies to all "java-library" projects: JUnit, Mockito and AssertJ in their respective
@@ -30,16 +34,35 @@ class DefaultTestDependencyConvention implements EdcConvention {
     @Override
     public void apply(Project target) {
         target.getPluginManager().withPlugin("java-library", plugin -> {
-            var d = target.getDependencies();
+            var dependencyHandler = target.getDependencies();
 
-            d.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, d.platform(format("org.junit:junit-bom:%s", Versions.JUPITER)));
-            d.add(TEST_RUNTIME_ONLY_CONFIGURATION_NAME, "org.junit.platform:junit-platform-launcher");
-            d.add(TEST_RUNTIME_ONLY_CONFIGURATION_NAME, "org.junit.jupiter:junit-jupiter-engine");
-            d.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "org.junit.jupiter:junit-jupiter-api");
-            d.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "org.junit.jupiter:junit-jupiter-params");
-            d.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, format("org.mockito:mockito-core:%s", Versions.MOCKITO));
-            d.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, format("org.assertj:assertj-core:%s", Versions.ASSERTJ));
+            var dependencies = Map.of(
+                    "Implementation", List.of(
+                            dependencyHandler.platform(format("org.junit:junit-bom:%s", Versions.JUPITER)),
+                            "org.junit.jupiter:junit-jupiter-api",
+                            "org.junit.jupiter:junit-jupiter-params",
+                            "org.mockito:mockito-core:%s".formatted(Versions.MOCKITO),
+                            "org.assertj:assertj-core:%s".formatted(Versions.ASSERTJ)
+                    ),
+                    "RuntimeOnly", List.of(
+                            "org.junit.platform:junit-platform-launcher",
+                            "org.junit.jupiter:junit-jupiter-engine"
+                    )
+            );
+
+            prepareDependenciesFor(dependencies, "test")
+                    .forEach(dependency -> dependencyHandler.add(dependency.getKey(), dependency.getValue()));
+
+            if (target.getPluginManager().hasPlugin("java-test-fixtures")) {
+                prepareDependenciesFor(dependencies, "testFixtures")
+                        .forEach(dependency -> dependencyHandler.add(dependency.getKey(), dependency.getValue()));
+            }
         });
+    }
+
+    private @NotNull Stream<? extends Map.Entry<String, ?>> prepareDependenciesFor(Map<@NotNull String, @NotNull List<?>> dependencies, String configurationContext) {
+        return dependencies.entrySet().stream()
+                .flatMap(entry -> entry.getValue().stream().map(it -> entry(configurationContext + entry.getKey(), it)));
     }
 
 }
