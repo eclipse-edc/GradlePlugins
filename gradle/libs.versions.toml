@@ -11,7 +11,7 @@ jakarta-ws-rs = "4.0.0"
 jupiter = "5.12.2"
 mockito = "5.17.0"
 openapi-merger = "1.0.5"
-swagger = "2.2.22"
+swagger = "2.2.26"
 swagger-parser = "2.1.26"
 
 [libraries]
