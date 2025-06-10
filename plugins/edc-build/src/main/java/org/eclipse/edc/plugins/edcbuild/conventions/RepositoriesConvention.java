@@ -26,8 +26,9 @@ class RepositoriesConvention implements EdcConvention {
     @Override
     public void apply(Project target) {
         var handler = target.getRepositories();
+        handler.maven(r -> r.setUrl(URI.create(Repositories.SNAPSHOT_REPO_URL)));
         handler.mavenLocal();
-        handler.maven(r -> r.setUrl(URI.create("https://oss.sonatype.org/content/repositories/snapshots/")));
         handler.mavenCentral();
+        handler.maven(r -> r.setUrl(URI.create(Repositories.DEPRECATED_SNAPSHOT_REPO_URL)));
     }
 }
