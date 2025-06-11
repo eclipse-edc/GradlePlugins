@@ -28,7 +28,7 @@ import java.io.File;
 
 import static org.eclipse.edc.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
 
-    /**
+/**
  * Configures the Maven POM for each project:
  * <ul>
  *     <li>sets project name, description, license, SCM info etc.</li>
@@ -50,12 +50,6 @@ class MavenArtifactConvention implements EdcConvention {
                     .map(p -> (MavenPublication) p)
                     .peek(mavenPub -> mavenPub.pom(pom -> setPomInformation(pomExt, target, pom)))
                     .forEach(mavenPub -> {
-//                        addArtifactIfExist(target, getManifestFile(target), mavenPub, artifact -> {
-//                            artifact.setClassifier("manifest");
-//                            artifact.setType("json");
-//                            artifact.builtBy("autodoc");
-//                        });
-
                         var openapiFiles = target.getLayout().getBuildDirectory().getAsFile().get().toPath()
                                 .resolve("docs").resolve("openapi").toFile()
                                 .listFiles((dir, name) -> name.endsWith(".yaml"));
@@ -84,14 +78,6 @@ class MavenArtifactConvention implements EdcConvention {
                     .artifact(project.getArtifacts().add("archives", location, configureAction));
         }
     }
-
-//    private static @NotNull File getManifestFile(Project target) {
-//        var autodocExt = requireExtension(target, AutodocExtension.class);
-//        var projectBuildDirectory = target.getLayout().getBuildDirectory().getAsFile();
-//        var pathToManifest = autodocExt.getOutputDirectory().convention(projectBuildDirectory).get().getAbsolutePath();
-//        var manifestFileName = "edc.json";
-//        return Path.of(pathToManifest, manifestFileName).toFile();
-//    }
 
     private static void setPomInformation(MavenPomExtension pomExt, Project project, MavenPom pom) {
         // these properties are mandatory!

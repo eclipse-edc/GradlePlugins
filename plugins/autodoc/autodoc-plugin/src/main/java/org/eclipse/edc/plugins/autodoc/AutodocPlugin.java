@@ -20,10 +20,15 @@ import org.eclipse.edc.plugins.autodoc.tasks.MarkdownRendererTask.ToHtml;
 import org.eclipse.edc.plugins.autodoc.tasks.MarkdownRendererTask.ToMarkdown;
 import org.eclipse.edc.plugins.autodoc.tasks.MergeManifestsTask;
 import org.eclipse.edc.plugins.autodoc.tasks.ResolveManifestTask;
+import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.publish.PublishingExtension;
+import org.gradle.api.publish.maven.MavenPublication;
 
 import java.util.List;
+
+import static java.util.Optional.ofNullable;
 
 /**
  * Gradle plugin that injects an {@code annotationProcessor} dependency to any Gradle project so that the autodoc processor can run during compile.
@@ -32,7 +37,7 @@ public class AutodocPlugin implements Plugin<Project> {
 
     public static final String GROUP_NAME = "autodoc";
     public static final String AUTODOC_TASK_NAME = "autodoc";
-    private final List<String> exclusions = List.of("version-catalog", "edc-build", "module-names", "openapi-merger", "test-summary", "autodoc-plugin", "autodoc-processor", "autodoc-converters");
+    private final List<String> exclusions = List.of("version-catalog", "edc-build", "autodoc-plugin", "autodoc-processor", "autodoc-converters");
 
     @Override
     public void apply(Project project) {
@@ -58,5 +63,34 @@ public class AutodocPlugin implements Plugin<Project> {
             t.setDescription(AutodocBomTask.DESCRIPTION);
             t.setGroup(GROUP_NAME);
         });
+
+        project.afterEvaluate(p -> {
+            var manifestFile = p.getLayout().getBuildDirectory().file("edc.json");
+
+            if (!manifestFile.isPresent()) {
+                return;
+            }
+
+            publishingExtension(project).getPublications().stream()
+                    .filter(MavenPublication.class::isInstance)
+                    .map(MavenPublication.class::cast)
+                    .map(MavenPublication::getArtifacts)
+                    .forEach(artifacts -> {
+                        var manifestArtifact = p.getArtifacts().add("archives", manifestFile, artifact -> {
+                            artifact.builtBy(AUTODOC_TASK_NAME);
+                            artifact.setClassifier("manifest");
+                            artifact.setType("json");
+                        });
+
+                        artifacts.artifact(manifestArtifact);
+                    });
+        });
+
     }
+
+    private static PublishingExtension publishingExtension(Project target) {
+        return ofNullable(target.getExtensions().findByType(PublishingExtension.class))
+                .orElseThrow(() -> new GradleException(PublishingExtension.class.getSimpleName() + " expected but was null"));
+    }
+
 }

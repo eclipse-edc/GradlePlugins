@@ -3,6 +3,7 @@
 [![documentation](https://img.shields.io/badge/documentation-8A2BE2?style=flat-square)](https://eclipse-edc.github.io)
 [![discord](https://img.shields.io/badge/discord-chat-brightgreen.svg?style=flat-square&logo=discord)](https://discord.gg/n4sD9qtjMQ)
 [![latest version](https://img.shields.io/maven-central/v/org.eclipse.edc/boot?logo=apache-maven&style=flat-square&label=latest%20version)](https://search.maven.org/artifact/org.eclipse.edc/boot)
+[![latest version (plugin)](https://img.shields.io/gradle-plugin-portal/v/org.eclipse.edc.edc-build)](https://plugins.gradle.org/plugin/org.eclipse.edc.edc-build)
 [![license](https://img.shields.io/github/license/eclipse-edc/GradlePlugins?style=flat-square&logo=apache)](https://www.apache.org/licenses/LICENSE-2.0)
 <br>
 [![build](https://img.shields.io/github/actions/workflow/status/eclipse-edc/GradlePlugins/verify.yaml?branch=main&logo=GitHub&style=flat-square&label=ci)](https://github.com/eclipse-edc/GradlePlugins/actions/workflows/verify.yaml?query=branch%3Amain)
@@ -11,7 +12,20 @@
 
 ---
 
-This repository contains various plugins for the EDC Gradle build.
+This repository contains various plugins for the EDC Gradle plugins.
+
+There are 2 plugins: `edc-build` and `autodoc`
+
+### edc-build
+Is a plugin that provides basic capabilities to check/build/publish edc related modules.
+
+The plugin is published on the https://plugins.gradle.org/plugin/org.eclipse.edc.edc-build with its own version number,
+detached from the EDC version.
+
+### autodoc
+Is a plugin that permits automatic documentation generation for EDC related modules.
+
+Its version is aligned with the EDC one. 
 
 ## Documentation
 

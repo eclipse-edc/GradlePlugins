@@ -12,7 +12,7 @@
  *
  */
 
-package org.eclipse.edc.plugins.testsummary;
+package org.eclipse.edc.plugins.edcbuild.plugins;
 
 import org.gradle.api.tasks.testing.TestDescriptor;
 import org.gradle.api.tasks.testing.TestListener;
