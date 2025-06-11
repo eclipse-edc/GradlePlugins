@@ -15,7 +15,6 @@
 package org.eclipse.edc.plugins.edcbuild;
 
 import io.github.gradlenexus.publishplugin.NexusPublishPlugin;
-import org.eclipse.edc.plugins.autodoc.AutodocPlugin;
 import org.eclipse.edc.plugins.modulenames.ModuleNamesPlugin;
 import org.eclipse.edc.plugins.openapimerger.OpenApiMergerPlugin;
 import org.eclipse.edc.plugins.testsummary.TestSummaryPlugin;
@@ -36,7 +35,6 @@ public class EdcBuildBasePlugin implements Plugin<Project> {
     private static void defineCapabilities(Project target) {
 
         target.getPlugins().apply(JavaLibraryPlugin.class);
-        target.getPlugins().apply(AutodocPlugin.class);
         target.getPlugins().apply(CheckstylePlugin.class);
         target.getPlugins().apply(MavenPublishPlugin.class);
         target.getPlugins().apply(JavaPlugin.class);

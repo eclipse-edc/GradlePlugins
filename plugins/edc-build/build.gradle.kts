@@ -1,5 +1,5 @@
 plugins {
-    `java-gradle-plugin`
+    alias(libs.plugins.publish)
 }
 
 val group: String by project
@@ -10,7 +10,6 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":plugins:autodoc:autodoc-plugin"))
     implementation(project(":plugins:test-summary"))
     implementation(project(":plugins:module-names"))
     implementation(project(":plugins:openapi-merger"))
@@ -24,23 +23,15 @@ dependencies {
 gradlePlugin {
     website.set("https://projects.eclipse.org/projects/technology.edc")
     vcsUrl.set("https://github.com/eclipse-edc/GradlePlugins.git")
-    // Define the plugins
+
     plugins {
-        create("edc-build-base") {
-            displayName = "edc-build-base"
-            description =
-                "Meta-plugin that provides the capabilities of the EDC build"
-            id = "${group}.edc-build-base"
-            implementationClass = "org.eclipse.edc.plugins.edcbuild.EdcBuildBasePlugin"
-            tags.set(listOf("build", "verification", "test"))
-        }
         create("edc-build") {
+            id = "${group}.edc-build"
             displayName = "edc-build"
             description =
                 "Plugin that applies the base capabilities and provides default configuration for the EDC build"
-            id = "${group}.edc-build"
             implementationClass = "org.eclipse.edc.plugins.edcbuild.EdcBuildPlugin"
-            tags.set(listOf("build", "verification", "test"))
+            tags = listOf("build", "verification", "test")
         }
     }
 }
