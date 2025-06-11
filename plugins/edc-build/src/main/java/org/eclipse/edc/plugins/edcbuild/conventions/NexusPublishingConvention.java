@@ -22,8 +22,8 @@ import java.net.URI;
 
 class NexusPublishingConvention implements EdcConvention {
 
-    private static final String OSSRH_USER = "OSSRH_USER";
-    private static final String OSSRH_PASSWORD = "OSSRH_PASSWORD";
+    private static final String NEXUS_USERNAME_ENV_VAR = "CENTRAL_SONATYPE_TOKEN_USERNAME";
+    private static final String NEXUS_PASSWORD_ENV_VAR = "CENTRAL_SONATYPE_TOKEN_PASSWORD";
 
     @Override
     public void apply(Project target) {
@@ -38,8 +38,8 @@ class NexusPublishingConvention implements EdcConvention {
     private void configure(NexusRepository r) {
         r.getNexusUrl().set(URI.create(Repositories.NEXUS_REPO_URL));
         r.getSnapshotRepositoryUrl().set(URI.create(Repositories.SNAPSHOT_REPO_URL));
-        r.getUsername().set(System.getenv(OSSRH_USER));
-        r.getPassword().set(System.getenv(OSSRH_PASSWORD));
+        r.getUsername().set(System.getenv(NEXUS_USERNAME_ENV_VAR));
+        r.getPassword().set(System.getenv(NEXUS_PASSWORD_ENV_VAR));
     }
 
 
