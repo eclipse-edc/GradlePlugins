@@ -15,21 +15,31 @@
 package org.eclipse.edc.plugins.edcbuild.conventions;
 
 import io.github.gradlenexus.publishplugin.NexusPublishExtension;
+import io.github.gradlenexus.publishplugin.NexusRepository;
 import org.gradle.api.Project;
 
-import static org.eclipse.edc.plugins.edcbuild.conventions.Repositories.sonatypeRepo;
+import java.net.URI;
 
 class NexusPublishingConvention implements EdcConvention {
+
+    private static final String OSSRH_USER = "OSSRH_USER";
+    private static final String OSSRH_PASSWORD = "OSSRH_PASSWORD";
 
     @Override
     public void apply(Project target) {
         if (target == target.getRootProject()) {
 
-
             target.getExtensions().configure(NexusPublishExtension.class, nexusPublishExtension -> {
-                nexusPublishExtension.repositories(sonatypeRepo());
+                nexusPublishExtension.repositories(c -> c.sonatype(this::configure));
             });
         }
+    }
+
+    private void configure(NexusRepository r) {
+        r.getNexusUrl().set(URI.create(Repositories.NEXUS_REPO_URL));
+        r.getSnapshotRepositoryUrl().set(URI.create(Repositories.SNAPSHOT_REPO_URL));
+        r.getUsername().set(System.getenv(OSSRH_USER));
+        r.getPassword().set(System.getenv(OSSRH_PASSWORD));
     }
 
 
