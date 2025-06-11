@@ -12,7 +12,7 @@
  *
  */
 
-package org.eclipse.edc.plugins.openapimerger.tasks;
+package org.eclipse.edc.plugins.edcbuild.plugins;
 
 import com.rameshkp.openapi.merger.gradle.task.OpenApiMergerTask;
 import org.gradle.api.tasks.options.Option;

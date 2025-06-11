@@ -10,14 +10,17 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":plugins:test-summary"))
-    implementation(project(":plugins:module-names"))
-    implementation(project(":plugins:openapi-merger"))
-
     implementation(libs.plugin.nexus.publish)
     implementation(libs.plugin.checksum)
     implementation(libs.plugin.swagger)
-    implementation(libs.plugin.openapi.merger)
+    implementation(libs.plugin.openapi.merger.app)
+    implementation(libs.plugin.openapi.merger) {
+        constraints {
+            implementation(libs.swagger.parser) {
+                because("OpenAPI merger plugin uses an old version that caused this issue: https://github.com/eclipse-edc/GradlePlugins/issues/183")
+            }
+        }
+    }
 }
 
 gradlePlugin {

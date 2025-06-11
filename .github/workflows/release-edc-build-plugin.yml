@@ -18,7 +18,7 @@ jobs:
         with:
           gpg-private-key: ${{ secrets.ORG_GPG_PRIVATE_KEY }}
       - run: | 
-          ./gradlew -Pversion=0.0.1 -Psigning.gnupg.executable=gpg -Psigning.gnupg.passphrase="${{ secrets.ORG_GPG_PASSPHRASE }}" \
+          ./gradlew -Pversion=0.0.2 -Psigning.gnupg.executable=gpg -Psigning.gnupg.passphrase="${{ secrets.ORG_GPG_PASSPHRASE }}" \
                     :plugins:edc-build:publishPlugins
         env:
           GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}

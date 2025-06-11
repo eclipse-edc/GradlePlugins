@@ -15,9 +15,9 @@
 package org.eclipse.edc.plugins.edcbuild;
 
 import io.github.gradlenexus.publishplugin.NexusPublishPlugin;
-import org.eclipse.edc.plugins.modulenames.ModuleNamesPlugin;
-import org.eclipse.edc.plugins.openapimerger.OpenApiMergerPlugin;
-import org.eclipse.edc.plugins.testsummary.TestSummaryPlugin;
+import org.eclipse.edc.plugins.edcbuild.plugins.ModuleNamesPlugin;
+import org.eclipse.edc.plugins.edcbuild.plugins.OpenApiMergerPlugin;
+import org.eclipse.edc.plugins.edcbuild.plugins.TestSummaryPlugin;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaLibraryPlugin;

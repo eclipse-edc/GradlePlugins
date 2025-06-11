@@ -12,7 +12,7 @@
  *
  */
 
-package org.eclipse.edc.plugins.testsummary;
+package org.eclipse.edc.plugins.edcbuild.plugins;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;

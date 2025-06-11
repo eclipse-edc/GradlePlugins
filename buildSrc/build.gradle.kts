@@ -47,6 +47,11 @@ gradlePlugin {
             id = "${group}.edc-build"
             implementationClass = "${group}.plugins.edcbuild.EdcBuildPlugin"
         }
+
+        create("autodoc") {
+            id = "${group}.autodoc"
+            implementationClass = "${group}.plugins.autodoc.AutodocPlugin"
+        }
     }
 }
 
@@ -60,9 +65,6 @@ sourceSets {
                 "../plugins/autodoc/autodoc-plugin/src/main",
                 "../plugins/autodoc/autodoc-converters/src/main",
                 "../plugins/edc-build/src/main",
-                "../plugins/module-names/src/main",
-                "../plugins/openapi-merger/src/main",
-                "../plugins/test-summary/src/main"
             )
         }
     }
