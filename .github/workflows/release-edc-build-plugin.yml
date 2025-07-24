@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        description: version to be released
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: eclipse-edc/.github/.github/actions/setup-build@main
+      - uses: eclipse-edc/.github/.github/actions/import-gpg-key@main
+        with:
+          gpg-private-key: ${{ secrets.ORG_GPG_PRIVATE_KEY }}
+      - run: | 
+          ./gradlew -Pversion=${{ inputs.version }} \
+                    -Psigning.gnupg.executable=gpg \
+                    -Psigning.gnupg.passphrase="${{ secrets.ORG_GPG_PASSPHRASE }}" \
+                    :plugins:edc-build:publishPlugins
+        env:
+          GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
+          GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          generateReleaseNotes: true
+          tag: edc-build-v${{ inputs.version }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          removeArtifacts: true
+          makeLatest: true
+
+      - uses: sarisia/actions-status-discord@v1
+        if: always()
+        with:
+          webhook: ${{ secrets.DISCORD_GITHUB_CI_WEBHOOK }}
+          title: "Release edc-build-v${{ inputs.version }} plugin"
+          username: GitHub Actions

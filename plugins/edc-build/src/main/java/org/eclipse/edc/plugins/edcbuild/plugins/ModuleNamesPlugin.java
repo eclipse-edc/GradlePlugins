@@ -12,7 +12,7 @@
  *
  */
 
-package org.eclipse.edc.plugins.modulenames;
+package org.eclipse.edc.plugins.edcbuild.plugins;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;

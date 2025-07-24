@@ -1,5 +1,5 @@
 plugins {
-    `java-gradle-plugin`
+    alias(libs.plugins.publish)
 }
 
 val group: String by project
@@ -10,37 +10,31 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":plugins:autodoc:autodoc-plugin"))
-    implementation(project(":plugins:test-summary"))
-    implementation(project(":plugins:module-names"))
-    implementation(project(":plugins:openapi-merger"))
-
     implementation(libs.plugin.nexus.publish)
     implementation(libs.plugin.checksum)
     implementation(libs.plugin.swagger)
-    implementation(libs.plugin.openapi.merger)
+    implementation(libs.plugin.openapi.merger.app)
+    implementation(libs.plugin.openapi.merger) {
+        constraints {
+            implementation(libs.swagger.parser) {
+                because("OpenAPI merger plugin uses an old version that caused this issue: https://github.com/eclipse-edc/GradlePlugins/issues/183")
+            }
+        }
+    }
 }
 
 gradlePlugin {
     website.set("https://projects.eclipse.org/projects/technology.edc")
     vcsUrl.set("https://github.com/eclipse-edc/GradlePlugins.git")
-    // Define the plugins
+
     plugins {
-        create("edc-build-base") {
-            displayName = "edc-build-base"
-            description =
-                "Meta-plugin that provides the capabilities of the EDC build"
-            id = "${group}.edc-build-base"
-            implementationClass = "org.eclipse.edc.plugins.edcbuild.EdcBuildBasePlugin"
-            tags.set(listOf("build", "verification", "test"))
-        }
         create("edc-build") {
+            id = "${group}.edc-build"
             displayName = "edc-build"
             description =
                 "Plugin that applies the base capabilities and provides default configuration for the EDC build"
-            id = "${group}.edc-build"
             implementationClass = "org.eclipse.edc.plugins.edcbuild.EdcBuildPlugin"
-            tags.set(listOf("build", "verification", "test"))
+            tags = listOf("build", "verification", "test")
         }
     }
 }

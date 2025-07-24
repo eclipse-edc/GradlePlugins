@@ -15,7 +15,6 @@ gradlePlugin {
     website.set("https://projects.eclipse.org/projects/technology.edc")
     vcsUrl.set("https://github.com/eclipse-edc/GradlePlugins.git")
 
-    // Define the plugin
     plugins {
         create("autodoc") {
             displayName = "autodoc"

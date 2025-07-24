@@ -12,10 +12,8 @@
  *
  */
 
-package org.eclipse.edc.plugins.modulenames;
+package org.eclipse.edc.plugins.edcbuild.plugins;
 
-import org.eclipse.edc.plugins.openapimerger.OpenApiMergerPlugin;
-import org.eclipse.edc.plugins.openapimerger.tasks.MergeApiSpecByPathTask;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.BeforeEach;
