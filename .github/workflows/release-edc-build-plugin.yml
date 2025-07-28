@@ -1,4 +1,4 @@
-name: Release
+name: Release edc-build plugin
 
 on:
   workflow_dispatch:
