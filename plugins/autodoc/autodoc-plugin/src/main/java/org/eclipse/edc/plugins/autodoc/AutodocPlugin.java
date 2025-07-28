@@ -65,9 +65,9 @@ public class AutodocPlugin implements Plugin<Project> {
         });
 
         project.afterEvaluate(p -> {
-            var manifestFile = p.getLayout().getBuildDirectory().file("edc.json");
+            var manifestFile = p.getLayout().getBuildDirectory().file("edc.json").get().getAsFile();
 
-            if (!manifestFile.isPresent()) {
+            if (!manifestFile.exists()) {
                 return;
             }
 
