@@ -23,10 +23,13 @@ import org.gradle.api.artifacts.ConfigurablePublishArtifact;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.maven.MavenPom;
 import org.gradle.api.publish.maven.MavenPublication;
+import org.gradle.api.publish.maven.tasks.PublishToMavenRepository;
 
 import java.io.File;
+import java.net.URL;
 
 import static org.eclipse.edc.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
+import static org.gradle.api.artifacts.ArtifactRepositoryContainer.MAVEN_CENTRAL_URL;
 
 /**
  * Configures the Maven POM for each project:
@@ -46,9 +49,14 @@ class MavenArtifactConvention implements EdcConvention {
             var pomExt = requireExtension(project, BuildExtension.class).getPom();
 
             pubExt.getPublications().stream()
-                    .filter(p -> p instanceof MavenPublication)
-                    .map(p -> (MavenPublication) p)
+                    .filter(MavenPublication.class::isInstance)
+                    .map(MavenPublication.class::cast)
                     .peek(mavenPub -> mavenPub.pom(pom -> setPomInformation(pomExt, target, pom)))
+                    .peek(publication -> {
+                        if (!publication.getVersion().endsWith("-SNAPSHOT")) {
+                            disablePublishIfArtifactAlreadyUploaded(publication, project);
+                        }
+                    })
                     .forEach(mavenPub -> {
                         var openapiFiles = target.getLayout().getBuildDirectory().getAsFile().get().toPath()
                                 .resolve("docs").resolve("openapi").toFile()
@@ -65,6 +73,24 @@ class MavenArtifactConvention implements EdcConvention {
                         }
 
                     });
+        });
+    }
+
+    private void disablePublishIfArtifactAlreadyUploaded(MavenPublication publication, Project project) {
+        project.getTasks().withType(PublishToMavenRepository.class).forEach(task -> {
+            var artifact = publication.getGroupId() + ":" + publication.getArtifactId() + ":" + publication.getVersion();
+
+            try {
+                var artifactPath = MAVEN_CENTRAL_URL + publication.getGroupId().replace('.', '/') +
+                        "/" + publication.getArtifactId() + "/" + publication.getVersion() +
+                        "/" + publication.getArtifactId() + "-" + publication.getVersion() + ".pom";
+
+                new URL(artifactPath).openStream().close();
+                project.getLogger().debug("Artifact {} already exists - skipping publish", artifact);
+                task.setEnabled(false);
+            } catch (Throwable e) {
+                project.getLogger().debug("Artifact {} not found on maven central - will publish", artifact);
+            }
         });
     }
 
