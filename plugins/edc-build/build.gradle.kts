@@ -47,3 +47,7 @@ sourceSets {
         }
     }
 }
+
+edcBuild {
+    publish.set(false)
+}
