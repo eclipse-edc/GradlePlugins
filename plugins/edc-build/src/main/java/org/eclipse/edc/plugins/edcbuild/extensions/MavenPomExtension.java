@@ -39,10 +39,12 @@ public abstract class MavenPomExtension {
 
     public abstract Property<String> getScmUrl();
 
+    @Deprecated(since = "edc-build-0.1.0")
     public String getGroupId() {
         return groupId;
     }
 
+    @Deprecated(since = "edc-build-0.1.0")
     public void setGroupId(String groupId) {
         this.groupId = groupId;
     }

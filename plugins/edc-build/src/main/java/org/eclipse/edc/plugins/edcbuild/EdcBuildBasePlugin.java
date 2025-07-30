@@ -36,17 +36,14 @@ public class EdcBuildBasePlugin implements Plugin<Project> {
     public void apply(Project target) {
         var plugins = target.getPlugins();
 
-        plugins.apply(JavaLibraryPlugin.class);
         plugins.apply(CheckstylePlugin.class);
-        plugins.apply(MavenPublishPlugin.class);
+        plugins.apply(JavaLibraryPlugin.class);
         plugins.apply(JavaPlugin.class);
+        plugins.apply(MavenPublishPlugin.class);
         plugins.apply(TestSummaryPlugin.class);
-        plugins.apply(com.vanniktech.maven.publish.MavenPublishPlugin.class);
 
         if (target == target.getRootProject()) {
             plugins.apply(ChecksumPlugin.class);
-            // The nexus publish plugin MUST be applied to the root project only, it'll throw an exception otherwise
-            // target.getPlugins().apply(NexusPublishPlugin.class); TODO: here apply the publish plugin
             plugins.apply(OpenApiMergerPlugin.class);
             plugins.apply(ModuleNamesPlugin.class);
         }
