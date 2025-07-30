@@ -14,7 +14,6 @@
 
 package org.eclipse.edc.plugins.edcbuild;
 
-import io.github.gradlenexus.publishplugin.NexusPublishPlugin;
 import org.eclipse.edc.plugins.edcbuild.plugins.ModuleNamesPlugin;
 import org.eclipse.edc.plugins.edcbuild.plugins.OpenApiMergerPlugin;
 import org.eclipse.edc.plugins.edcbuild.plugins.TestSummaryPlugin;
@@ -32,26 +31,25 @@ import org.gradle.crypto.checksum.ChecksumPlugin;
  * @see <a href="https://docs.gradle.org/current/userguide/designing_gradle_plugins.html">Gradle Documentation</a>
  */
 public class EdcBuildBasePlugin implements Plugin<Project> {
-    private static void defineCapabilities(Project target) {
-
-        target.getPlugins().apply(JavaLibraryPlugin.class);
-        target.getPlugins().apply(CheckstylePlugin.class);
-        target.getPlugins().apply(MavenPublishPlugin.class);
-        target.getPlugins().apply(JavaPlugin.class);
-        target.getPlugins().apply(TestSummaryPlugin.class);
-
-        // The nexus publish plugin MUST be applied to the root project only, it'll throw an exception otherwise
-        if (target == target.getRootProject()) {
-            target.getPlugins().apply(ChecksumPlugin.class);
-            target.getPlugins().apply(NexusPublishPlugin.class);
-            target.getPlugins().apply(OpenApiMergerPlugin.class);
-            target.getPlugins().apply(ModuleNamesPlugin.class);
-        }
-    }
 
     @Override
     public void apply(Project target) {
-        defineCapabilities(target);
+        var plugins = target.getPlugins();
+
+        plugins.apply(JavaLibraryPlugin.class);
+        plugins.apply(CheckstylePlugin.class);
+        plugins.apply(MavenPublishPlugin.class);
+        plugins.apply(JavaPlugin.class);
+        plugins.apply(TestSummaryPlugin.class);
+        plugins.apply(com.vanniktech.maven.publish.MavenPublishPlugin.class);
+
+        if (target == target.getRootProject()) {
+            plugins.apply(ChecksumPlugin.class);
+            // The nexus publish plugin MUST be applied to the root project only, it'll throw an exception otherwise
+            // target.getPlugins().apply(NexusPublishPlugin.class); TODO: here apply the publish plugin
+            plugins.apply(OpenApiMergerPlugin.class);
+            plugins.apply(ModuleNamesPlugin.class);
+        }
     }
 
 }

@@ -47,11 +47,6 @@ class JavaConvention implements EdcConvention {
             options.setFork(true);
             options.setIncremental(true);
         });
-
-
-        // needed for publishing to maven central
-        javaPluginExt.withJavadocJar();
-        javaPluginExt.withSourcesJar();
     }
 
 }

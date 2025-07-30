@@ -60,7 +60,7 @@ public class Conventions {
     }
 
     public static EdcConvention nexusPublishing() {
-        return new NexusPublishingConvention();
+        return new PublishToMavenCentralConvention();
     }
 
     public static EdcConvention rootBuildScript() {
