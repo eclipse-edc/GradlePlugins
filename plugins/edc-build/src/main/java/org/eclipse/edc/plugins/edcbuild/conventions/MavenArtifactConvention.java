@@ -43,7 +43,8 @@ class MavenArtifactConvention implements EdcConvention {
     public void apply(Project target) {
         target.afterEvaluate(project -> {
             var pubExt = requireExtension(project, PublishingExtension.class);
-            var pomExt = requireExtension(project, BuildExtension.class).getPom();
+            var buildExtension = requireExtension(project, BuildExtension.class);
+            var pomExt = buildExtension.getPom();
 
             pubExt.getPublications().stream()
                     .filter(p -> p instanceof MavenPublication)

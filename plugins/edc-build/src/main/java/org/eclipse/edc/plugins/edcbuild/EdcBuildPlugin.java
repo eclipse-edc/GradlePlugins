@@ -18,6 +18,8 @@ package org.eclipse.edc.plugins.edcbuild;
 import org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.publish.maven.tasks.AbstractPublishToMaven;
+import org.gradle.plugins.signing.Sign;
 
 import static java.util.List.of;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.allDependencies;
@@ -28,7 +30,6 @@ import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.java;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.mavenPom;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.mavenPublication;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.mavenPublishing;
-import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.nexusPublishing;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.printClasspath;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.repositories;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.rootBuildScript;
@@ -49,8 +50,10 @@ public class EdcBuildPlugin implements Plugin<Project> {
         // apply all plugins
         target.getPlugins().apply(EdcBuildBasePlugin.class);
 
-        //this one must run in the configuration phase
-        nexusPublishing().apply(target);
+        target.getTasks().withType(AbstractPublishToMaven.class).configureEach(task -> {
+            var signTasks = target.getTasks().withType(Sign.class);
+            task.mustRunAfter(signTasks);
+        });
 
         // configuration values are only guaranteed to be set after the project has been evaluated
         // https://docs.gradle.org/current/userguide/build_lifecycle.html

@@ -10,8 +10,8 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.plugin.nexus.publish)
     implementation(libs.plugin.checksum)
+    implementation(libs.plugin.publish)
     implementation(libs.plugin.swagger)
     implementation(libs.plugin.openapi.merger.app)
     implementation(libs.plugin.openapi.merger) {

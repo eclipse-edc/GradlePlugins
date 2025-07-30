@@ -59,10 +59,6 @@ public class Conventions {
         return new JarConvention();
     }
 
-    public static EdcConvention nexusPublishing() {
-        return new NexusPublishingConvention();
-    }
-
     public static EdcConvention rootBuildScript() {
         return new RootBuildScriptConvention();
     }

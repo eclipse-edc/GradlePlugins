@@ -27,8 +27,8 @@ jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "j
 jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "jupiter" }
 markdown-gen = { module = "net.steppschuh.markdowngenerator:markdowngenerator", version = "1.3.1.1" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+plugin-publish = { module = "com.vanniktech:gradle-maven-publish-plugin", version = "0.34.0" }
 plugin-checksum = { module = "gradle.plugin.org.gradle.crypto:checksum", version = "1.4.0" }
-plugin-nexus-publish = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
 plugin-openapi-merger = { module = "com.rameshkp:openapi-merger-gradle-plugin", version.ref = "openapi-merger" }
 plugin-openapi-merger-app = { module = "com.rameshkp:openapi-merger-app", version.ref = "openapi-merger" }
 plugin-swagger = { module = "io.swagger.core.v3:swagger-gradle-plugin", version.ref = "swagger" }
