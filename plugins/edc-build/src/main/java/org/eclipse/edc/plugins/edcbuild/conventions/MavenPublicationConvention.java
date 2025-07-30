@@ -14,6 +14,7 @@
 
 package org.eclipse.edc.plugins.edcbuild.conventions;
 
+import com.vanniktech.maven.publish.MavenPublishBaseExtension;
 import org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension;
 import org.gradle.api.Project;
 import org.gradle.api.publish.PublishingExtension;
@@ -60,6 +61,10 @@ public class MavenPublicationConvention implements EdcConvention {
                             mavenPublication.suppressPomMetadataWarningsFor("testFixturesRuntimeElements");
                         }));
             }
+
+            target.getExtensions().configure(MavenPublishBaseExtension.class, extension -> {
+                extension.publishToMavenCentral(true);
+            });
         }
     }
 

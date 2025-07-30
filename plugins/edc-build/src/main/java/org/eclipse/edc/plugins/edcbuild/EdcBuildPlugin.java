@@ -28,7 +28,6 @@ import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.java;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.mavenPom;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.mavenPublication;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.mavenPublishing;
-import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.nexusPublishing;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.printClasspath;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.repositories;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.rootBuildScript;
@@ -48,9 +47,6 @@ public class EdcBuildPlugin implements Plugin<Project> {
 
         // apply all plugins
         target.getPlugins().apply(EdcBuildBasePlugin.class);
-
-        //this one must run in the configuration phase
-        nexusPublishing().apply(target);
 
         // configuration values are only guaranteed to be set after the project has been evaluated
         // https://docs.gradle.org/current/userguide/build_lifecycle.html
