@@ -36,6 +36,7 @@ import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.rootBuild
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.signing;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.swagger;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.tests;
+import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.waitForPublishedArtifacts;
 
 /**
  * Adds (opinionated) conventions (=configuration) for various plugins.
@@ -77,7 +78,8 @@ public class EdcBuildPlugin implements Plugin<Project> {
                     tests(),
                     jar(),
                     swagger(),
-                    printClasspath()
+                    printClasspath(),
+                    waitForPublishedArtifacts()
             ).forEach(c -> c.apply(project));
         });
 

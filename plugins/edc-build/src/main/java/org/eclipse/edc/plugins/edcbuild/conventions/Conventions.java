@@ -82,4 +82,8 @@ public class Conventions {
     public static EdcConvention printClasspath() {
         return new PrintClasspathConvention();
     }
+
+    public static EdcConvention waitForPublishedArtifacts() {
+        return new WaitForPublishedArtifactsConvention();
+    }
 }

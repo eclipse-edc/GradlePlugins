@@ -19,8 +19,6 @@ import org.gradle.api.tasks.testing.Test;
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat;
 import org.jetbrains.annotations.NotNull;
 
-import static java.util.Optional.ofNullable;
-
 /**
  * Configures the use of JUnit, the tagging mechanism and also configures the test logging
  */
@@ -60,9 +58,11 @@ class TestConvention implements EdcConvention {
 
     @NotNull
     private static String[] getTags(String tagsSeparatedByComma) {
-        return ofNullable(tagsSeparatedByComma)
-                .map(prop -> prop.split(","))
-                .orElse(new String[0]);
+        if (tagsSeparatedByComma == null || tagsSeparatedByComma.isBlank()) {
+            return new String[0];
+        }
+
+        return tagsSeparatedByComma.split(",");
     }
 
     @Override
