@@ -5,6 +5,8 @@ format.version = "1.1"
 assertj = "3.27.3"
 checkstyle = "10.26.1"
 edc = "0.14.0-SNAPSHOT"
+# the edc-boot-spi dependency is used only for tests, this fixed version prevents the "chicken-egg" problem
+edc-test = "0.13.2"
 jackson = "2.19.2"
 jetbrainsAnnotation = "26.0.2"
 jakarta-ws-rs = "4.0.0"
@@ -18,7 +20,7 @@ swagger-parser = "2.1.31"
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 checkstyle = { module = "com.puppycrawl.tools:checkstyle", version.ref = "checkstyle" }
 edc-runtime-metamodel = { module = "org.eclipse.edc:runtime-metamodel", version.ref = "edc" }
-edc-core-spi = { module = "org.eclipse.edc:core-spi", version.ref = "edc" }
+edc-boot-spi = { module = "org.eclipse.edc:boot-spi", version.ref = "edc-test" }
 j2html = { module = "com.j2html:j2html", version = "1.6.0" }
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
