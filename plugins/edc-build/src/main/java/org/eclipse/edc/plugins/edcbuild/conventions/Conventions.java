@@ -15,8 +15,6 @@
 
 package org.eclipse.edc.plugins.edcbuild.conventions;
 
-import org.eclipse.edc.plugins.edcbuild.tasks.WaitForPublishedArtifacts;
-
 /**
  * Contains statically accessible {@link EdcConvention} objects that can be applied to a project.
  */
