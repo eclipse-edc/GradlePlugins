@@ -87,9 +87,9 @@ maven/mavencentral/javax.el/javax.el-api/3.0.0, CDDL-1.0 or Apache-2.0, approved
 maven/mavencentral/javax.validation/validation-api/1.1.0.Final, Apache-2.0, approved, CQ15114
 maven/mavencentral/javax.validation/validation-api/2.0.0.Final, Apache-2.0, approved, CQ15302
 maven/mavencentral/joda-time/joda-time/2.10.5, Apache-2.0, approved, clearlydefined
-maven/mavencentral/net.bytebuddy/byte-buddy-agent/1.17.5, Apache-2.0, approved, #19238
+maven/mavencentral/net.bytebuddy/byte-buddy-agent/1.17.6, Apache-2.0, approved, #19238
 maven/mavencentral/net.bytebuddy/byte-buddy/1.15.11, Apache-2.0 AND BSD-3-Clause, approved, #16008
-maven/mavencentral/net.bytebuddy/byte-buddy/1.17.5, Apache-2.0 AND BSD-3-Clause, approved, #19239
+maven/mavencentral/net.bytebuddy/byte-buddy/1.17.6, Apache-2.0 AND BSD-3-Clause, approved, #19239
 maven/mavencentral/net.sf.jopt-simple/jopt-simple/5.0.4, MIT, approved, CQ13174
 maven/mavencentral/net.sf.saxon/Saxon-HE/12.5, W3C-19980720 AND MPL-2.0 AND MPL-1.0, approved, #16061
 maven/mavencentral/net.steppschuh.markdowngenerator/markdowngenerator/1.3.1.1, Apache-2.0, approved, clearlydefined
@@ -143,7 +143,7 @@ maven/mavencentral/org.junit.platform/junit-platform-commons/1.13.4, EPL-2.0, ap
 maven/mavencentral/org.junit.platform/junit-platform-engine/1.13.4, EPL-2.0, approved, #21701
 maven/mavencentral/org.junit.platform/junit-platform-launcher/1.13.4, EPL-2.0, approved, #21708
 maven/mavencentral/org.junit/junit-bom/5.13.4, EPL-2.0, approved, #21846
-maven/mavencentral/org.mockito/mockito-core/5.18.0, MIT AND (Apache-2.0 AND MIT) AND Apache-2.0, approved, #21306
+maven/mavencentral/org.mockito/mockito-core/5.19.0, MIT AND (Apache-2.0 AND MIT) AND Apache-2.0, approved, #22881
 maven/mavencentral/org.mozilla/rhino/1.7.7.2, MPL-2.0 AND BSD-3-Clause AND ISC, approved, CQ16320
 maven/mavencentral/org.objenesis/objenesis/3.3, Apache-2.0, approved, #19727
 maven/mavencentral/org.opentest4j/opentest4j/1.3.0, Apache-2.0, approved, #9713
