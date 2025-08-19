@@ -24,6 +24,9 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion;
  * Root configuration resource for the EDC Build plugin
  */
 public abstract class BuildExtension {
+
+    private static final boolean DEFAULT_SHOULD_PUBLISH = true;
+
     private final MavenPomExtension pom;
     private final SwaggerGeneratorExtension swagger;
 
@@ -48,6 +51,15 @@ public abstract class BuildExtension {
 
     public SwaggerGeneratorExtension getSwagger() {
         return swagger;
+    }
+
+    /**
+     * Tell if the module needs to be published
+     *
+     * @return true if the module needs to be published, false otherwise
+     */
+    public boolean shouldPublish() {
+        return getPublish().getOrElse(DEFAULT_SHOULD_PUBLISH);
     }
 
     public abstract Property<Boolean> getPublish();
