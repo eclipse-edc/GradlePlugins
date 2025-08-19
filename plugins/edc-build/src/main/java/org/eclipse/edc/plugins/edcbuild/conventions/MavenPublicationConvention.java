@@ -23,8 +23,6 @@ import static org.eclipse.edc.plugins.edcbuild.conventions.ConventionFunctions.r
 
 public class MavenPublicationConvention implements EdcConvention {
 
-    private static final boolean DEFAULT_SHOULD_PUBLISH = true;
-
     @Override
     public void apply(Project target) {
         // do not publish the root project or modules without a build.gradle.kts
@@ -33,9 +31,8 @@ public class MavenPublicationConvention implements EdcConvention {
         }
 
         var buildExtension = requireExtension(target, BuildExtension.class);
-        var shouldPublish = buildExtension.getPublish().getOrElse(DEFAULT_SHOULD_PUBLISH);
 
-        if (shouldPublish) {
+        if (buildExtension.shouldPublish()) {
             target.getPlugins().apply(MavenPublishPlugin.class);
 
             target.getExtensions().configure(MavenPublishBaseExtension.class, extension -> {

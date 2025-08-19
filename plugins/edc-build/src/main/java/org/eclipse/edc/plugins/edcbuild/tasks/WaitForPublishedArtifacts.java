@@ -14,6 +14,7 @@
 
 package org.eclipse.edc.plugins.edcbuild.tasks;
 
+import org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.artifacts.dsl.RepositoryHandler;
 import org.gradle.api.publish.PublishingExtension;
@@ -37,6 +38,10 @@ public class WaitForPublishedArtifacts extends DefaultTask {
 
     @TaskAction
     public void waitForPublishedArtifacts() {
+        if (!requireExtension(getProject(), BuildExtension.class).shouldPublish()) {
+            return;
+        }
+
         requireExtension(getProject(), PublishingExtension.class)
                 .getPublications().stream()
                 .map(MavenPublication.class::cast)
