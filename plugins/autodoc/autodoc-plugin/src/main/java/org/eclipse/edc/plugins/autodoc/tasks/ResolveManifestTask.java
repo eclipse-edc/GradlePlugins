@@ -16,7 +16,7 @@ package org.eclipse.edc.plugins.autodoc.tasks;
 
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.artifacts.ProjectDependency;
-import org.gradle.api.internal.artifacts.dependencies.DefaultProjectDependency;
+import org.gradle.api.internal.artifacts.dependencies.ProjectDependencyInternal;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,13 +52,15 @@ public class ResolveManifestTask extends AbstractManifestResolveTask {
 
     @Override
     protected Optional<DependencySource> createSource(Dependency dependency) {
-        if (dependency instanceof DefaultProjectDependency localDependency) {
-            var manifestFile = localDependency.getDependencyProject().getLayout().getBuildDirectory().file("edc.json");
-            if (manifestFile.isPresent()) {
-                return Optional.of(DependencySourceFactory.createDependencySource(manifestFile.get().getAsFile().toURI(), dependency, MANIFEST_CLASSIFIER, MANIFEST_TYPE));
+        if (dependency instanceof ProjectDependencyInternal localDependency) {
+            var buildPath = localDependency.getTargetProjectIdentity().getBuildPath();
+            var manifestFile = new File(buildPath.relativePath("edc.json"));
+            if (manifestFile.exists()) {
+                return Optional.of(DependencySourceFactory.createDependencySource(manifestFile.toURI(), dependency, MANIFEST_CLASSIFIER, MANIFEST_TYPE));
             } else {
                 getLogger().debug("No manifest file found for dependency {}", dependency);
             }
+            return Optional.empty();
 
         } else {
             getLogger().debug("Dependency {} is not a DefaultProjectDependency", dependency);
