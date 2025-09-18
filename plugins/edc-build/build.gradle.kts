@@ -13,6 +13,7 @@ dependencies {
     implementation(libs.plugin.checksum)
     implementation(libs.plugin.publish)
     implementation(libs.plugin.swagger)
+    implementation(libs.openapi.generator)
     implementation(libs.plugin.openapi.generator)
     implementation(libs.swagger.parser)
     // openapi-merger deprecated, will be removed

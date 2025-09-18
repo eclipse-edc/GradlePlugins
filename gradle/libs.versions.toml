@@ -13,6 +13,7 @@ jakarta-ws-rs = "4.0.0"
 jupiter = "5.13.4"
 mockito = "5.19.0"
 openapi-merger = "1.0.5"
+openapi-generator = "7.14.0"
 swagger = "2.2.26"
 swagger-parser = "2.1.32"
 
@@ -29,11 +30,12 @@ jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "j
 jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "jupiter" }
 markdown-gen = { module = "net.steppschuh.markdowngenerator:markdowngenerator", version = "1.3.1.1" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+openapi-generator = { module = "org.openapitools:openapi-generator", version.ref = "openapi-generator" }
 plugin-publish = { module = "com.vanniktech:gradle-maven-publish-plugin", version = "0.34.0" }
 plugin-checksum = { module = "gradle.plugin.org.gradle.crypto:checksum", version = "1.4.0" }
 plugin-openapi-merger = { module = "com.rameshkp:openapi-merger-gradle-plugin", version.ref = "openapi-merger" }
 plugin-openapi-merger-app = { module = "com.rameshkp:openapi-merger-app", version.ref = "openapi-merger" }
-plugin-openapi-generator = { module = "org.openapitools:openapi-generator-gradle-plugin", version = "7.14.0" }
+plugin-openapi-generator = { module = "org.openapitools:openapi-generator-gradle-plugin", version.ref = "openapi-generator" }
 plugin-swagger = { module = "io.swagger.core.v3:swagger-gradle-plugin", version.ref = "swagger" }
 swagger-parser = { module = "io.swagger.parser.v3:swagger-parser", version.ref = "swagger-parser" }
 
