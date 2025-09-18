@@ -17,6 +17,7 @@ package org.eclipse.edc.plugins.edcbuild.plugins;
 import com.rameshkp.openapi.merger.gradle.plugin.OpenApiMergerGradlePlugin;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.openapitools.generator.gradle.plugin.OpenApiGeneratorPlugin;
 
 /**
  * Custom grade plugin to avoid module name duplications.
@@ -31,9 +32,16 @@ public class OpenApiMergerPlugin implements Plugin<Project> {
     public void apply(Project project) {
 
         if (project == project.getRootProject()) {
-            project.getPlugins().apply(OpenApiMergerGradlePlugin.class);
-            project.getTasks().register(MergeApiSpecByPathTask.NAME, MergeApiSpecByPathTask.class);
+            project.getPlugins().apply(OpenApiGeneratorPlugin.class);
+            project.getTasks().register(MergeOpenApiSpecTask.NAME, MergeOpenApiSpecTask.class);
+            deprecatedOpenApiMergerMergePlugin(project);
         }
+    }
+
+    @Deprecated(since = "edc-build-1.0.0")
+    private static void deprecatedOpenApiMergerMergePlugin(Project project) {
+        project.getPlugins().apply(OpenApiMergerGradlePlugin.class);
+        project.getTasks().register(MergeApiSpecByPathTask.NAME, MergeApiSpecByPathTask.class);
     }
 
 }
