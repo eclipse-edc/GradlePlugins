@@ -37,8 +37,6 @@ import static org.eclipse.edc.plugins.edcbuild.conventions.ConventionFunctions.r
  */
 class MavenArtifactConvention implements EdcConvention {
 
-    private static final String PROJECT_URL = "https://projects.eclipse.org/projects/technology.edc";
-
     @Override
     public void apply(Project target) {
         target.afterEvaluate(project -> {
@@ -49,7 +47,7 @@ class MavenArtifactConvention implements EdcConvention {
             pubExt.getPublications().stream()
                     .filter(p -> p instanceof MavenPublication)
                     .map(p -> (MavenPublication) p)
-                    .peek(mavenPub -> mavenPub.pom(pom -> setPomInformation(pomExt, target, pom)))
+                    .peek(mavenPub -> mavenPub.pom(pom -> setPomInformation(pomExt, pom)))
                     .forEach(mavenPub -> {
                         var openapiFiles = target.getLayout().getBuildDirectory().getAsFile().get().toPath()
                                 .resolve("docs").resolve("openapi").toFile()
@@ -80,25 +78,23 @@ class MavenArtifactConvention implements EdcConvention {
         }
     }
 
-    private static void setPomInformation(MavenPomExtension pomExt, Project project, MavenPom pom) {
-        // these properties are mandatory!
-        var projectName = pomExt.getProjectName().getOrElse(project.getName());
-        var description = pomExt.getDescription().getOrElse("edc :: " + project.getName());
-        var projectUrl = pomExt.getProjectUrl().getOrElse(PROJECT_URL);
+    private static void setPomInformation(MavenPomExtension pomExt, MavenPom pom) {
+        var projectName = pomExt.getProjectName().get();
+        var description = pomExt.getDescription().get();
+        var projectUrl = pomExt.getProjectUrl().get();
         pom.getName().set(projectName);
         pom.getDescription().set(description);
         pom.getUrl().set(projectUrl);
 
-        // we'll provide a sane default for these properties
         pom.licenses(l -> l.license(pl -> {
-            pl.getName().set(pomExt.getLicenseName().getOrElse("The Apache License, Version 2.0"));
-            pl.getUrl().set(pomExt.getLicenseUrl().getOrElse("http://www.apache.org/licenses/LICENSE-2.0.txt"));
+            pl.getName().set(pomExt.getLicenseName().get());
+            pl.getUrl().set(pomExt.getLicenseUrl().get());
         }));
 
         pom.developers(d -> d.developer(md -> {
-            md.getId().set(pomExt.getDeveloperId().getOrElse("mspiekermann"));
-            md.getName().set(pomExt.getDeveloperName().getOrElse("Markus Spiekermann"));
-            md.getEmail().set(pomExt.getDeveloperEmail().getOrElse("markus.spiekermann@isst.fraunhofer.de"));
+            md.getId().set(pomExt.getDeveloperId().get());
+            md.getName().set(pomExt.getDeveloperName().get());
+            md.getEmail().set(pomExt.getDeveloperEmail().get());
         }));
 
         pom.scm(scm -> {

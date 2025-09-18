@@ -17,7 +17,9 @@ package org.eclipse.edc.plugins.edcbuild.plugins;
 import io.swagger.parser.OpenAPIParser;
 import io.swagger.v3.core.util.Yaml;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.parser.core.models.ParseOptions;
+import org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension;
 import org.gradle.api.file.Directory;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.tasks.TaskAction;
@@ -30,6 +32,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import javax.inject.Inject;
+
+import static org.eclipse.edc.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
 
 /**
  * Customization of the {@link GenerateTask}, which allows to pass in the input and output directories via command line.
@@ -89,16 +93,25 @@ public class MergeOpenApiSpecTask extends GenerateTask {
 
         var outputPath = Path.of(getOutputDir().get());
         var spec = outputPath.resolve("openapi").resolve("openapi.yaml");
-        var openAPIParser = new OpenAPIParser();
-        var swaggerParseResult = openAPIParser.readLocation(spec.toString(), Collections.emptyList(), new ParseOptions());
-        var openAPI = swaggerParseResult.getOpenAPI();
+        var parser = new OpenAPIParser();
+        var swaggerParseResult = parser.readLocation(spec.toString(), Collections.emptyList(), new ParseOptions());
+        var openApi = swaggerParseResult.getOpenAPI();
         var info = new Info();
         info.setTitle(infoTitle);
         info.setDescription(infoDescription);
         info.setVersion(infoVersion);
-        openAPI.setInfo(info);
+        info.setLicense(createLicense());
+        openApi.setInfo(info);
 
-        Files.writeString(output, Yaml.pretty(openAPI));
+        Files.writeString(output, Yaml.pretty(openApi));
+    }
+
+    private License createLicense() {
+        var pom = requireExtension(getProject(), BuildExtension.class).getPom();
+        var license = new License();
+        license.setName(pom.getLicenseName().get());
+        license.setUrl(pom.getLicenseUrl().get());
+        return license;
     }
 
 }

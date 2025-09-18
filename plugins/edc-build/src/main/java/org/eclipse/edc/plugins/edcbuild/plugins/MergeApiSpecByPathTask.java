@@ -21,6 +21,8 @@ import java.io.File;
 
 /**
  * Customization of the {@link OpenApiMergerTask}, which allows to pass in the input and output directories via command line.
+ *
+ * @deprecated please use mergeOpenApiSpec task
  */
 @Deprecated(since = "edc-build-1.0.0")
 public class MergeApiSpecByPathTask extends OpenApiMergerTask {
