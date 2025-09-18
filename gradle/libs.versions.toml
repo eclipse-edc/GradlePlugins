@@ -33,6 +33,7 @@ plugin-publish = { module = "com.vanniktech:gradle-maven-publish-plugin", versio
 plugin-checksum = { module = "gradle.plugin.org.gradle.crypto:checksum", version = "1.4.0" }
 plugin-openapi-merger = { module = "com.rameshkp:openapi-merger-gradle-plugin", version.ref = "openapi-merger" }
 plugin-openapi-merger-app = { module = "com.rameshkp:openapi-merger-app", version.ref = "openapi-merger" }
+plugin-openapi-generator = { module = "org.openapitools:openapi-generator-gradle-plugin", version = "7.14.0" }
 plugin-swagger = { module = "io.swagger.core.v3:swagger-gradle-plugin", version.ref = "swagger" }
 swagger-parser = { module = "io.swagger.parser.v3:swagger-parser", version.ref = "swagger-parser" }
 

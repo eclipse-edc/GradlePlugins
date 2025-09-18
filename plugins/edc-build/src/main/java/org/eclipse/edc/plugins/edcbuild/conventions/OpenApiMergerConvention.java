@@ -26,6 +26,7 @@ import static org.eclipse.edc.plugins.edcbuild.conventions.SwaggerConvention.def
 /**
  * Configures inputs and outputs for the OpenAPI merger plugin
  */
+@Deprecated(since = "edc-build-1.0.0")
 class OpenApiMergerConvention implements EdcConvention {
 
     private static final String OPEN_API_VERSION = "3.0.1";

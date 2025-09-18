@@ -16,9 +16,17 @@
 package org.eclipse.edc.plugins.edcbuild;
 
 import org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension;
+import org.eclipse.edc.plugins.edcbuild.plugins.ModuleNamesPlugin;
+import org.eclipse.edc.plugins.edcbuild.plugins.OpenApiMergerPlugin;
+import org.eclipse.edc.plugins.edcbuild.plugins.TestSummaryPlugin;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.plugins.JavaLibraryPlugin;
+import org.gradle.api.plugins.JavaPlugin;
+import org.gradle.api.plugins.quality.CheckstylePlugin;
+import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
 import org.gradle.api.publish.maven.tasks.AbstractPublishToMaven;
+import org.gradle.crypto.checksum.ChecksumPlugin;
 import org.gradle.plugins.signing.Sign;
 
 import static java.util.List.of;
@@ -48,8 +56,7 @@ public class EdcBuildPlugin implements Plugin<Project> {
         // register the extension(s)
         target.getExtensions().create("edcBuild", BuildExtension.class, target.getObjects());
 
-        // apply all plugins
-        target.getPlugins().apply(EdcBuildBasePlugin.class);
+        applyPlugins(target);
 
         target.getTasks().withType(AbstractPublishToMaven.class).configureEach(task -> {
             var signTasks = target.getTasks().withType(Sign.class);
@@ -82,7 +89,21 @@ public class EdcBuildPlugin implements Plugin<Project> {
                     waitForPublishedArtifacts()
             ).forEach(c -> c.apply(project));
         });
+    }
 
+    private static void applyPlugins(Project target) {
+        var plugins = target.getPlugins();
 
+        plugins.apply(CheckstylePlugin.class);
+        plugins.apply(JavaLibraryPlugin.class);
+        plugins.apply(JavaPlugin.class);
+        plugins.apply(MavenPublishPlugin.class);
+        plugins.apply(TestSummaryPlugin.class);
+
+        if (target == target.getRootProject()) {
+            plugins.apply(ChecksumPlugin.class);
+            plugins.apply(OpenApiMergerPlugin.class);
+            plugins.apply(ModuleNamesPlugin.class);
+        }
     }
 }
