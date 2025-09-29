@@ -2,7 +2,7 @@
 format.version = "1.1"
 
 [versions]
-assertj = "3.27.5"
+assertj = "3.27.6"
 checkstyle = "11.0.1"
 edc = "0.15.0-SNAPSHOT"
 # the edc-boot-spi dependency is used only for tests, this fixed version prevents the "chicken-egg" problem
