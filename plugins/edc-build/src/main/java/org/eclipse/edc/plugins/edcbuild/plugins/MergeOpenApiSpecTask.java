@@ -54,6 +54,7 @@ public class MergeOpenApiSpecTask extends GenerateTask {
         getInputSpecRootDirectorySkipMerge().set(false);
         getSkipValidateSpec().set(true);
         getGeneratorName().set("openapi-yaml");
+        getSkipOperationExample().set(false);
         getOutputDir().set(buildOpenapiFolder.dir("generated").getAsFile().getAbsolutePath());
     }
 
