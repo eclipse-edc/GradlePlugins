@@ -7,7 +7,7 @@ checkstyle = "12.1.1"
 edc = "0.15.0-SNAPSHOT"
 # the edc-boot-spi dependency is used only for tests, this fixed version prevents the "chicken-egg" problem
 edc-test = "0.14.1"
-jackson = "2.20.0"
+jackson = "2.20.1"
 jetbrainsAnnotation = "26.0.2-1"
 jakarta-ws-rs = "4.0.0"
 jupiter = "6.0.0"
