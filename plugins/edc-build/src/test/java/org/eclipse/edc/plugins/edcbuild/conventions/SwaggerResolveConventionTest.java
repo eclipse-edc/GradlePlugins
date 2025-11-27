@@ -37,7 +37,6 @@ class SwaggerResolveConventionTest {
         project = ProjectBuilder.builder().withName(PROJECT_NAME).build();
         project.getPluginManager().apply(SWAGGER_GRADLE_PLUGIN);
         project.getPluginManager().apply(JavaPlugin.class);
-        project.getRepositories().mavenCentral();
         project.getExtensions().create("edcBuild", BuildExtension.class, project.getObjects());
     }
 
@@ -46,13 +45,11 @@ class SwaggerResolveConventionTest {
         var convention = new SwaggerResolveConvention();
         convention.apply(project);
 
-        var task = project.getTasks().getByName("resolve");
+        var resolveTask = (ResolveTask) project.getTasks().getByName("resolve");
 
-        assertThat(task).isInstanceOfSatisfying(ResolveTask.class, resolveTask -> {
-            assertThat(resolveTask.getOutputDir().get().getAsFile().getAbsolutePath()).endsWith("/resources/openapi/yaml");
-            assertThat(resolveTask.getOutputFileName().get()).isEqualTo(PROJECT_NAME);
-            assertThat(resolveTask.getOutputFormat().get()).isEqualTo(ResolveTask.Format.YAML);
-        });
+        assertThat(resolveTask.getOutputDir().toString()).endsWith("/resources/openapi/yaml");
+        assertThat(resolveTask.getOutputFileName()).isEqualTo(PROJECT_NAME);
+        assertThat(resolveTask.getOutputFormat()).isEqualTo(ResolveTask.Format.YAML);
     }
 
     @Test
@@ -62,13 +59,11 @@ class SwaggerResolveConventionTest {
         var convention = new SwaggerResolveConvention();
         convention.apply(project);
 
-        var task = project.getTasks().getByName("resolve");
+        var resolveTask = (ResolveTask) project.getTasks().getByName("resolve");
 
-        assertThat(task).isInstanceOfSatisfying(ResolveTask.class, resolveTask -> {
-            assertThat(resolveTask.getOutputDir().get().getAsFile().getAbsolutePath()).endsWith("/resources/openapi/yaml/test-api");
-            assertThat(resolveTask.getOutputFileName().get()).isEqualTo(PROJECT_NAME);
-            assertThat(resolveTask.getOutputFormat().get()).isEqualTo(ResolveTask.Format.YAML);
-        });
+        assertThat(resolveTask.getOutputDir().toString()).endsWith("/resources/openapi/yaml/test-api");
+        assertThat(resolveTask.getOutputFileName()).isEqualTo(PROJECT_NAME);
+        assertThat(resolveTask.getOutputFormat()).isEqualTo(ResolveTask.Format.YAML);
     }
 
     @Test
@@ -79,12 +74,10 @@ class SwaggerResolveConventionTest {
         var convention = new SwaggerResolveConvention();
         convention.apply(project);
 
-        var task = project.getTasks().getByName("resolve");
+        var resolveTask = (ResolveTask) project.getTasks().getByName("resolve");
 
-        assertThat(task).isInstanceOfSatisfying(ResolveTask.class, resolveTask -> {
-            assertThat(resolveTask.getOutputDir().get().getAsFile().getAbsolutePath()).endsWith("/some/funny/path/test-api");
-            assertThat(resolveTask.getOutputFileName().get()).isEqualTo(PROJECT_NAME);
-            assertThat(resolveTask.getOutputFormat().get()).isEqualTo(ResolveTask.Format.YAML);
-        });
+        assertThat(resolveTask.getOutputDir().toString()).endsWith("/some/funny/path/test-api");
+        assertThat(resolveTask.getOutputFileName()).isEqualTo(PROJECT_NAME);
+        assertThat(resolveTask.getOutputFormat()).isEqualTo(ResolveTask.Format.YAML);
     }
 }
