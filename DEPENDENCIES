@@ -172,7 +172,7 @@ maven/mavencentral/org.junit.platform/junit-platform-commons/6.0.1, EPL-2.0, app
 maven/mavencentral/org.junit.platform/junit-platform-engine/6.0.1, EPL-2.0, approved, #23933
 maven/mavencentral/org.junit.platform/junit-platform-launcher/6.0.1, EPL-2.0, approved, #23935
 maven/mavencentral/org.junit/junit-bom/6.0.1, , restricted, clearlydefined
-maven/mavencentral/org.mockito/mockito-core/5.20.0, MIT AND (Apache-2.0 AND MIT) AND Apache-2.0, approved, #23392
+maven/mavencentral/org.mockito/mockito-core/5.21.0, MIT AND (Apache-2.0 AND MIT) AND Apache-2.0, approved, #25203
 maven/mavencentral/org.mozilla/rhino/1.7.7.2, MPL-2.0 AND BSD-3-Clause AND ISC, approved, CQ16320
 maven/mavencentral/org.objenesis/objenesis/3.3, Apache-2.0, approved, #19727
 maven/mavencentral/org.openapitools/openapi-generator-core/7.16.0, , restricted, clearlydefined
