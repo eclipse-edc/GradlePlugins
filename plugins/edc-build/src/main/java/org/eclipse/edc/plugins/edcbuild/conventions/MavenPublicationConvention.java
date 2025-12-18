@@ -36,7 +36,9 @@ public class MavenPublicationConvention implements EdcConvention {
             target.getPlugins().apply(MavenPublishPlugin.class);
 
             target.getExtensions().configure(MavenPublishBaseExtension.class, extension -> {
-                extension.publishToMavenCentral(true);
+                var automaticRelease = true;
+                var validateDeployment = false;
+                extension.publishToMavenCentral(automaticRelease, validateDeployment);
 
                 extension.signAllPublications();
             });
