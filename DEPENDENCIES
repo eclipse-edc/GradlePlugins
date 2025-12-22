@@ -86,13 +86,13 @@ maven/mavencentral/io.swagger.core.v3/swagger-annotations/2.2.37, Apache-2.0, ap
 maven/mavencentral/io.swagger.core.v3/swagger-core/2.2.37, Apache-2.0, approved, #9265
 maven/mavencentral/io.swagger.core.v3/swagger-gradle-plugin/2.2.26, Apache-2.0 AND MIT, approved, #10356
 maven/mavencentral/io.swagger.core.v3/swagger-models/2.2.37, Apache-2.0, approved, #10353
-maven/mavencentral/io.swagger.parser.v3/swagger-parser-core/2.1.36, Apache-2.0, approved, #11478
-maven/mavencentral/io.swagger.parser.v3/swagger-parser-safe-url-resolver/2.1.36, Apache-2.0, approved, #11375
-maven/mavencentral/io.swagger.parser.v3/swagger-parser-v2-converter/2.1.36, Apache-2.0, approved, #9330
-maven/mavencentral/io.swagger.parser.v3/swagger-parser-v3/2.1.36, Apache-2.0, approved, #9323
+maven/mavencentral/io.swagger.parser.v3/swagger-parser-core/2.1.37, Apache-2.0, approved, #11478
+maven/mavencentral/io.swagger.parser.v3/swagger-parser-safe-url-resolver/2.1.37, Apache-2.0, approved, #11375
+maven/mavencentral/io.swagger.parser.v3/swagger-parser-v2-converter/2.1.37, Apache-2.0, approved, #9330
+maven/mavencentral/io.swagger.parser.v3/swagger-parser-v3/2.1.37, Apache-2.0, approved, #9323
 maven/mavencentral/io.swagger.parser.v3/swagger-parser/2.0.23, Apache-2.0, approved, clearlydefined
 maven/mavencentral/io.swagger.parser.v3/swagger-parser/2.1.33, Apache-2.0, approved, #11316
-maven/mavencentral/io.swagger.parser.v3/swagger-parser/2.1.36, Apache-2.0, approved, #11316
+maven/mavencentral/io.swagger.parser.v3/swagger-parser/2.1.37, Apache-2.0, approved, #11316
 maven/mavencentral/io.swagger/swagger-annotations/1.6.16, Apache-2.0, approved, #3792
 maven/mavencentral/io.swagger/swagger-compat-spec-parser/1.0.75, Apache-2.0, approved, #11479
 maven/mavencentral/io.swagger/swagger-core/1.6.16, Apache-2.0, approved, #4358
