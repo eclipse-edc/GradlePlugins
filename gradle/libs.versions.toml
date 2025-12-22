@@ -15,7 +15,7 @@ mockito = "5.21.0"
 openapi-merger = "1.0.5"
 openapi-generator = "7.16.0"
 swagger = "2.2.26"
-swagger-parser = "2.1.36"
+swagger-parser = "2.1.37"
 
 [libraries]
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
