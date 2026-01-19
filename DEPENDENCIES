@@ -2,6 +2,7 @@ maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.18.2, Apache
 maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.19.0, Apache-2.0, approved, #21911
 maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.19.2, Apache-2.0, approved, #21911
 maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.20, Apache-2.0, approved, #23056
+maven/mavencentral/com.fasterxml.jackson.core/jackson-annotations/2.21, Apache-2.0, approved, #25587
 maven/mavencentral/com.fasterxml.jackson.core/jackson-core/2.18.2, Apache-2.0 AND MIT, approved, #16371
 maven/mavencentral/com.fasterxml.jackson.core/jackson-core/2.19.2, Apache-2.0 AND MIT, approved, #21916
 maven/mavencentral/com.fasterxml.jackson.core/jackson-core/2.20.1, MIT AND Apache-2.0, approved, #23054
@@ -60,15 +61,17 @@ maven/mavencentral/com.rameshkp/openapi-merger-gradle-plugin/1.0.5, Apache-2.0, 
 maven/mavencentral/com.samskivert/jmustache/1.16, BSD-2-Clause AND BSD-3-Clause, approved, clearlydefined
 maven/mavencentral/com.squareup.moshi/moshi-kotlin/1.15.2, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.squareup.moshi/moshi/1.15.2, Apache-2.0, approved, clearlydefined
-maven/mavencentral/com.squareup.okhttp3/okhttp/3.14.9, Apache-2.0, restricted, clearlydefined
-maven/mavencentral/com.squareup.okio/okio-jvm/3.7.0, Apache-2.0, approved, clearlydefined
-maven/mavencentral/com.squareup.okio/okio/1.17.2, Apache-2.0, approved, clearlydefined
+maven/mavencentral/com.squareup.okhttp3/okhttp-jvm/5.1.0, Apache-2.0, approved, clearlydefined
+maven/mavencentral/com.squareup.okhttp3/okhttp/4.12.0, Apache-2.0, approved, #15227
+maven/mavencentral/com.squareup.okhttp3/okhttp/5.1.0, Apache-2.0, approved, clearlydefined
+maven/mavencentral/com.squareup.okio/okio-jvm/3.15.0, Apache-2.0, approved, clearlydefined
+maven/mavencentral/com.squareup.okio/okio/3.15.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/com.squareup.okio/okio/3.7.0, Apache-2.0, approved, clearlydefined
-maven/mavencentral/com.squareup.retrofit2/converter-moshi/2.12.0, , restricted, clearlydefined
-maven/mavencentral/com.squareup.retrofit2/converter-scalars/2.12.0, Apache-2.0, approved, clearlydefined
-maven/mavencentral/com.squareup.retrofit2/retrofit/2.12.0, , restricted, clearlydefined
-maven/mavencentral/com.vanniktech/central-portal/0.35.0, , restricted, clearlydefined
-maven/mavencentral/com.vanniktech/gradle-maven-publish-plugin/0.35.0, , restricted, clearlydefined
+maven/mavencentral/com.squareup.retrofit2/converter-moshi/3.0.0, Apache-2.0, approved, clearlydefined
+maven/mavencentral/com.squareup.retrofit2/converter-scalars/3.0.0, Apache-2.0, approved, clearlydefined
+maven/mavencentral/com.squareup.retrofit2/retrofit/3.0.0, Apache-2.0, approved, clearlydefined
+maven/mavencentral/com.vanniktech/central-portal/0.36.0, , restricted, clearlydefined
+maven/mavencentral/com.vanniktech/gradle-maven-publish-plugin/0.36.0, , restricted, clearlydefined
 maven/mavencentral/commons-beanutils/commons-beanutils/1.11.0, Apache-2.0, approved, #21555
 maven/mavencentral/commons-cli/commons-cli/1.10.0, Apache-2.0, approved, #22698
 maven/mavencentral/commons-codec/commons-codec/1.11, Apache-2.0 AND BSD-3-Clause, approved, CQ15971
@@ -161,7 +164,8 @@ maven/mavencentral/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.8.0, Apache-2.0, ap
 maven/mavencentral/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.8.21, Apache-2.0, approved, #8919
 maven/mavencentral/org.jetbrains.kotlin/kotlin-stdlib/1.4.20, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.jetbrains.kotlin/kotlin-stdlib/1.8.21, Apache-2.0, approved, #8865
-maven/mavencentral/org.jetbrains.kotlin/kotlin-stdlib/1.9.21, Apache-2.0, approved, #11827
+maven/mavencentral/org.jetbrains.kotlin/kotlin-stdlib/2.1.21, Apache-2.0, approved, #17634
+maven/mavencentral/org.jetbrains.kotlin/kotlin-stdlib/2.2.0, Apache-2.0, approved, #22410
 maven/mavencentral/org.jetbrains/annotations/13.0, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.jetbrains/annotations/26.0.2-1, Apache-2.0, approved, #16629
 maven/mavencentral/org.jspecify/jspecify/1.0.0, Apache-2.0, approved, #21897
