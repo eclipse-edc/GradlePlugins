@@ -95,7 +95,6 @@ maven/mavencentral/io.swagger.parser.v3/swagger-parser-safe-url-resolver/2.1.37,
 maven/mavencentral/io.swagger.parser.v3/swagger-parser-v2-converter/2.1.37, Apache-2.0, approved, #9330
 maven/mavencentral/io.swagger.parser.v3/swagger-parser-v3/2.1.37, Apache-2.0, approved, #9323
 maven/mavencentral/io.swagger.parser.v3/swagger-parser/2.0.23, Apache-2.0, approved, clearlydefined
-maven/mavencentral/io.swagger.parser.v3/swagger-parser/2.1.33, Apache-2.0, approved, #11316
 maven/mavencentral/io.swagger.parser.v3/swagger-parser/2.1.37, Apache-2.0, approved, #11316
 maven/mavencentral/io.swagger/swagger-annotations/1.6.16, Apache-2.0, approved, #3792
 maven/mavencentral/io.swagger/swagger-compat-spec-parser/1.0.75, Apache-2.0, approved, #11479
@@ -180,9 +179,9 @@ maven/mavencentral/org.junit/junit-bom/6.0.2, , restricted, clearlydefined
 maven/mavencentral/org.mockito/mockito-core/5.21.0, MIT AND (Apache-2.0 AND MIT) AND Apache-2.0, approved, #25203
 maven/mavencentral/org.mozilla/rhino/1.7.7.2, MPL-2.0 AND BSD-3-Clause AND ISC, approved, CQ16320
 maven/mavencentral/org.objenesis/objenesis/3.3, Apache-2.0, approved, #19727
-maven/mavencentral/org.openapitools/openapi-generator-core/7.16.0, , restricted, clearlydefined
-maven/mavencentral/org.openapitools/openapi-generator-gradle-plugin/7.16.0, , restricted, clearlydefined
-maven/mavencentral/org.openapitools/openapi-generator/7.16.0, , restricted, clearlydefined
+maven/mavencentral/org.openapitools/openapi-generator-core/7.19.0, , restricted, clearlydefined
+maven/mavencentral/org.openapitools/openapi-generator-gradle-plugin/7.19.0, , restricted, clearlydefined
+maven/mavencentral/org.openapitools/openapi-generator/7.19.0, , restricted, clearlydefined
 maven/mavencentral/org.opentest4j/opentest4j/1.3.0, Apache-2.0, approved, #9713
 maven/mavencentral/org.projectlombok/lombok/1.18.38, MIT, approved, #15192
 maven/mavencentral/org.reflections/reflections/0.10.2, Apache-2.0 AND WTFPL, approved, clearlydefined
