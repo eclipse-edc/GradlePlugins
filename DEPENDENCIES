@@ -113,6 +113,7 @@ maven/mavencentral/joda-time/joda-time/2.10.5, Apache-2.0, approved, clearlydefi
 maven/mavencentral/joda-time/joda-time/2.12.7, Apache-2.0, approved, #12739
 maven/mavencentral/net.bytebuddy/byte-buddy-agent/1.17.7, Apache-2.0, approved, #19238
 maven/mavencentral/net.bytebuddy/byte-buddy/1.17.7, Apache-2.0 AND BSD-3-Clause, approved, #19239
+maven/mavencentral/net.bytebuddy/byte-buddy/1.18.3, Apache-2.0 AND BSD-3-Clause, approved, #24658
 maven/mavencentral/net.java.dev.jna/jna/5.12.1, Apache-2.0 OR LGPL-2.1-or-later, approved, #3217
 maven/mavencentral/net.sf.jopt-simple/jopt-simple/5.0.4, MIT, approved, CQ13174
 maven/mavencentral/net.sf.saxon/Saxon-HE/12.9, MPL-2.0, approved, clearlydefined
@@ -139,7 +140,7 @@ maven/mavencentral/org.apache.maven.resolver/maven-resolver-api/1.9.18, Apache-2
 maven/mavencentral/org.apache.maven.resolver/maven-resolver-util/1.9.18, Apache-2.0, approved, #4953
 maven/mavencentral/org.apache.xbean/xbean-reflect/3.7, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.apiguardian/apiguardian-api/1.1.2, Apache-2.0, approved, #17641
-maven/mavencentral/org.assertj/assertj-core/3.27.6, Apache-2.0, approved, #17980
+maven/mavencentral/org.assertj/assertj-core/3.27.7, Apache-2.0, approved, #17980
 maven/mavencentral/org.checkerframework/checker-qual/3.19.0, MIT, approved, clearlydefined
 maven/mavencentral/org.checkerframework/checker-qual/3.37.0, MIT, approved, clearlydefined
 maven/mavencentral/org.checkerframework/checker-qual/3.52.1, , restricted, clearlydefined
