@@ -43,10 +43,6 @@ public class Conventions {
         return new MavenArtifactConvention();
     }
 
-    public static EdcConvention java() {
-        return new JavaConvention();
-    }
-
     public static EdcConvention allDependencies() {
         return new AllDependenciesConvention();
     }

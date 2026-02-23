@@ -18,7 +18,6 @@ package org.eclipse.edc.plugins.edcbuild.extensions;
 import org.gradle.api.Action;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
-import org.gradle.jvm.toolchain.JavaLanguageVersion;
 
 /**
  * Root configuration resource for the EDC Build plugin
@@ -46,8 +45,6 @@ public abstract class BuildExtension {
     public MavenPomExtension getPom() {
         return pom;
     }
-
-    public abstract Property<JavaLanguageVersion> getJavaLanguageVersion();
 
     public SwaggerGeneratorExtension getSwagger() {
         return swagger;
