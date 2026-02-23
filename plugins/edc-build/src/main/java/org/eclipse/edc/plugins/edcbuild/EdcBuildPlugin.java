@@ -34,7 +34,6 @@ import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.allDepend
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.checkstyle;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.defaultDependencies;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.jar;
-import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.java;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.mavenPom;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.mavenPublication;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.mavenPublishing;
@@ -73,7 +72,6 @@ public class EdcBuildPlugin implements Plugin<Project> {
             // apply the conventions
             of(
                     rootBuildScript(),
-                    java(),
                     repositories(),
                     defaultDependencies(),
                     checkstyle(),
