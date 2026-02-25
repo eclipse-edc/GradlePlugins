@@ -35,6 +35,7 @@ class SwaggerResolveConventionTest {
     @BeforeEach
     void setUp() {
         project = ProjectBuilder.builder().withName(PROJECT_NAME).build();
+        project.getRepositories().mavenCentral();
         project.getPluginManager().apply(SWAGGER_GRADLE_PLUGIN);
         project.getPluginManager().apply(JavaPlugin.class);
         project.getExtensions().create("edcBuild", BuildExtension.class, project.getObjects());
@@ -47,9 +48,10 @@ class SwaggerResolveConventionTest {
 
         var resolveTask = (ResolveTask) project.getTasks().getByName("resolve");
 
-        assertThat(resolveTask.getOutputDir().toString()).endsWith("/resources/openapi/yaml");
-        assertThat(resolveTask.getOutputFileName()).isEqualTo(PROJECT_NAME);
-        assertThat(resolveTask.getOutputFormat()).isEqualTo(ResolveTask.Format.YAML);
+        assertThat(resolveTask.getOutputDir().get().toString()).endsWith("/resources/openapi/yaml");
+        assertThat(resolveTask.getOutputFileName().get()).isEqualTo(PROJECT_NAME);
+        assertThat(resolveTask.getOutputFormat().get()).isEqualTo(ResolveTask.Format.YAML);
+
     }
 
     @Test
@@ -61,9 +63,9 @@ class SwaggerResolveConventionTest {
 
         var resolveTask = (ResolveTask) project.getTasks().getByName("resolve");
 
-        assertThat(resolveTask.getOutputDir().toString()).endsWith("/resources/openapi/yaml/test-api");
-        assertThat(resolveTask.getOutputFileName()).isEqualTo(PROJECT_NAME);
-        assertThat(resolveTask.getOutputFormat()).isEqualTo(ResolveTask.Format.YAML);
+        assertThat(resolveTask.getOutputDir().get().toString()).endsWith("/resources/openapi/yaml/test-api");
+        assertThat(resolveTask.getOutputFileName().get()).isEqualTo(PROJECT_NAME);
+        assertThat(resolveTask.getOutputFormat().get()).isEqualTo(ResolveTask.Format.YAML);
     }
 
     @Test
@@ -76,8 +78,8 @@ class SwaggerResolveConventionTest {
 
         var resolveTask = (ResolveTask) project.getTasks().getByName("resolve");
 
-        assertThat(resolveTask.getOutputDir().toString()).endsWith("/some/funny/path/test-api");
-        assertThat(resolveTask.getOutputFileName()).isEqualTo(PROJECT_NAME);
-        assertThat(resolveTask.getOutputFormat()).isEqualTo(ResolveTask.Format.YAML);
+        assertThat(resolveTask.getOutputDir().get().toString()).endsWith("/some/funny/path/test-api");
+        assertThat(resolveTask.getOutputFileName().get()).isEqualTo(PROJECT_NAME);
+        assertThat(resolveTask.getOutputFormat().get()).isEqualTo(ResolveTask.Format.YAML);
     }
 }
