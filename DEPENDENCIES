@@ -116,7 +116,7 @@ maven/mavencentral/net.bytebuddy/byte-buddy/1.17.7, Apache-2.0 AND BSD-3-Clause,
 maven/mavencentral/net.bytebuddy/byte-buddy/1.18.3, Apache-2.0 AND BSD-3-Clause, approved, #24658
 maven/mavencentral/net.java.dev.jna/jna/5.12.1, Apache-2.0 OR LGPL-2.1-or-later, approved, #3217
 maven/mavencentral/net.sf.jopt-simple/jopt-simple/5.0.4, MIT, approved, CQ13174
-maven/mavencentral/net.sf.saxon/Saxon-HE/12.9, MPL-2.0, approved, clearlydefined
+maven/mavencentral/net.sf.saxon/Saxon-HE/12.9, MPL-2.0, restricted, clearlydefined
 maven/mavencentral/net.steppschuh.markdowngenerator/markdowngenerator/1.3.1.1, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.antlr/antlr4-runtime/4.13.2, BSD-3-Clause, approved, #10767
 maven/mavencentral/org.apache.commons/commons-lang3/3.12.0, Apache-2.0, approved, clearlydefined
@@ -178,7 +178,7 @@ maven/mavencentral/org.junit.platform/junit-platform-commons/6.0.3, EPL-2.0, app
 maven/mavencentral/org.junit.platform/junit-platform-engine/6.0.3, EPL-2.0, approved, #23933
 maven/mavencentral/org.junit.platform/junit-platform-launcher/6.0.3, EPL-2.0, approved, #23935
 maven/mavencentral/org.junit/junit-bom/6.0.3, , restricted, clearlydefined
-maven/mavencentral/org.mockito/mockito-core/5.21.0, MIT AND (Apache-2.0 AND MIT) AND Apache-2.0, approved, #25203
+maven/mavencentral/org.mockito/mockito-core/5.22.0, MIT AND (Apache-2.0 AND MIT) AND Apache-2.0, approved, #26239
 maven/mavencentral/org.mozilla/rhino/1.7.7.2, MPL-2.0 AND BSD-3-Clause AND ISC, approved, CQ16320
 maven/mavencentral/org.objenesis/objenesis/3.3, Apache-2.0, approved, #19727
 maven/mavencentral/org.openapitools/openapi-generator-core/7.19.0, , restricted, clearlydefined
