@@ -59,10 +59,6 @@ public class Conventions {
         return new RootBuildScriptConvention();
     }
 
-    public static EdcConvention swagger() {
-        return new SwaggerConvention();
-    }
-
     public static EdcConvention swaggerGenerator() {
         return new SwaggerResolveConvention();
     }

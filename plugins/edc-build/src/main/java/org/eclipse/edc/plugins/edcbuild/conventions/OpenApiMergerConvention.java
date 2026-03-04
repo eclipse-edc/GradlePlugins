@@ -21,7 +21,7 @@ import org.gradle.api.Project;
 import java.util.function.Supplier;
 
 import static org.eclipse.edc.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
-import static org.eclipse.edc.plugins.edcbuild.conventions.SwaggerConvention.defaultOutputDirectory;
+import static org.eclipse.edc.plugins.edcbuild.conventions.SwaggerResolveConvention.defaultOutputDirectory;
 
 /**
  * Configures inputs and outputs for the OpenAPI merger plugin

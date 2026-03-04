@@ -37,11 +37,12 @@ import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.jar;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.mavenPom;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.mavenPublication;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.mavenPublishing;
+import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.openApiMerger;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.printClasspath;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.repositories;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.rootBuildScript;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.signing;
-import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.swagger;
+import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.swaggerGenerator;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.tests;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.waitForPublishedArtifacts;
 
@@ -62,6 +63,13 @@ public class EdcBuildPlugin implements Plugin<Project> {
             task.mustRunAfter(signTasks);
         });
 
+        of(
+                rootBuildScript(),
+                repositories(),
+                swaggerGenerator(),
+                openApiMerger()
+        ).forEach(c -> c.apply(target));
+
         // configuration values are only guaranteed to be set after the project has been evaluated
         // https://docs.gradle.org/current/userguide/build_lifecycle.html
         target.afterEvaluate(project -> {
@@ -71,8 +79,6 @@ public class EdcBuildPlugin implements Plugin<Project> {
 
             // apply the conventions
             of(
-                    rootBuildScript(),
-                    repositories(),
                     defaultDependencies(),
                     checkstyle(),
                     mavenPublishing(),
@@ -82,7 +88,6 @@ public class EdcBuildPlugin implements Plugin<Project> {
                     allDependencies(),
                     tests(),
                     jar(),
-                    swagger(),
                     printClasspath(),
                     waitForPublishedArtifacts()
             ).forEach(c -> c.apply(project));
