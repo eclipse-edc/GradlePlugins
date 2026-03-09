@@ -19,7 +19,4 @@ public class Repositories {
     public static final String NEXUS_REPO_URL = "https://ossrh-staging-api.central.sonatype.com/service/local/";
     public static final String SNAPSHOT_REPO_URL = "https://central.sonatype.com/repository/maven-snapshots/";
 
-    @Deprecated(since = "0.14.0")
-    public static final String DEPRECATED_SNAPSHOT_REPO_URL = "https://oss.sonatype.org/content/repositories/snapshots/";
-
 }

@@ -26,14 +26,6 @@ dependencies {
     implementation(libs.plugin.swagger)
     implementation(libs.plugin.openapi.generator)
     implementation(libs.swagger.parser)
-    implementation(libs.plugin.openapi.merger) { // DEPRECATED
-        constraints {
-            implementation(libs.swagger.parser) {
-                because("OpenAPI merger plugin uses an old version that caused this issue: https://github.com/eclipse-edc/GradlePlugins/issues/183")
-            }
-        }
-    }
-
     implementation(libs.jetbrains.annotations)
     implementation(libs.jackson.core)
     implementation(libs.jackson.databind)

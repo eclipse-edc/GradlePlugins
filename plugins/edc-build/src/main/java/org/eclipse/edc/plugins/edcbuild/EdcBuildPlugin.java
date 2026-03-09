@@ -37,7 +37,6 @@ import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.jar;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.mavenPom;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.mavenPublication;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.mavenPublishing;
-import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.openApiMerger;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.printClasspath;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.repositories;
 import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.rootBuildScript;
@@ -52,8 +51,6 @@ import static org.eclipse.edc.plugins.edcbuild.conventions.Conventions.waitForPu
 public class EdcBuildPlugin implements Plugin<Project> {
     @Override
     public void apply(Project target) {
-
-        // register the extension(s)
         target.getExtensions().create("edcBuild", BuildExtension.class, target.getObjects());
 
         applyPlugins(target);
@@ -66,8 +63,7 @@ public class EdcBuildPlugin implements Plugin<Project> {
         of(
                 rootBuildScript(),
                 repositories(),
-                swaggerGenerator(),
-                openApiMerger()
+                swaggerGenerator()
         ).forEach(c -> c.apply(target));
 
         // configuration values are only guaranteed to be set after the project has been evaluated

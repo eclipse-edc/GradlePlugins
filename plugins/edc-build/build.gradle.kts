@@ -16,15 +16,6 @@ dependencies {
     implementation(libs.openapi.generator)
     implementation(libs.plugin.openapi.generator)
     implementation(libs.swagger.parser)
-    // openapi-merger deprecated, will be removed
-    implementation(libs.plugin.openapi.merger.app)
-    implementation(libs.plugin.openapi.merger) {
-        constraints {
-            implementation(libs.swagger.parser) {
-                because("OpenAPI merger plugin uses an old version that caused this issue: https://github.com/eclipse-edc/GradlePlugins/issues/183")
-            }
-        }
-    }
 }
 
 gradlePlugin {

@@ -16,8 +16,6 @@ package org.eclipse.edc.plugins.edcbuild.conventions;
 
 import org.gradle.api.Project;
 
-import static org.eclipse.edc.plugins.edcbuild.conventions.Repositories.DEPRECATED_SNAPSHOT_REPO_URL;
-
 /**
  * Configures the root buildscript, i.e. adds repos
  */
@@ -28,7 +26,6 @@ class RootBuildScriptConvention implements EdcConvention {
             target.getBuildscript().getRepositories().mavenLocal();
             target.getBuildscript().getRepositories().mavenCentral();
             target.getBuildscript().getRepositories().gradlePluginPortal();
-            target.getBuildscript().getRepositories().maven(repo -> repo.setUrl(DEPRECATED_SNAPSHOT_REPO_URL));
         }
     }
 }
