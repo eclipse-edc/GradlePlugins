@@ -32,18 +32,13 @@ class OpenApiMergerPluginTest {
     }
 
     @Test
-    void verify_hasMergerTask() {
-        assertThat(project.getTasks().findByName(MergeApiSpecByPathTask.NAME)).isNotNull();
-    }
-
-
-    @Test
     void verify_pluginIsOnlyAppliedToRootProject() {
         var subproj = ProjectBuilder.builder().withParent(project).build();
 
         subproj.getPlugins().apply(OpenApiMergerPlugin.class);
 
-        assertThat(subproj.getTasks().findByName(MergeApiSpecByPathTask.NAME)).isNull();
+        assertThat(project.getTasks().findByName(MergeOpenApiSpecTask.NAME)).isNotNull();
+        assertThat(subproj.getTasks().findByName(MergeOpenApiSpecTask.NAME)).isNull();
     }
 
 }

@@ -63,10 +63,6 @@ public class Conventions {
         return new SwaggerResolveConvention();
     }
 
-    public static EdcConvention openApiMerger() {
-        return new OpenApiMergerConvention();
-    }
-    
     public static EdcConvention mavenPublication() {
         return new MavenPublicationConvention();
     }
