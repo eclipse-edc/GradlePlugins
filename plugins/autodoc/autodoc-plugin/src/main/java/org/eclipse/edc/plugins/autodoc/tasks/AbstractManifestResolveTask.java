@@ -17,6 +17,7 @@ package org.eclipse.edc.plugins.autodoc.tasks;
 import org.eclipse.edc.plugins.autodoc.AutodocExtension;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.artifacts.Dependency;
+import org.gradle.api.tasks.CacheableTask;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
@@ -39,6 +40,7 @@ import static org.eclipse.edc.plugins.autodoc.tasks.Constants.DEFAULT_AUTODOC_FO
  * <p>
  * Implementations must provide a reference to that autodoc manifest file in the form of a {@link DependencySource}.
  */
+@CacheableTask
 public abstract class AbstractManifestResolveTask extends DefaultTask {
     public static final String MANIFEST_CLASSIFIER = "manifest";
     public static final String MANIFEST_TYPE = "json";

@@ -15,12 +15,14 @@
 package org.eclipse.edc.plugins.autodoc.tasks;
 
 import org.gradle.api.DefaultTask;
+import org.gradle.api.tasks.CacheableTask;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.util.internal.GFileUtils;
 
 import java.io.File;
 
+@CacheableTask
 public class AutodocBomTask extends DefaultTask {
 
     public static final String NAME = "autodocBom";

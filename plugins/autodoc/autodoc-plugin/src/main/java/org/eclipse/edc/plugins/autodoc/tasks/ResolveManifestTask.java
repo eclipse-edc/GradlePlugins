@@ -17,6 +17,7 @@ package org.eclipse.edc.plugins.autodoc.tasks;
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.artifacts.ProjectDependency;
 import org.gradle.api.internal.artifacts.dependencies.ProjectDependencyInternal;
+import org.gradle.api.tasks.CacheableTask;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,6 +25,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Optional;
 
+@CacheableTask
 public class ResolveManifestTask extends AbstractManifestResolveTask {
 
     public static final String NAME = "resolveManifests";

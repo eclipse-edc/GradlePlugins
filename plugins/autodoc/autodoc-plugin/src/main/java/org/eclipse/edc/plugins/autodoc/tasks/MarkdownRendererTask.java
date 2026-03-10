@@ -22,6 +22,7 @@ import org.eclipse.edc.plugins.autodoc.spi.ManifestRenderer;
 import org.eclipse.edc.plugins.autodoc.spi.ManifestWriter;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
+import org.gradle.api.tasks.CacheableTask;
 import org.gradle.api.tasks.TaskAction;
 
 import java.io.File;
@@ -34,6 +35,7 @@ import java.util.function.Function;
 
 import static java.lang.String.format;
 
+@CacheableTask
 public class MarkdownRendererTask extends DefaultTask {
 
     private final JsonManifestReader reader = new JsonManifestReader(new ObjectMapper());
@@ -73,6 +75,7 @@ public class MarkdownRendererTask extends DefaultTask {
         }
     }
 
+    @CacheableTask
     public static class ToHtml extends MarkdownRendererTask {
         public static final String NAME = "doc2html";
 
@@ -81,6 +84,7 @@ public class MarkdownRendererTask extends DefaultTask {
         }
     }
 
+    @CacheableTask
     public static class ToMarkdown extends MarkdownRendererTask {
         public static final String NAME = "doc2md";
 

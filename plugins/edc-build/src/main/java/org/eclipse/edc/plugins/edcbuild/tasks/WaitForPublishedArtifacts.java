@@ -20,6 +20,7 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.maven.MavenPublication;
 import org.gradle.api.tasks.TaskAction;
+import org.gradle.work.DisableCachingByDefault;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -31,6 +32,7 @@ import static org.eclipse.edc.plugins.edcbuild.conventions.ConventionFunctions.r
  * Task for root project that looks up for published artifacts, waiting if they are not available.
  * After a certain timeout the task fails
  */
+@DisableCachingByDefault
 public class WaitForPublishedArtifacts extends DefaultTask {
 
     private static final int TASK_TIMEOUT_MINUTES = 60;

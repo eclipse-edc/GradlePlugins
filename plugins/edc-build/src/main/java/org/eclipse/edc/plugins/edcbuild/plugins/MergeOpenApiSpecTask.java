@@ -22,6 +22,7 @@ import io.swagger.v3.parser.core.models.ParseOptions;
 import org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension;
 import org.gradle.api.file.Directory;
 import org.gradle.api.model.ObjectFactory;
+import org.gradle.api.tasks.CacheableTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +39,7 @@ import static org.eclipse.edc.plugins.edcbuild.conventions.ConventionFunctions.r
 /**
  * Customization of the {@link GenerateTask}, which allows to pass in the input and output directories via command line.
  */
+@CacheableTask
 public class MergeOpenApiSpecTask extends GenerateTask {
 
     public static final String NAME = "mergeOpenApiSpec";

@@ -17,6 +17,7 @@ package org.eclipse.edc.plugins.autodoc.tasks;
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.artifacts.ProjectDependency;
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
+import org.gradle.api.tasks.CacheableTask;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,6 +30,7 @@ import java.util.Optional;
 
 import static java.lang.String.format;
 
+@CacheableTask
 public class DownloadManifestTask extends AbstractManifestResolveTask {
 
     public static final String NAME = "downloadManifests";
