@@ -17,10 +17,11 @@ package org.eclipse.edc.plugins.edcbuild.tasks;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.TaskAction;
+import org.gradle.work.DisableCachingByDefault;
 
 import static org.eclipse.edc.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
 
-
+@DisableCachingByDefault
 public class PrintClasspathTask extends DefaultTask {
 
     @TaskAction

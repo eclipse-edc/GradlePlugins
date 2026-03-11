@@ -16,7 +16,6 @@ package org.eclipse.edc.plugins.edcbuild.conventions;
 
 import io.swagger.v3.plugins.gradle.tasks.ResolveTask;
 import org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension;
-import org.eclipse.edc.plugins.edcbuild.tasks.PrintApiGroupTask;
 import org.gradle.api.Project;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.plugins.JavaPluginExtension;
@@ -45,8 +44,6 @@ class SwaggerResolveConvention implements EdcConvention {
     @Override
     public void apply(Project target) {
         target.getPluginManager().withPlugin(SWAGGER_GRADLE_PLUGIN, appliedPlugin -> {
-
-            target.getTasks().register("apiGroups", PrintApiGroupTask.class);
 
             Stream.of(
                     "io.swagger.core.v3:swagger-jaxrs2-jakarta:%s".formatted(SWAGGER),
