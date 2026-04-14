@@ -152,14 +152,12 @@ public class ExtensionIntrospector {
                 .toString();
 
         var description = Stream.of(
-                attributeValue(String.class, "description", settingMirror, elementUtils),
-                attributeValue(String.class, "value", settingMirror, elementUtils)
+                attributeValue(String.class, "description", settingMirror, elementUtils)
         ).filter(Objects::nonNull).filter(it -> !it.isEmpty()).findFirst().orElse(null);
 
         return ConfigurationSetting.Builder.newInstance()
                 .key(keyValue)
                 .description(description)
-                .type(attributeValue(String.class, "type", settingMirror, elementUtils))
                 .required(attributeValue(Boolean.class, "required", settingMirror, elementUtils))
                 .maximum(attributeValue(Long.class, "max", settingMirror, elementUtils))
                 .minimum(attributeValue(Long.class, "min", settingMirror, elementUtils))

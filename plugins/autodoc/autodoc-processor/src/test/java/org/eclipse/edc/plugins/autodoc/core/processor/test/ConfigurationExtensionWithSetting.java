@@ -20,7 +20,7 @@ import org.eclipse.edc.spi.system.configuration.Config;
 
 public class ConfigurationExtensionWithSetting implements ConfigurationExtension {
 
-    @Setting("Valid because this is an extension of ServiceExtension")
+    @Setting(description = "Valid because this is an extension of ServiceExtension")
     private static final String VALID_SETTING = "any";
 
     @Override

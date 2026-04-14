@@ -17,6 +17,6 @@ package org.eclipse.edc.plugins.autodoc.core.processor.test;
 import org.eclipse.edc.runtime.metamodel.annotation.Setting;
 
 public class NotExtensionWithSetting {
-    @Setting("the setting must stay in a ServiceExtension class")
+    @Setting(description = "the setting must stay in a ServiceExtension class")
     private static final String UNEXPECTED_SETTING = "any";
 }
