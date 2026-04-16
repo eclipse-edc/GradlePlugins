@@ -17,7 +17,10 @@ package org.eclipse.edc.plugins.edcbuild.conventions;
 import io.swagger.v3.plugins.gradle.tasks.ResolveTask;
 import org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension;
 import org.gradle.api.Project;
+import org.gradle.api.internal.project.ProjectInternal;
 import org.gradle.api.plugins.JavaPlugin;
+import org.gradle.api.provider.Provider;
+import org.gradle.api.tasks.TaskProvider;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,11 +33,11 @@ import static org.eclipse.edc.plugins.edcbuild.conventions.SwaggerResolveConvent
 class SwaggerResolveConventionTest {
 
     private static final String PROJECT_NAME = "testproject";
-    private Project project;
+    private final Project project = ProjectBuilder.builder().withName(PROJECT_NAME).build();
+    private final SwaggerResolveConvention convention = new SwaggerResolveConvention();
 
     @BeforeEach
     void setUp() {
-        project = ProjectBuilder.builder().withName(PROJECT_NAME).build();
         project.getRepositories().mavenCentral();
         project.getPluginManager().apply(SWAGGER_GRADLE_PLUGIN);
         project.getPluginManager().apply(JavaPlugin.class);
@@ -42,44 +45,104 @@ class SwaggerResolveConventionTest {
     }
 
     @Test
-    void apply_whenApiGroupNotSpecified_shouldUseDefault() {
-        var convention = new SwaggerResolveConvention();
+    void shouldDisableTask_whenNoGroupSpecified() {
         convention.apply(project);
 
         var resolveTask = (ResolveTask) project.getTasks().getByName("resolve");
 
-        assertThat(resolveTask.getOutputDir().get().toString()).endsWith("/resources/openapi/yaml");
-        assertThat(resolveTask.getOutputFileName().get()).isEqualTo(PROJECT_NAME);
-        assertThat(resolveTask.getOutputFormat().get()).isEqualTo(ResolveTask.Format.YAML);
-
+        assertThat(resolveTask.isEnabled()).isFalse();
+        assertThat(resolveTask.getDependsOn()).hasSize(0);
     }
 
     @Test
     void apply_whenApiGroupSpecified_shouldAppend() {
         var swagger = ConventionFunctions.requireExtension(project, BuildExtension.class).getSwagger();
-        swagger.getApiGroup().set("test-api");
-        var convention = new SwaggerResolveConvention();
+        swagger.apiGroup("test-api");
+
         convention.apply(project);
+        ((ProjectInternal) project).evaluate();
+        var resolveTask = project.getTasks().getByName("resolve");
 
-        var resolveTask = (ResolveTask) project.getTasks().getByName("resolve");
-
-        assertThat(resolveTask.getOutputDir().get().toString()).endsWith("/resources/openapi/yaml/test-api");
-        assertThat(resolveTask.getOutputFileName().get()).isEqualTo(PROJECT_NAME);
-        assertThat(resolveTask.getOutputFormat().get()).isEqualTo(ResolveTask.Format.YAML);
+        assertThat(resolveTask.getDependsOn()).hasSize(1).first().isInstanceOfSatisfying(TaskProvider.class, taskProvider -> {
+            assertThat(taskProvider.isPresent()).isTrue();
+            assertThat(taskProvider.get()).isInstanceOfSatisfying(ResolveTask.class, actual -> {
+                assertThat(actual.getOutputDir().get().toString()).endsWith("/resources/openapi/yaml/test-api");
+                assertThat(actual.getOutputFileName().get()).isEqualTo(PROJECT_NAME);
+                assertThat(actual.getOutputFormat().get()).isEqualTo(ResolveTask.Format.YAML);
+            });
+        });
     }
 
     @Test
     void apply_whenOutputDirSet_shouldAppend() {
         var swagger = ConventionFunctions.requireExtension(project, BuildExtension.class).getSwagger();
-        swagger.getApiGroup().set("test-api");
+        swagger.apiGroup("test-api");
         swagger.getOutputDirectory().set(new File("some/funny/path"));
-        var convention = new SwaggerResolveConvention();
+
         convention.apply(project);
+        ((ProjectInternal) project).evaluate();
+        var resolveTask = project.getTasks().getByName("resolve");
 
-        var resolveTask = (ResolveTask) project.getTasks().getByName("resolve");
+        assertThat(resolveTask.getDependsOn()).hasSize(1).first().isInstanceOfSatisfying(TaskProvider.class, taskProvider -> {
+            assertThat(taskProvider.isPresent()).isTrue();
+            assertThat(taskProvider.get()).isInstanceOfSatisfying(ResolveTask.class, actual -> {
+                assertThat(actual.getOutputDir().get().toString()).endsWith("/some/funny/path/test-api");
+                assertThat(actual.getOutputFileName().get()).isEqualTo(PROJECT_NAME);
+                assertThat(actual.getOutputFormat().get()).isEqualTo(ResolveTask.Format.YAML);
+            });
+        });
+    }
 
-        assertThat(resolveTask.getOutputDir().get().toString()).endsWith("/some/funny/path/test-api");
-        assertThat(resolveTask.getOutputFileName().get()).isEqualTo(PROJECT_NAME);
-        assertThat(resolveTask.getOutputFormat().get()).isEqualTo(ResolveTask.Format.YAML);
+    @Test
+    void shouldSetPackage_whenSpecified() {
+        var swagger = ConventionFunctions.requireExtension(project, BuildExtension.class).getSwagger();
+        swagger.apiGroup("group", "the.package.name", "another.package.name");
+
+        convention.apply(project);
+        ((ProjectInternal) project).evaluate();
+        var resolveTask = project.getTasks().getByName("resolve");
+
+        assertThat(resolveTask.getDependsOn()).hasSize(1).map(TaskProvider.class::cast).map(Provider::get).map(ResolveTask.class::cast)
+                .first().satisfies(task -> {
+                    assertThat(task.getResourcePackages().get()).containsExactlyInAnyOrder("the.package.name", "another.package.name");
+                });
+    }
+
+    @Test
+    void shouldRegisterMultipleTasks_whenMultipleApiGroups() {
+        var swagger = ConventionFunctions.requireExtension(project, BuildExtension.class).getSwagger();
+        swagger.apiGroup("group-one");
+        swagger.apiGroup("group-two");
+
+        convention.apply(project);
+        ((ProjectInternal) project).evaluate();
+        var resolveTask = project.getTasks().getByName("resolve");
+
+        assertThat(resolveTask.getDependsOn()).hasSize(2).map(TaskProvider.class::cast).map(Provider::get).map(ResolveTask.class::cast)
+                .anySatisfy(p -> assertThat(p.getOutputDir().get().toString()).endsWith("/resources/openapi/yaml/group-one"))
+                .anySatisfy(p -> assertThat(p.getOutputDir().get().toString()).endsWith("/resources/openapi/yaml/group-two"));
+    }
+
+    @Deprecated(since = "1.5.0")
+    @Test
+    void shouldApplyDeprecatedApiGroupCall_whenItIsDefined() {
+        var swagger = ConventionFunctions.requireExtension(project, BuildExtension.class).getSwagger();
+        swagger.getApiGroup().set("test-api"); // deprecated call
+        swagger.apiGroup("another-one");
+        swagger.getOutputDirectory().set(new File("some/funny/path"));
+
+        convention.apply(project);
+        ((ProjectInternal) project).evaluate();
+        var resolveTask = project.getTasks().getByName("resolve");
+
+        assertThat(resolveTask.getDependsOn()).hasSize(1).first().isInstanceOfSatisfying(TaskProvider.class, taskProvider -> {
+            assertThat(taskProvider.isPresent()).isTrue();
+            assertThat(taskProvider.get()).isInstanceOfSatisfying(ResolveTask.class, actual -> {
+                assertThat(actual.getOutputDir().get().toString()).endsWith("/some/funny/path/test-api");
+                assertThat(actual.getOutputFileName().get()).isEqualTo(PROJECT_NAME);
+                assertThat(actual.getOutputFormat().get()).isEqualTo(ResolveTask.Format.YAML);
+            });
+        });
+
     }
 }
