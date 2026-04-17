@@ -15,13 +15,16 @@
 package org.eclipse.edc.plugins.edcbuild.conventions;
 
 import io.swagger.v3.plugins.gradle.tasks.ResolveTask;
+import org.eclipse.edc.plugins.edcbuild.extensions.ApiGroup;
 import org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension;
+import org.eclipse.edc.plugins.edcbuild.extensions.SwaggerGeneratorExtension;
 import org.gradle.api.Project;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.jspecify.annotations.NonNull;
 
 import java.nio.file.Path;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.eclipse.edc.plugins.edcbuild.Versions.JAKARTA_WS_RS;
@@ -34,7 +37,6 @@ import static org.gradle.api.plugins.JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAM
  */
 class SwaggerResolveConvention implements EdcConvention {
 
-    private static final String DEFAULT_API_GROUP = "";
     public static final String SWAGGER_GRADLE_PLUGIN = "io.swagger.core.v3.swagger-gradle-plugin";
 
     public static Path defaultOutputDirectory(Project project) {
@@ -51,47 +53,69 @@ class SwaggerResolveConvention implements EdcConvention {
             ).forEach(dependency -> target.getDependencies().add(IMPLEMENTATION_CONFIGURATION_NAME, dependency));
 
             var swaggerExt = requireExtension(target, BuildExtension.class).getSwagger();
+            var tasks = target.getTasks();
 
-            var resourcePkgs = swaggerExt.getResourcePackages(); // already provides the default
+            var resolve = tasks.named("resolve");
+            resolve.configure(it -> it.setEnabled(false));
 
-            target.getTasks().withType(ResolveTask.class).configureEach(task -> {
-                var outputFileName = swaggerExt.getOutputFilename().getOrElse(target.getName());
-                var fallbackOutputDir = defaultOutputDirectory(target);
-                var apiGroup = swaggerExt.getApiGroup().getOrElse(DEFAULT_API_GROUP);
+            var openapiAll = tasks.register("openapi");
 
-                var outputDir = Path.of(swaggerExt.getOutputDirectory().getOrElse(fallbackOutputDir.toFile()).toURI())
-                        .resolve(apiGroup)
-                        .toString();
+            target.afterEvaluate(p -> getApiGroups(swaggerExt).forEach(apiGroup -> {
+                var resolveTask = tasks.register("resolve" + apiGroup.name(), ResolveTask.class, task -> {
+                    var fallbackOutputDir = defaultOutputDirectory(target);
 
-                task.setOutputFileName(outputFileName);
-                task.setOutputDir(outputDir);
-                task.setOutputFormat(ResolveTask.Format.YAML);
-                task.setSortOutput(true);
-                task.setPrettyPrint(true);
-                task.setClasspath(getClasspath(target));
-                task.setBuildClasspath(task.getClasspath());
-                task.setResourcePackages(resourcePkgs);
-            });
+                    var outputDir = Path.of(swaggerExt.getOutputDirectory().getOrElse(fallbackOutputDir.toFile()).toURI())
+                            .resolve(apiGroup.name())
+                            .toString();
 
-            target.getTasks().register("openapi", ResolveTask.class).configure(task -> {
-                var outputDir = target.getLayout().getBuildDirectory().getAsFile().get().toPath()
-                        .resolve("docs").resolve("openapi")
-                        .toString();
+                    task.setOutputFileName(swaggerExt.getOutputFilename().getOrElse(target.getName()));
+                    task.setOutputDir(outputDir);
+                    task.setClasspath(getClasspath(target));
+                    task.setResourcePackages(apiGroup.packages());
 
-                target.getTasks().findByName("jar").dependsOn(task);
-                task.setGroup("documentation");
-                task.setDescription("Generates openapi specification documentation.");
-                task.setOutputFileName(swaggerExt.getApiGroup().getOrElse("openapi"));
-                task.setOutputDir(outputDir);
-                task.setOutputFormat(ResolveTask.Format.YAML);
-                task.setSortOutput(true);
-                task.setPrettyPrint(true);
-                task.setClasspath(getClasspath(target));
-                task.setBuildClasspath(task.getClasspath());
-                task.setResourcePackages(resourcePkgs);
-            });
+                    baseTaskConfiguration(task, target);
+                });
+                resolve.configure(t -> t.dependsOn(resolveTask));
+
+                var openapiTask = tasks.register("openapi" + apiGroup.name(), ResolveTask.class, task -> {
+                    var outputDir = target.getLayout().getBuildDirectory().getAsFile().get().toPath()
+                            .resolve("docs").resolve("openapi")
+                            .toString();
+
+                    task.setGroup("documentation");
+                    task.setDescription("Generates openapi specification documentation.");
+                    task.setOutputFileName(apiGroup.name());
+                    task.setResourcePackages(apiGroup.packages());
+                    task.setOutputDir(outputDir);
+
+                    baseTaskConfiguration(task, target);
+                });
+                openapiAll.configure(t -> t.dependsOn(openapiTask));
+                tasks.named("jar").configure(t -> t.dependsOn(openapiTask));
+            }));
 
         });
+    }
+
+    private static void baseTaskConfiguration(ResolveTask task, Project project) {
+        task.setClasspath(getClasspath(project));
+        task.setBuildClasspath(task.getClasspath());
+        task.setOutputFormat(ResolveTask.Format.YAML);
+        task.setSortOutput(true);
+        task.setPrettyPrint(true);
+        task.setReadAllResources(true);
+        task.setSkip(false);
+        task.setEncoding("UTF-8");
+        task.setAlwaysResolveAppPath(Boolean.FALSE);
+        task.setSkipResolveAppPath(Boolean.FALSE);
+        task.setOpenAPI31(false);
+        task.setConvertToOpenAPI31(false);
+    }
+
+    private static @NonNull Set<ApiGroup> getApiGroups(SwaggerGeneratorExtension swaggerExt) {
+        return swaggerExt.getApiGroup()
+                .map(group -> Set.of(new ApiGroup(group, swaggerExt.getResourcePackages())))
+                .getOrElse(swaggerExt.getApiGroups());
     }
 
     private static @NonNull FileCollection getClasspath(Project target) {
