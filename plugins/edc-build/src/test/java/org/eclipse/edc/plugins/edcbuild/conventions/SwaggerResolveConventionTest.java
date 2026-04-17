@@ -55,7 +55,7 @@ class SwaggerResolveConventionTest {
     }
 
     @Test
-    void apply_whenApiGroupSpecified_shouldAppend() {
+    void shouldCreateTaskForApiGroup() {
         var swagger = ConventionFunctions.requireExtension(project, BuildExtension.class).getSwagger();
         swagger.apiGroup("test-api");
 
@@ -69,6 +69,27 @@ class SwaggerResolveConventionTest {
                 assertThat(actual.getOutputDir().get().toString()).endsWith("/resources/openapi/yaml/test-api");
                 assertThat(actual.getOutputFileName().get()).isEqualTo(PROJECT_NAME);
                 assertThat(actual.getOutputFormat().get()).isEqualTo(ResolveTask.Format.YAML);
+                assertThat(actual.getResourcePackages().get()).containsExactly("org.eclipse.edc");
+            });
+        });
+    }
+
+    @Test
+    void shouldAssignPackageNames() {
+        var swagger = ConventionFunctions.requireExtension(project, BuildExtension.class).getSwagger();
+        swagger.apiGroup("test-api", "package.name");
+
+        convention.apply(project);
+        ((ProjectInternal) project).evaluate();
+        var resolveTask = project.getTasks().getByName("resolve");
+
+        assertThat(resolveTask.getDependsOn()).hasSize(1).first().isInstanceOfSatisfying(TaskProvider.class, taskProvider -> {
+            assertThat(taskProvider.isPresent()).isTrue();
+            assertThat(taskProvider.get()).isInstanceOfSatisfying(ResolveTask.class, actual -> {
+                assertThat(actual.getOutputDir().get().toString()).endsWith("/resources/openapi/yaml/test-api");
+                assertThat(actual.getOutputFileName().get()).isEqualTo(PROJECT_NAME);
+                assertThat(actual.getOutputFormat().get()).isEqualTo(ResolveTask.Format.YAML);
+                assertThat(actual.getResourcePackages().get()).containsExactly("package.name");
             });
         });
     }

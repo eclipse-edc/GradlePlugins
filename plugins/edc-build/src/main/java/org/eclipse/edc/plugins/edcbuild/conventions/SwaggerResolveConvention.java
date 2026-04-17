@@ -58,8 +58,6 @@ class SwaggerResolveConvention implements EdcConvention {
             var resolve = tasks.named("resolve");
             resolve.configure(it -> it.setEnabled(false));
 
-            var openapiAll = tasks.register("openapi");
-
             target.afterEvaluate(p -> getApiGroups(swaggerExt).forEach(apiGroup -> {
                 var resolveTask = tasks.register("resolve" + apiGroup.name(), ResolveTask.class, task -> {
                     var fallbackOutputDir = defaultOutputDirectory(target);
@@ -90,7 +88,6 @@ class SwaggerResolveConvention implements EdcConvention {
 
                     baseTaskConfiguration(task, target);
                 });
-                openapiAll.configure(t -> t.dependsOn(openapiTask));
                 tasks.named("jar").configure(t -> t.dependsOn(openapiTask));
             }));
 
