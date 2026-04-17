@@ -23,17 +23,20 @@ import java.util.Set;
 
 public abstract class SwaggerGeneratorExtension {
 
-    private Set<String> resourcePackages = Set.of("org.eclipse.edc");
-    private Set<ApiGroup> apiGroups = new HashSet<>();
+    public static final String DEFAULT_PACKAGE = "org.eclipse.edc";
+    private Set<String> resourcePackages = Set.of(DEFAULT_PACKAGE);
+    private final Set<ApiGroup> apiGroups = new HashSet<>();
 
     public abstract Property<String> getOutputFilename();
 
     public abstract Property<File> getOutputDirectory();
 
+    @Deprecated(since = "0.15.1")
     public Set<String> getResourcePackages() {
         return resourcePackages;
     }
 
+    @Deprecated(since = "0.15.1")
     public void setResourcePackages(Set<String> resourcePackages) {
         this.resourcePackages = resourcePackages;
     }
@@ -48,7 +51,8 @@ public abstract class SwaggerGeneratorExtension {
     public abstract Property<String> getApiGroup();
 
     public void apiGroup(String group, String... packages) {
-        apiGroups.add(new ApiGroup(group, new HashSet<>(Arrays.asList(packages))));
+        var groupPackages = packages.length == 0 ? Set.of(DEFAULT_PACKAGE) : new HashSet<>(Arrays.asList(packages));
+        apiGroups.add(new ApiGroup(group, groupPackages));
     }
 
     public Set<ApiGroup> getApiGroups() {
