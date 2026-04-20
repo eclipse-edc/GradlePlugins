@@ -58,7 +58,6 @@ class MavenArtifactConvention implements EdcConvention {
                                 addArtifactIfExist(target, openapiFile, mavenPub, artifact -> {
                                     artifact.setClassifier(getFilenameWithoutExtension(openapiFile));
                                     artifact.setType("yaml");
-                                    artifact.builtBy("openapi");
                                 });
                             }
                         }
