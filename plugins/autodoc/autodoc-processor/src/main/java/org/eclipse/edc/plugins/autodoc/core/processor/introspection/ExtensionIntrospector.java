@@ -21,20 +21,23 @@ import org.eclipse.edc.runtime.metamodel.annotation.Inject;
 import org.eclipse.edc.runtime.metamodel.annotation.Provider;
 import org.eclipse.edc.runtime.metamodel.annotation.Provides;
 import org.eclipse.edc.runtime.metamodel.annotation.Setting;
-import org.eclipse.edc.runtime.metamodel.annotation.SettingContext;
 import org.eclipse.edc.runtime.metamodel.annotation.Spi;
 import org.eclipse.edc.runtime.metamodel.domain.ConfigurationSetting;
 import org.eclipse.edc.runtime.metamodel.domain.Service;
 import org.eclipse.edc.runtime.metamodel.domain.ServiceReference;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
@@ -103,15 +106,18 @@ public class ExtensionIntrospector {
     }
 
     /**
-     * Resolves configuration points declared with {@link Setting}.
+     * Resolves configuration points declared with {@link Setting} and {@link Configuration}
      */
     public List<ConfigurationSetting> resolveConfigurationSettings(Element element) {
         var settingsInConfigObjects = getEnclosedElementsAnnotatedWith(element, Configuration.class)
-                .flatMap(e -> getEnclosedElementsAnnotatedWith(typeUtils.asElement(e.asType()), Setting.class));
+                .map(this::extractConfigurationContext)
+                .flatMap(configurationContext -> getEnclosedSettings(configurationContext.type())
+                        .map(configurationElement -> new VariableElementContext(configurationContext.context(), configurationElement)));
 
-        return Stream.concat(settingsInConfigObjects, getEnclosedElementsAnnotatedWith(element, Setting.class))
-                .filter(VariableElement.class::isInstance)
-                .map(VariableElement.class::cast)
+        var settingElements = getEnclosedSettings(element)
+                .map(settingElement -> new VariableElementContext(null, settingElement));
+
+        return Stream.concat(settingsInConfigObjects, settingElements)
                 .map(this::createConfigurationSetting)
                 .collect(toList());
     }
@@ -127,6 +133,11 @@ public class ExtensionIntrospector {
         return element.asType().toString();
     }
 
+    private @NotNull Stream<VariableElement> getEnclosedSettings(Element type) {
+        return getEnclosedElementsAnnotatedWith(type, Setting.class)
+                .filter(VariableElement.class::isInstance)
+                .map(VariableElement.class::cast);
+    }
 
     /**
      * Returns a stream consisting of the {@code extensionElement}'s enclosed {@link Element}s, that are annotated with the given annotation class.
@@ -139,21 +150,18 @@ public class ExtensionIntrospector {
     /**
      * Maps a {@link ConfigurationSetting} from an {@link Setting} annotation.
      */
-    private ConfigurationSetting createConfigurationSetting(VariableElement settingElement) {
+    private ConfigurationSetting createConfigurationSetting(VariableElementContext variableElementContext) {
+        var settingElement = variableElementContext.element();
         var settingMirror = mirrorFor(Setting.class, settingElement);
-        var prefix = attributeValue(String.class, CONTEXT_ATTRIBUTE, settingMirror, elementUtils);
-        if (prefix.isEmpty()) {
-            prefix = resolveConfigurationPrefix(settingElement);
-        }
+        var prefix = getPrefix(settingMirror, variableElementContext.context());
 
         // either take the config key value directly from the annotated variable or from the "key" attribute
         var keyValue = prefix + ofNullable(settingElement.getConstantValue())
                 .orElseGet(() -> attributeValue(String.class, "key", settingMirror, elementUtils))
                 .toString();
 
-        var description = Stream.of(
-                attributeValue(String.class, "description", settingMirror, elementUtils)
-        ).filter(Objects::nonNull).filter(it -> !it.isEmpty()).findFirst().orElse(null);
+        var description = Stream.of(attributeValue(String.class, "description", settingMirror, elementUtils))
+                .filter(Objects::nonNull).filter(it -> !it.isEmpty()).findFirst().orElse(null);
 
         return ConfigurationSetting.Builder.newInstance()
                 .key(keyValue)
@@ -166,16 +174,58 @@ public class ExtensionIntrospector {
                 .build();
     }
 
-    /**
-     * Resolves a configuration prefix specified by {@link SettingContext} for a given EDC setting element or an empty string if there is none.
-     */
-    @NotNull
-    private String resolveConfigurationPrefix(VariableElement edcSettingElement) {
-        var enclosingElement = edcSettingElement.getEnclosingElement();
-        if (enclosingElement == null) {
-            return "";
+    private @NotNull String getPrefix(AnnotationMirror settingMirror, String configurationContext) {
+        var prefix = attributeValue(String.class, CONTEXT_ATTRIBUTE, settingMirror, elementUtils);
+        if (!prefix.isBlank()) {
+            return appendDotIfNeeded(prefix);
         }
-        var contextMirror = mirrorFor(SettingContext.class, enclosingElement);
-        return contextMirror != null ? attributeValue(String.class, "value", contextMirror, elementUtils) : "";
+
+        if (configurationContext != null) {
+            return appendDotIfNeeded(configurationContext);
+        }
+
+        return "";
     }
+
+    private @NotNull String appendDotIfNeeded(String string) {
+        return string + (string.endsWith(".") ? "" : ".");
+    }
+
+
+    private ConfigurationContext extractConfigurationContext(Element e) {
+        var settingContext = getSettingContext(e);
+
+        var currentType = e.asType();
+        var mapTypeElement = elementUtils.getTypeElement(Map.class.getName());
+        var mapType = typeUtils.getDeclaredType(mapTypeElement,
+                typeUtils.getWildcardType(null, null),
+                typeUtils.getWildcardType(null, null)
+        );
+
+        if (typeUtils.isAssignable(currentType, mapType)) {
+            var mapGenericType = ((DeclaredType) currentType).getTypeArguments().get(1);
+            return new ConfigurationContext(settingContext + ".<alias>", typeUtils.asElement(mapGenericType));
+        }
+
+        return new ConfigurationContext(settingContext, typeUtils.asElement(currentType));
+    }
+
+    private @Nullable String getSettingContext(Element e) {
+        var context = e.getAnnotation(Configuration.class).context();
+        if (!context.isBlank()) {
+            return context;
+        }
+
+        return ofNullable(mirrorFor(org.eclipse.edc.runtime.metamodel.annotation.SettingContext.class, e))
+                .map(annotationMirror -> attributeValue(String.class, "value", annotationMirror, elementUtils))
+                .orElse(null);
+    }
+
+    private record VariableElementContext(String context, VariableElement element) {
+
+    }
+
+    private record ConfigurationContext(String context, Element type) {}
+
+
 }

@@ -96,7 +96,6 @@ public class ModuleIntrospector {
      */
     public Set<Element> getExtensionElements(RoundEnvironment environment) {
 
-
         var settingsSymbols = environment.getElementsAnnotatedWith(Setting.class).stream()
                 .peek(setting -> {
                     var serviceExtensionType = typeUtils.erasure(elementUtils.getTypeElement(SYSTEM_EXTENSION_NAME).asType());
@@ -110,9 +109,8 @@ public class ModuleIntrospector {
                     }
                 });
 
-        // check that fields annotated with @Configuration occur only inside extension classes
-        environment.getElementsAnnotatedWith(Configuration.class)
-                .forEach(setting -> {
+        var configurationSymbols = environment.getElementsAnnotatedWith(Configuration.class).stream()
+                .peek(setting -> {
                     var serviceExtensionType = typeUtils.erasure(elementUtils.getTypeElement(SYSTEM_EXTENSION_NAME).asType());
                     var enclosingElement = setting.getEnclosingElement().asType();
 
@@ -126,7 +124,7 @@ public class ModuleIntrospector {
         var injectSymbols = environment.getElementsAnnotatedWith(Inject.class);
         var providerSymbols = environment.getElementsAnnotatedWith(Provider.class);
 
-        var classes = Stream.of(settingsSymbols, injectSymbols.stream(), providerSymbols.stream())
+        var classes = Stream.of(settingsSymbols, configurationSymbols, injectSymbols.stream(), providerSymbols.stream())
                 .reduce(Stream::concat)
                 .orElse(Stream.empty())
                 .map(Element::getEnclosingElement)

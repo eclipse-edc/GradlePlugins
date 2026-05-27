@@ -16,6 +16,7 @@ package org.eclipse.edc.plugins.autodoc.core.processor;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.eclipse.edc.plugins.autodoc.core.processor.testconfig.ServiceExtensionWithConfig;
 import org.eclipse.edc.plugins.autodoc.core.processor.testextensions.NotAnExtension;
 import org.eclipse.edc.plugins.autodoc.core.processor.testextensions.OptionalService;
 import org.eclipse.edc.plugins.autodoc.core.processor.testextensions.RequiredService;
@@ -31,6 +32,7 @@ import org.eclipse.edc.runtime.metamodel.domain.EdcServiceExtension;
 import org.eclipse.edc.runtime.metamodel.domain.Service;
 import org.eclipse.edc.runtime.metamodel.domain.ServiceReference;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -48,6 +50,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.tools.Diagnostic;
@@ -59,7 +62,6 @@ import javax.tools.ToolProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.eclipse.edc.plugins.autodoc.core.processor.Constants.TEST_CLASS_PREFIX_SETTING_KEY;
 import static org.eclipse.edc.plugins.autodoc.core.processor.Constants.TEST_FIELD_PREFIX_SETTING_KEY;
 import static org.eclipse.edc.plugins.autodoc.core.processor.Constants.TEST_SETTING_DEFAULT_VALUE;
 import static org.eclipse.edc.plugins.autodoc.core.processor.Constants.TEST_SETTING_ID_KEY;
@@ -256,9 +258,37 @@ public class EdcModuleProcessorTest {
 
             assertThat(ext1.getConfiguration())
                     .extracting(ConfigurationSetting::getKey)
-                    .contains(TEST_CLASS_PREFIX_SETTING_KEY + TEST_SETTING_ID_KEY, TEST_FIELD_PREFIX_SETTING_KEY + TEST_SETTING_ID_KEY);
+                    .contains(TEST_SETTING_ID_KEY, TEST_FIELD_PREFIX_SETTING_KEY + TEST_SETTING_ID_KEY);
         }
 
+    }
+
+    @Nested
+    class Configuration {
+        @Test
+        void shouldAddConfigurationContextAsPrefix() {
+            createTask("testconfig").call();
+
+            var modules = readManifest();
+
+            assertThat(modules).hasSize(1).first()
+                    .extracting(EdcModule::getExtensions)
+                    .extracting(serviceExtensions -> getExtension(serviceExtensions, ServiceExtensionWithConfig.class))
+                    .isNotNull()
+                    .satisfies(extension -> {
+                        assertThat(extension.getConfiguration()).hasSize(3)
+                                .extracting(ConfigurationSetting::getKey)
+                                .containsExactlyInAnyOrder(
+                                        "edc.configuration.context.setting",
+                                        "edc.configuration.map.<alias>.setting",
+                                        "edc.configuration.context.deprecated.setting");
+                    });
+
+        }
+
+        private @Nullable EdcServiceExtension getExtension(Set<EdcServiceExtension> serviceExtension, Class<?> clazz) {
+            return serviceExtension.stream().filter(it -> it.getName().equals(clazz.getSimpleName())).findFirst().orElse(null);
+        }
     }
 
     @Test
@@ -319,8 +349,9 @@ public class EdcModuleProcessorTest {
 
     private List<EdcModule> readManifest() {
         try (var files = Files.list(tempDir)) {
-            var url = files.filter(p -> p.endsWith("edc.json")).findFirst().orElseThrow(AssertionError::new).toUri().toURL();
-            return OBJECT_MAPPER.readValue(url, new TypeReference<>() { });
+            var stream = files.filter(p -> p.endsWith("edc.json")).findFirst().orElseThrow(AssertionError::new)
+                    .toUri().toURL().openStream();
+            return OBJECT_MAPPER.readValue(stream, new TypeReference<>() { });
         } catch (IOException e) {
             throw new AssertionError(e);
         }
