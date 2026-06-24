@@ -29,10 +29,6 @@ dependencies {
     implementation(libs.jetbrains.annotations)
     implementation(libs.jackson.core)
     implementation(libs.jackson.databind)
-
-    api(libs.edc.runtime.metamodel)
-    implementation(libs.markdown.gen)
-    implementation(libs.j2html)
 }
 
 gradlePlugin {
@@ -40,11 +36,6 @@ gradlePlugin {
         create("edc-build") {
             id = "${group}.edc-build"
             implementationClass = "${group}.plugins.edcbuild.EdcBuildPlugin"
-        }
-
-        create("autodoc") {
-            id = "${group}.autodoc"
-            implementationClass = "${group}.plugins.autodoc.AutodocPlugin"
         }
     }
 }
@@ -56,8 +47,6 @@ sourceSets {
         java {
             srcDirs(
                 generatedSourcesFolder,
-                "../plugins/autodoc/autodoc-plugin/src/main",
-                "../plugins/autodoc/autodoc-converters/src/main",
                 "../plugins/edc-build/src/main",
             )
         }
