@@ -12,20 +12,13 @@
 
 ---
 
-This repository contains various plugins for the EDC Gradle plugins.
-
-There are 2 plugins: `edc-build` and `autodoc`
+This repository contains gradle plugins for EDC.
 
 ### edc-build
 Is a plugin that provides basic capabilities to check/build/publish edc related modules.
 
 The plugin is published on the https://plugins.gradle.org/plugin/org.eclipse.edc.edc-build with its own version number,
 detached from the EDC version.
-
-### autodoc
-Is a plugin that permits automatic documentation generation for EDC related modules.
-
-Its version is aligned with the EDC one. 
 
 ## Documentation
 

@@ -4,15 +4,11 @@ format.version = "1.1"
 [versions]
 assertj = "3.27.7"
 checkstyle = "12.3.0"
-edc = "0.19.0-SNAPSHOT"
-# the edc-boot-spi dependency is used only for tests, this fixed version prevents the "chicken-egg" problem
-edc-test = "0.17.0"
 jackson = "2.22.0"
 jetbrainsAnnotation = "26.1.0"
 jakarta-ws-rs = "4.0.0"
 jupiter = "6.1.0"
 mockito = "5.23.0"
-openapi-merger = "1.0.5"
 openapi-generator = "7.19.0"
 swagger = "2.2.42"
 swagger-parser = "2.1.44"
@@ -20,15 +16,11 @@ swagger-parser = "2.1.44"
 [libraries]
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 checkstyle = { module = "com.puppycrawl.tools:checkstyle", version.ref = "checkstyle" }
-edc-runtime-metamodel = { module = "org.eclipse.edc:runtime-metamodel", version.ref = "edc" }
-edc-boot-spi = { module = "org.eclipse.edc:boot-spi", version.ref = "edc-test" }
-j2html = { module = "com.j2html:j2html", version = "1.6.0" }
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jakarta-ws-rs-api = { module = "jakarta.ws.rs:jakarta.ws.rs-api", version.ref = "jakarta-ws-rs" }
 jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotation" }
 jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "jupiter" }
-markdown-gen = { module = "net.steppschuh.markdowngenerator:markdowngenerator", version = "1.3.1.1" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 openapi-generator = { module = "org.openapitools:openapi-generator", version.ref = "openapi-generator" }
 plugin-publish = { module = "com.vanniktech:gradle-maven-publish-plugin", version = "0.36.0" }
