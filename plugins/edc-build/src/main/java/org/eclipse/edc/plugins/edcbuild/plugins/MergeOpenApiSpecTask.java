@@ -20,54 +20,54 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.parser.core.models.ParseOptions;
 import org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension;
-import org.gradle.api.file.Directory;
-import org.gradle.api.model.ObjectFactory;
-import org.gradle.api.tasks.CacheableTask;
+import org.gradle.api.DefaultTask;
+import org.gradle.api.GradleException;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
-import org.jetbrains.annotations.NotNull;
-import org.openapitools.generator.gradle.plugin.tasks.GenerateTask;
+import org.gradle.work.DisableCachingByDefault;
+import org.openapitools.codegen.config.MergedSpecBuilder;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
-import javax.inject.Inject;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static org.eclipse.edc.plugins.edcbuild.conventions.ConventionFunctions.requireExtension;
+import static org.openapitools.codegen.config.MergedSpecBuilder.MergeConflictStrategy.WARN;
+import static org.openapitools.codegen.config.MergedSpecBuilder.MergeMode.DEEP;
 
 /**
- * Customization of the {@link GenerateTask}, which allows to pass in the input and output directories via command line.
+ * Merges the partial OpenAPI specs found in a directory into a single spec, with the input and output passed in via
+ * command line.
+ * <p>
+ * The specs are merged in file name order, operations declared on the same path by different specs are combined (e.g.
+ * GET from one module and PUT from another), and a conflicting definition (same component name, or same method on the
+ * same path) keeps the first one, with a warning.
  */
-@CacheableTask
-public class MergeOpenApiSpecTask extends GenerateTask {
+@DisableCachingByDefault(because = "the input directory is passed in via command line")
+public abstract class MergeOpenApiSpecTask extends DefaultTask {
 
     public static final String NAME = "mergeOpenApiSpec";
 
-    private final Directory buildOpenapiFolder = getProject().getLayout().getBuildDirectory().get().dir("openapi");
+    private static final List<String> SPEC_EXTENSIONS = List.of(".yaml", ".yml", ".json");
+
+    private Path inputDir;
+    private Path workDir = getProject().getLayout().getBuildDirectory().get().dir("openapi").dir("generated").getAsFile().toPath();
+    private Path output = getProject().getLayout().getBuildDirectory().get().dir("openapi").file("merged.yaml").getAsFile().toPath();
     private String infoTitle = getProject().getName();
     private String infoDescription = "API documentation";
     private String infoVersion = "0.0.0";
-    private Path output = buildOpenapiFolder.file("merged.yaml").getAsFile().toPath();
-
-    @Inject
-    public MergeOpenApiSpecTask(@NotNull ObjectFactory objectFactory) {
-        super(objectFactory);
-        getInputSpecRootDirectorySkipMerge().set(false);
-        getSkipValidateSpec().set(true);
-        getGeneratorName().set("openapi-yaml");
-        getSkipOperationExample().set(false);
-        getOutputDir().set(buildOpenapiFolder.dir("generated").getAsFile().getAbsolutePath());
-    }
 
     @Option(option = "inputDir", description = "Input directory where to look for partial specs. Required")
     public void setInputDir(String inputDir) {
-        getInputSpecRootDirectory().set(inputDir);
+        this.inputDir = Path.of(inputDir);
     }
 
-    @Option(option = "outputDir", description = "Output directory where the merged spec file will be stored. Optional.")
+    @Option(option = "outputDir", description = "Working directory for the intermediate merged spec. Optional.")
     public void setOutputDir(String outputDirectory) {
-        getOutputDir().set(outputDirectory);
+        this.workDir = Path.of(outputDirectory);
     }
 
     @Option(option = "output", description = "Output merged file path")
@@ -92,13 +92,16 @@ public class MergeOpenApiSpecTask extends GenerateTask {
 
     @TaskAction
     public void task() throws IOException {
-        super.doWork();
+        if (inputDir == null) {
+            throw new GradleException("The --inputDir option is required");
+        }
 
-        var outputPath = Path.of(getOutputDir().get());
-        var spec = outputPath.resolve("openapi").resolve("openapi.yaml");
-        var parser = new OpenAPIParser();
-        var swaggerParseResult = parser.readLocation(spec.toString(), Collections.emptyList(), new ParseOptions());
-        var openApi = swaggerParseResult.getOpenAPI();
+        var merged = new MergedSpecBuilder(specFiles(), workDir.toString(), "merged", infoTitle, infoDescription, infoVersion, null)
+                .withMergeMode(DEEP)
+                .withConflictStrategy(WARN)
+                .buildMergedSpec();
+
+        var openApi = new OpenAPIParser().readLocation(merged, Collections.emptyList(), new ParseOptions()).getOpenAPI();
         var info = new Info();
         info.setTitle(infoTitle);
         info.setDescription(infoDescription);
@@ -106,7 +109,18 @@ public class MergeOpenApiSpecTask extends GenerateTask {
         info.setLicense(createLicense());
         openApi.setInfo(info);
 
+        Files.createDirectories(output.toAbsolutePath().getParent());
         Files.writeString(output, Yaml.pretty(openApi));
+    }
+
+    private List<String> specFiles() throws IOException {
+        try (Stream<Path> files = Files.walk(inputDir)) {
+            return files.filter(Files::isRegularFile)
+                    .filter(file -> SPEC_EXTENSIONS.stream().anyMatch(extension -> file.toString().endsWith(extension)))
+                    .map(file -> file.toAbsolutePath().toString())
+                    .sorted()
+                    .toList();
+        }
     }
 
     private License createLicense() {
@@ -118,4 +132,3 @@ public class MergeOpenApiSpecTask extends GenerateTask {
     }
 
 }
-
