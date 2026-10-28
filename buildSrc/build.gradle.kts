@@ -25,6 +25,7 @@ dependencies {
     implementation(libs.plugin.publish)
     implementation(libs.plugin.swagger)
     implementation(libs.plugin.openapi.generator)
+    implementation(libs.openapi.generator)
     implementation(libs.swagger.parser)
     implementation(libs.jetbrains.annotations)
     implementation(libs.jackson.core)
