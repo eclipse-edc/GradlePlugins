@@ -146,7 +146,7 @@ maven/mavencentral/org.codehaus.plexus/plexus-utils/3.3.0, , approved, CQ21066
 maven/mavencentral/org.commonmark/commonmark/0.21.0, BSD-2-Clause, approved, clearlydefined
 maven/mavencentral/org.eclipse.edc/boot-spi/0.17.0, Apache-2.0, approved, technology.edc
 maven/mavencentral/org.eclipse.edc/runtime-metamodel/0.17.0, Apache-2.0, approved, technology.edc
-maven/mavencentral/org.eclipse.edc/runtime-metamodel/0.18.1, Apache-2.0, approved, technology.edc
+maven/mavencentral/org.eclipse.edc/runtime-metamodel/0.18.2, Apache-2.0, approved, technology.edc
 maven/mavencentral/org.javassist/javassist/3.28.0-GA, Apache-2.0 OR LGPL-2.1-or-later OR MPL-1.1, approved, #327
 maven/mavencentral/org.jetbrains.kotlin/kotlin-reflect/1.8.21, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.8.0, Apache-2.0, approved, #8807
@@ -181,7 +181,7 @@ maven/mavencentral/org.slf4j/slf4j-api/2.0.9, MIT, approved, #5915
 maven/mavencentral/org.slf4j/slf4j-ext/1.7.36, MIT, approved, CQ9128
 maven/mavencentral/org.slf4j/slf4j-simple/1.7.36, MIT, approved, CQ7952
 maven/mavencentral/org.slf4j/slf4j-simple/2.0.17, MIT, approved, #10372
-maven/mavencentral/org.threeten/threetenbp/1.7.0, BSD-3-Clause, approved, clearlydefined
+maven/mavencentral/org.threeten/threetenbp/1.7.0, BSD-3-Clause, approved, #33040
 maven/mavencentral/org.xmlresolver/xmlresolver/5.3.3, Apache-2.0, approved, clearlydefined
 maven/mavencentral/org.yaml/snakeyaml/2.4, Apache-2.0, approved, #19469
 maven/mavencentral/org.yaml/snakeyaml/2.5, Apache-2.0, approved, #23100
