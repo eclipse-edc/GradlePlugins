@@ -14,6 +14,7 @@
 
 package org.eclipse.edc.plugins.edcbuild.conventions;
 
+import com.vanniktech.maven.publish.JavadocJar;
 import com.vanniktech.maven.publish.MavenPublishBaseExtension;
 import com.vanniktech.maven.publish.MavenPublishPlugin;
 import org.eclipse.edc.plugins.edcbuild.extensions.BuildExtension;
@@ -41,9 +42,18 @@ public class MavenPublicationConvention implements EdcConvention {
                 extension.publishToMavenCentral(automaticRelease, validateDeployment);
 
                 extension.signAllPublications();
+
+                if (isSnapshot(target)) {
+                    // skip javadocs for snapshots
+                    extension.configureBasedOnAppliedPlugins(new JavadocJar.None());
+                }
             });
         }
 
+    }
+
+    private static boolean isSnapshot(Project target) {
+        return target.getVersion().toString().endsWith("-SNAPSHOT");
     }
 
 }
