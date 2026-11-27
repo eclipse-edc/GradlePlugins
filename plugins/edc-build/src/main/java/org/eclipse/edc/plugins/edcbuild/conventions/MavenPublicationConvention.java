@@ -14,6 +14,7 @@
 
 package org.eclipse.edc.plugins.edcbuild.conventions;
 
+import com.vanniktech.maven.publish.DeploymentValidation;
 import com.vanniktech.maven.publish.JavadocJar;
 import com.vanniktech.maven.publish.MavenPublishBaseExtension;
 import com.vanniktech.maven.publish.MavenPublishPlugin;
@@ -34,19 +35,19 @@ public class MavenPublicationConvention implements EdcConvention {
         var buildExtension = requireExtension(target, BuildExtension.class);
 
         if (buildExtension.shouldPublish()) {
+            if (isSnapshot(target)) {
+                // skip javadocs for snapshots. Registered before applying the plugin, so it runs before vanniktech's own
+                // afterEvaluate hook, and after the ones registered by other plugins during project evaluation (e.g. shadow)
+                target.afterEvaluate(p -> requireExtension(p, MavenPublishBaseExtension.class).configureBasedOnAppliedPlugins(new JavadocJar.None()));
+            }
+
             target.getPlugins().apply(MavenPublishPlugin.class);
 
             target.getExtensions().configure(MavenPublishBaseExtension.class, extension -> {
                 var automaticRelease = true;
-                var validateDeployment = false;
-                extension.publishToMavenCentral(automaticRelease, validateDeployment);
+                extension.publishToMavenCentral(automaticRelease, DeploymentValidation.NONE);
 
                 extension.signAllPublications();
-
-                if (isSnapshot(target)) {
-                    // skip javadocs for snapshots
-                    extension.configureBasedOnAppliedPlugins(new JavadocJar.None());
-                }
             });
         }
 
